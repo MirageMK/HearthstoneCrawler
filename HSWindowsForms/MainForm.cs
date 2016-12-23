@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.IO.IsolatedStorage;
@@ -16,35 +17,33 @@ namespace HSWindowsForms
 {
     public partial class MainForm : RadForm
     {
-        IsolatedStorageFile isf = null;
+        private readonly IsolatedStorageFile _isf;
+        private const string FILENAME = "HSDecks.txt";
 
         public MainForm()
         {
-            isf = IsolatedStorageFile.GetStore(IsolatedStorageScope.User |
+            _isf = IsolatedStorageFile.GetStore(IsolatedStorageScope.User |
            IsolatedStorageScope.Assembly | IsolatedStorageScope.Domain,
            typeof(System.Security.Policy.Url), typeof(System.Security.Policy.Url));
-            IsolatedStorageFileStream isfs = new IsolatedStorageFileStream
-                    ("decks.txt", FileMode.Create, isf);
-
-            var temp1 = isf.GetFileNames("*");
-            var temp2 = isf.GetDirectoryNames("*");
-
-            var temp3 = isf.GetCreationTime("decks.txt");
-            var temp4 = isf.GetLastWriteTime("decks.txt");
-            var temp5 = isf.GetLastAccessTime("decks.txt");
 
             InitializeComponent();
             WindowState = FormWindowState.Maximized;
 
-            List<Deck> decks = new List<Deck>();
-            BaseReader reader = new HearthstoneTopDecksBaseReader();
-            decks.AddRange(reader.GetDecks());
-            reader = new TempoStormBaseReader();
-            decks.AddRange(reader.GetDecks());
-            reader = new ViciousSyndicateBaseReader();
-            decks.AddRange(reader.GetDecks());
+            DateTimeOffset lastChange = _isf.GetLastWriteTime(FILENAME);
 
-            string json = JsonConvert.SerializeObject(decks);
+            List<Deck> decks = _isf.LoadObject<List<Deck>>(FILENAME);
+            if (decks == null || !lastChange.Date.Equals(DateTime.Now.Date))
+            {
+                decks = new List<Deck>();
+                BaseReader reader = new HearthstoneTopDecksBaseReader();
+                decks.AddRange(reader.GetDecks());
+                reader = new TempoStormBaseReader();
+                decks.AddRange(reader.GetDecks());
+                reader = new ViciousSyndicateBaseReader();
+                decks.AddRange(reader.GetDecks());
+
+                _isf.SaveObject(decks, FILENAME);
+            }
 
             gridViewDecks.DataSource = decks;
 

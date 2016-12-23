@@ -74,6 +74,7 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "SplashForm";
             this.TransparencyKey = System.Drawing.Color.Transparent;
+            this.SizeChanged += new System.EventHandler(this.SplashForm_SizeChanged);
             ((System.ComponentModel.ISupportInitialize)(this.lblStatus)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
