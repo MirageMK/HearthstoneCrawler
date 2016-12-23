@@ -85,7 +85,7 @@
             this.gridViewDecks = new Telerik.WinControls.UI.RadGridView();
             this.deckBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.radPanel1 = new Telerik.WinControls.UI.RadPanel();
-            this.radButton1 = new Telerik.WinControls.UI.RadButton();
+            this.btnRefresh = new Telerik.WinControls.UI.RadButton();
             this.rbCValue = new Telerik.WinControls.UI.RadRadioButton();
             this.rbClass = new Telerik.WinControls.UI.RadRadioButton();
             this.rbFree = new Telerik.WinControls.UI.RadRadioButton();
@@ -103,7 +103,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.deckBindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.radPanel1)).BeginInit();
             this.radPanel1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.radButton1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.btnRefresh)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.rbCValue)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.rbClass)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.rbFree)).BeginInit();
@@ -553,6 +553,7 @@
             gridViewDecimalColumn9,
             gridViewTextBoxColumn21});
             this.gridViewDecks.MasterTemplate.DataSource = this.deckBindingSource;
+            this.gridViewDecks.MasterTemplate.EnableFiltering = true;
             sortDescriptor3.PropertyName = "MyDust";
             this.gridViewDecks.MasterTemplate.SortDescriptors.AddRange(new Telerik.WinControls.Data.SortDescriptor[] {
             sortDescriptor3});
@@ -571,7 +572,7 @@
             // 
             // radPanel1
             // 
-            this.radPanel1.Controls.Add(this.radButton1);
+            this.radPanel1.Controls.Add(this.btnRefresh);
             this.radPanel1.Controls.Add(this.rbCValue);
             this.radPanel1.Controls.Add(this.rbClass);
             this.radPanel1.Controls.Add(this.rbFree);
@@ -584,14 +585,15 @@
             ((Telerik.WinControls.UI.RadPanelElement)(this.radPanel1.GetChildAt(0))).Padding = new System.Windows.Forms.Padding(10, 5, 0, 5);
             ((Telerik.WinControls.Primitives.BorderPrimitive)(this.radPanel1.GetChildAt(0).GetChildAt(1))).Visibility = Telerik.WinControls.ElementVisibility.Collapsed;
             // 
-            // radButton1
+            // btnRefresh
             // 
-            this.radButton1.Dock = System.Windows.Forms.DockStyle.Right;
-            this.radButton1.Location = new System.Drawing.Point(715, 5);
-            this.radButton1.Name = "radButton1";
-            this.radButton1.Size = new System.Drawing.Size(110, 35);
-            this.radButton1.TabIndex = 7;
-            this.radButton1.Text = "Refresh";
+            this.btnRefresh.Dock = System.Windows.Forms.DockStyle.Right;
+            this.btnRefresh.Location = new System.Drawing.Point(715, 5);
+            this.btnRefresh.Name = "btnRefresh";
+            this.btnRefresh.Size = new System.Drawing.Size(110, 35);
+            this.btnRefresh.TabIndex = 7;
+            this.btnRefresh.Text = "Refresh";
+            this.btnRefresh.Click += new System.EventHandler(this.btnRefresh_Click);
             // 
             // rbCValue
             // 
@@ -656,7 +658,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.radPanel1)).EndInit();
             this.radPanel1.ResumeLayout(false);
             this.radPanel1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.radButton1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.btnRefresh)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.rbCValue)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.rbClass)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.rbFree)).EndInit();
@@ -676,7 +678,7 @@
         private Telerik.WinControls.UI.RadGridView gridViewDecks;
         private Telerik.WinControls.UI.Data.EnumBinder enumBinder1;
         private Telerik.WinControls.UI.Data.EnumBinder enumBinder2;
-        private Telerik.WinControls.UI.RadButton radButton1;
+        private Telerik.WinControls.UI.RadButton btnRefresh;
         private Telerik.WinControls.UI.RadRadioButton rbClass;
         private Telerik.WinControls.UI.RadRadioButton rbCValue;
         private Telerik.WinControls.UI.RadRadioButton rbFree;
