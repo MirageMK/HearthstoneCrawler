@@ -79,17 +79,17 @@
             this.gridMyCollection = new Telerik.WinControls.UI.RadGridView();
             this.cardBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.pvMainPager = new Telerik.WinControls.UI.RadPageView();
+            this.pvpSummary = new Telerik.WinControls.UI.RadPageViewPage();
             this.pvpDecks = new Telerik.WinControls.UI.RadPageViewPage();
             this.radPanel2 = new Telerik.WinControls.UI.RadPanel();
             this.gridViewDecks = new Telerik.WinControls.UI.RadGridView();
             this.deckBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.radPanel1 = new Telerik.WinControls.UI.RadPanel();
             this.radButton1 = new Telerik.WinControls.UI.RadButton();
-            this.radRadioButton2 = new Telerik.WinControls.UI.RadRadioButton();
-            this.radRadioButton3 = new Telerik.WinControls.UI.RadRadioButton();
-            this.radRadioButton1 = new Telerik.WinControls.UI.RadRadioButton();
+            this.rbCValue = new Telerik.WinControls.UI.RadRadioButton();
+            this.rbClass = new Telerik.WinControls.UI.RadRadioButton();
+            this.rbFree = new Telerik.WinControls.UI.RadRadioButton();
             this.pvpCollection = new Telerik.WinControls.UI.RadPageViewPage();
-            this.pvpSummary = new Telerik.WinControls.UI.RadPageViewPage();
             ((System.ComponentModel.ISupportInitialize)(this.gridMyCollection)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.gridMyCollection.MasterTemplate)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.cardBindingSource)).BeginInit();
@@ -104,9 +104,9 @@
             ((System.ComponentModel.ISupportInitialize)(this.radPanel1)).BeginInit();
             this.radPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.radButton1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.radRadioButton2)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.radRadioButton3)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.radRadioButton1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.rbCValue)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.rbClass)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.rbFree)).BeginInit();
             this.pvpCollection.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this)).BeginInit();
             this.SuspendLayout();
@@ -408,13 +408,21 @@
             this.pvMainPager.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pvMainPager.Location = new System.Drawing.Point(0, 0);
             this.pvMainPager.Name = "pvMainPager";
-            this.pvMainPager.SelectedPage = this.pvpSummary;
+            this.pvMainPager.SelectedPage = this.pvpDecks;
             this.pvMainPager.Size = new System.Drawing.Size(984, 562);
             this.pvMainPager.TabIndex = 1;
             this.pvMainPager.Text = "Pager";
             this.pvMainPager.ViewMode = Telerik.WinControls.UI.PageViewMode.Backstage;
             ((Telerik.WinControls.UI.RadPageViewBackstageElement)(this.pvMainPager.GetChildAt(0))).ItemAlignment = Telerik.WinControls.UI.StripViewItemAlignment.Near;
             ((Telerik.WinControls.UI.StripViewItemContainer)(this.pvMainPager.GetChildAt(0).GetChildAt(0))).MinSize = new System.Drawing.Size(150, 0);
+            // 
+            // pvpSummary
+            // 
+            this.pvpSummary.ItemSize = new System.Drawing.SizeF(89F, 45F);
+            this.pvpSummary.Location = new System.Drawing.Point(155, 4);
+            this.pvpSummary.Name = "pvpSummary";
+            this.pvpSummary.Size = new System.Drawing.Size(825, 554);
+            this.pvpSummary.Text = "Summary";
             // 
             // pvpDecks
             // 
@@ -564,9 +572,9 @@
             // radPanel1
             // 
             this.radPanel1.Controls.Add(this.radButton1);
-            this.radPanel1.Controls.Add(this.radRadioButton2);
-            this.radPanel1.Controls.Add(this.radRadioButton3);
-            this.radPanel1.Controls.Add(this.radRadioButton1);
+            this.radPanel1.Controls.Add(this.rbCValue);
+            this.radPanel1.Controls.Add(this.rbClass);
+            this.radPanel1.Controls.Add(this.rbFree);
             this.radPanel1.Dock = System.Windows.Forms.DockStyle.Top;
             this.radPanel1.Location = new System.Drawing.Point(0, 0);
             this.radPanel1.Name = "radPanel1";
@@ -585,29 +593,32 @@
             this.radButton1.TabIndex = 7;
             this.radButton1.Text = "Refresh";
             // 
-            // radRadioButton2
+            // rbCValue
             // 
-            this.radRadioButton2.Location = new System.Drawing.Point(235, 13);
-            this.radRadioButton2.Name = "radRadioButton2";
-            this.radRadioButton2.Size = new System.Drawing.Size(105, 18);
-            this.radRadioButton2.TabIndex = 5;
-            this.radRadioButton2.Text = "radRadioButton2";
+            this.rbCValue.Location = new System.Drawing.Point(235, 13);
+            this.rbCValue.Name = "rbCValue";
+            this.rbCValue.Size = new System.Drawing.Size(106, 18);
+            this.rbCValue.TabIndex = 5;
+            this.rbCValue.Text = "By Crafting Value";
+            this.rbCValue.CheckStateChanged += new System.EventHandler(this.radRadioButton_CheckStateChanged);
             // 
-            // radRadioButton3
+            // rbClass
             // 
-            this.radRadioButton3.Location = new System.Drawing.Point(124, 13);
-            this.radRadioButton3.Name = "radRadioButton3";
-            this.radRadioButton3.Size = new System.Drawing.Size(105, 18);
-            this.radRadioButton3.TabIndex = 6;
-            this.radRadioButton3.Text = "radRadioButton3";
+            this.rbClass.Location = new System.Drawing.Point(124, 13);
+            this.rbClass.Name = "rbClass";
+            this.rbClass.Size = new System.Drawing.Size(60, 18);
+            this.rbClass.TabIndex = 6;
+            this.rbClass.Text = "By Class";
+            this.rbClass.CheckStateChanged += new System.EventHandler(this.radRadioButton_CheckStateChanged);
             // 
-            // radRadioButton1
+            // rbFree
             // 
-            this.radRadioButton1.Location = new System.Drawing.Point(13, 13);
-            this.radRadioButton1.Name = "radRadioButton1";
-            this.radRadioButton1.Size = new System.Drawing.Size(105, 18);
-            this.radRadioButton1.TabIndex = 4;
-            this.radRadioButton1.Text = "radRadioButton1";
+            this.rbFree.Location = new System.Drawing.Point(13, 13);
+            this.rbFree.Name = "rbFree";
+            this.rbFree.Size = new System.Drawing.Size(74, 18);
+            this.rbFree.TabIndex = 4;
+            this.rbFree.Text = "Free Decks";
+            this.rbFree.CheckStateChanged += new System.EventHandler(this.radRadioButton_CheckStateChanged);
             // 
             // pvpCollection
             // 
@@ -617,14 +628,6 @@
             this.pvpCollection.Name = "pvpCollection";
             this.pvpCollection.Size = new System.Drawing.Size(825, 554);
             this.pvpCollection.Text = "My Collection";
-            // 
-            // pvpSummary
-            // 
-            this.pvpSummary.ItemSize = new System.Drawing.SizeF(89F, 45F);
-            this.pvpSummary.Location = new System.Drawing.Point(155, 4);
-            this.pvpSummary.Name = "pvpSummary";
-            this.pvpSummary.Size = new System.Drawing.Size(825, 554);
-            this.pvpSummary.Text = "Summary";
             // 
             // MainForm
             // 
@@ -654,9 +657,9 @@
             this.radPanel1.ResumeLayout(false);
             this.radPanel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.radButton1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.radRadioButton2)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.radRadioButton3)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.radRadioButton1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.rbCValue)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.rbClass)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.rbFree)).EndInit();
             this.pvpCollection.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this)).EndInit();
             this.ResumeLayout(false);
@@ -674,9 +677,9 @@
         private Telerik.WinControls.UI.Data.EnumBinder enumBinder1;
         private Telerik.WinControls.UI.Data.EnumBinder enumBinder2;
         private Telerik.WinControls.UI.RadButton radButton1;
-        private Telerik.WinControls.UI.RadRadioButton radRadioButton3;
-        private Telerik.WinControls.UI.RadRadioButton radRadioButton2;
-        private Telerik.WinControls.UI.RadRadioButton radRadioButton1;
+        private Telerik.WinControls.UI.RadRadioButton rbClass;
+        private Telerik.WinControls.UI.RadRadioButton rbCValue;
+        private Telerik.WinControls.UI.RadRadioButton rbFree;
         private Telerik.WinControls.UI.RadPanel radPanel2;
         private Telerik.WinControls.UI.RadPanel radPanel1;
         private Telerik.WinControls.UI.RadPageViewPage pvpSummary;

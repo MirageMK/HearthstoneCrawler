@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Drawing;
 using System.IO;
 using System.IO.IsolatedStorage;
+using System.Linq;
 using System.Net;
 using System.Windows.Forms;
 using HSCore;
@@ -11,6 +13,7 @@ using HSCore.Readers;
 using HSWindowsForms.Helper;
 using Newtonsoft.Json;
 using Telerik.WinControls;
+using Telerik.WinControls.Data;
 using Telerik.WinControls.UI;
 
 namespace HSWindowsForms
@@ -29,6 +32,13 @@ namespace HSWindowsForms
             InitializeComponent();
             WindowState = FormWindowState.Maximized;
 
+            LoadMyCollection();
+
+            LoadDecks();
+        }
+
+        private void LoadDecks()
+        {
             DateTimeOffset lastChange = _isf.GetLastWriteTime(FILENAME);
 
             List<Deck> decks = _isf.LoadObject<List<Deck>>(FILENAME);
@@ -46,8 +56,10 @@ namespace HSWindowsForms
             }
 
             gridViewDecks.DataSource = decks;
-
-            LoadMyCollection();
+            if (gridViewDecks.SelectedRows.Count > 0)
+            {
+                gridViewDecks.SelectedRows[0].IsCurrent = false;
+            }
         }
 
         private void LoadMyCollection()
@@ -112,6 +124,43 @@ namespace HSWindowsForms
         {
             DeckForm deckForm = new DeckForm(gridViewDecks.CurrentRow.DataBoundItem as Deck);
             deckForm.Show();
+        }
+
+        private void btnRefresh_Click(object sender, EventArgs e)
+        {
+            this.gridViewDecks.GroupDescriptors.Clear();
+            this.gridViewDecks.FilterDescriptors.Clear();
+            LoadDecks();
+        }
+
+        private void radRadioButton_CheckStateChanged(object sender, EventArgs e)
+        {
+            RadRadioButton radioButton = sender as RadRadioButton;
+
+            RadRadioButton button = radioButton?.Parent.Controls.OfType<RadRadioButton>()
+                                                 .FirstOrDefault(n => n.IsChecked);
+
+            if (button == null) return;
+
+            this.gridViewDecks.GroupDescriptors.Clear();
+            this.gridViewDecks.FilterDescriptors.Clear();
+            FilterDescriptor fDescriptor = new FilterDescriptor();
+            GroupDescriptor gDescriptor = new GroupDescriptor();
+            switch (button.Name)
+            {
+                case "rbFree":
+                    fDescriptor.Operator = FilterOperator.IsEqualTo;
+                    fDescriptor.Value = 0;
+                    fDescriptor.IsFilterEditor = true;
+                    this.gridViewDecks.Columns["MyDust"].FilterDescriptor = fDescriptor;
+                    break;
+                case "rbClass":
+                    gDescriptor.GroupNames.Add("Class", ListSortDirection.Ascending);
+                    this.gridViewDecks.GroupDescriptors.Add(gDescriptor);
+                    break;
+                case "rbCValue":
+                    break;
+            }
         }
     }
 }
