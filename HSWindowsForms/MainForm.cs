@@ -11,20 +11,23 @@ using HSCore;
 using HSCore.Model;
 using HSCore.Readers;
 using HSWindowsForms.Helper;
-using Newtonsoft.Json;
 using Telerik.WinControls;
 using Telerik.WinControls.Data;
+using Telerik.WinControls.Enumerations;
 using Telerik.WinControls.UI;
 
 namespace HSWindowsForms
 {
     public partial class MainForm : RadForm
     {
+        private readonly WebClient _wc;
         private readonly IsolatedStorageFile _isf;
         private const string FILENAME = "HSDecks.txt";
 
         public MainForm()
         {
+            _wc = new WebClient();
+
             _isf = IsolatedStorageFile.GetStore(IsolatedStorageScope.User |
            IsolatedStorageScope.Assembly | IsolatedStorageScope.Domain,
            typeof(System.Security.Policy.Url), typeof(System.Security.Policy.Url));
@@ -32,22 +35,39 @@ namespace HSWindowsForms
             InitializeComponent();
             WindowState = FormWindowState.Maximized;
 
+            
             LoadMyCollection();
-
-            LoadDecks();
+            
+            LoadSummary(LoadDecks());
         }
 
-        private void LoadDecks()
+        private void LoadSummary(List<Deck> decks)
+        {
+            Dictionary<Card, double> value = new Dictionary<Card, double>();
+            foreach(Deck deck in decks)
+            {
+                foreach(KeyValuePair<Card, int> dCard in deck.Cards)
+                {
+                    if(!value.ContainsKey(dCard.Key))
+                        value.Add(dCard.Key, dCard.Value);
+                    else
+                        value[dCard.Key]+= dCard.Value;
+                }
+            }
+        }
+
+        private List<Deck> LoadDecks(bool force = false)
         {
             DateTimeOffset lastChange = _isf.GetLastWriteTime(FILENAME);
 
             List<Deck> decks = _isf.LoadObject<List<Deck>>(FILENAME);
-            if (decks == null || !lastChange.Date.Equals(DateTime.Now.Date))
+
+            if (decks == null || !lastChange.Date.Equals(DateTime.Now.Date) || force)
             {
                 decks = new List<Deck>();
-                BaseReader reader = new HearthstoneTopDecksBaseReader();
+                BaseReader reader = new TempoStormBaseReader();
                 decks.AddRange(reader.GetDecks());
-                reader = new TempoStormBaseReader();
+                reader = new HearthstoneTopDecksBaseReader();
                 decks.AddRange(reader.GetDecks());
                 reader = new ViciousSyndicateBaseReader();
                 decks.AddRange(reader.GetDecks());
@@ -60,10 +80,15 @@ namespace HSWindowsForms
             {
                 gridViewDecks.SelectedRows[0].IsCurrent = false;
             }
+
+            return decks;
         }
 
         private void LoadMyCollection()
         {
+            gridMyCollection.Columns["Cost"].SortOrder = RadSortOrder.Ascending;
+            gridMyCollection.Columns["Name"].SortOrder = RadSortOrder.Ascending;
+
             gridMyCollection.MasterTemplate.GroupComparer = new GroupComparer();
 
             gridMyCollection.DataSource = MyCollection.Cards;
@@ -85,6 +110,8 @@ namespace HSWindowsForms
             gridMyCollection.SummaryRowsTop.Add(summaryRowItem);
             gridMyCollection.MasterTemplate.ShowTotals = true;
             gridMyCollection.MasterView.SummaryRows[0].PinPosition = PinnedRowPosition.Top;
+
+            gridMyCollection.MasterTemplate.ExpandAllGroups();
         }
 
         private void radGridView1_GroupSummaryEvaluate(object sender, GroupSummaryEvaluationEventArgs e)
@@ -96,27 +123,25 @@ namespace HSWindowsForms
 
         }
 
-
-        readonly RadOffice2007ScreenTipElement _screenTip = new RadOffice2007ScreenTipElement();
+        private readonly RadOffice2007ScreenTipElement _screenTip = new RadOffice2007ScreenTipElement();
         private void radGridView1_ScreenTipNeeded(object sender, ScreenTipNeededEventArgs e)
         {
+            e.Delay = 1;
             GridDataCellElement cell = e.Item as GridDataCellElement;
 
-            if (cell?.RowInfo.Cells["Img"]?.Value == null) return;
+            Card card = (Card)cell?.RowInfo.DataBoundItem;
 
-            WebClient wc = new WebClient();
-            byte[] bytes = wc.DownloadData(cell.RowInfo.Cells["Img"].Value.ToString());
+            if (card?.Img == null) return;
+
+            byte[] bytes = _wc.DownloadData(card.Img);
             MemoryStream ms = new MemoryStream(bytes);
             _screenTip.MainTextLabel.Image = Image.FromStream(ms);
-            _screenTip.CaptionLabel.Text = "";
             _screenTip.MainTextLabel.Text = "";
-            _screenTip.CaptionLabel.Size = new Size(0, 0);
+            _screenTip.CaptionVisible = false;
+            _screenTip.FooterVisible = false;
+            _screenTip.MainTextLabel.Margin = new Padding(-5, -35, -15, -20);
 
-            _screenTip.EnableCustomSize = true;
-            //Optionally set auto-size to false to specify exact size parameters
-            _screenTip.AutoSize = false;
-            _screenTip.Size = new Size(315, 460);
-
+            _screenTip.AutoSize = true;
             cell.ScreenTip = _screenTip;
         }
 
@@ -128,9 +153,12 @@ namespace HSWindowsForms
 
         private void btnRefresh_Click(object sender, EventArgs e)
         {
-            this.gridViewDecks.GroupDescriptors.Clear();
-            this.gridViewDecks.FilterDescriptors.Clear();
-            LoadDecks();
+            gridViewDecks.GroupDescriptors.Clear();
+            gridViewDecks.FilterDescriptors.Clear();
+            rbCValue.ToggleState = ToggleState.Off;
+            rbClass.ToggleState = ToggleState.Off;
+            rbFree.ToggleState = ToggleState.Off;
+            LoadDecks(true);
         }
 
         private void radRadioButton_CheckStateChanged(object sender, EventArgs e)
@@ -142,25 +170,48 @@ namespace HSWindowsForms
 
             if (button == null) return;
 
-            this.gridViewDecks.GroupDescriptors.Clear();
-            this.gridViewDecks.FilterDescriptors.Clear();
+            gridViewDecks.GroupDescriptors.Clear();
+            gridViewDecks.FilterDescriptors.Clear();
+            gridViewDecks.SortDescriptors.Clear();
             FilterDescriptor fDescriptor = new FilterDescriptor();
             GroupDescriptor gDescriptor = new GroupDescriptor();
+            SortDescriptor sDescriptor = new SortDescriptor();
             switch (button.Name)
             {
                 case "rbFree":
                     fDescriptor.Operator = FilterOperator.IsEqualTo;
                     fDescriptor.Value = 0;
                     fDescriptor.IsFilterEditor = true;
-                    this.gridViewDecks.Columns["MyDust"].FilterDescriptor = fDescriptor;
+                    gridViewDecks.Columns["MyDust"].FilterDescriptor = fDescriptor;
+
+                    sDescriptor.PropertyName = "Tier";
+                    sDescriptor.Direction = ListSortDirection.Ascending;
+                    gridViewDecks.MasterTemplate.SortDescriptors.Add(sDescriptor);
                     break;
                 case "rbClass":
                     gDescriptor.GroupNames.Add("Class", ListSortDirection.Ascending);
-                    this.gridViewDecks.GroupDescriptors.Add(gDescriptor);
+                    gridViewDecks.GroupDescriptors.Add(gDescriptor);
+
+                    sDescriptor.PropertyName = "MyDust";
+                    sDescriptor.Direction = ListSortDirection.Ascending;
+                    gridViewDecks.MasterTemplate.SortDescriptors.Add(sDescriptor);
+
+                    fDescriptor.Operator = FilterOperator.IsEqualTo;
+                    fDescriptor.Value = DeckType.Standard;
+                    fDescriptor.IsFilterEditor = true;
+                    gridViewDecks.Columns["DeckType"].FilterDescriptor = fDescriptor;
                     break;
                 case "rbCValue":
                     break;
             }
+
+
+            if (gridViewDecks.SelectedRows.Count > 0)
+            {
+                gridViewDecks.SelectedRows[0].IsCurrent = false;
+            }
+
+            gridViewDecks.MasterTemplate.ExpandAllGroups();
         }
     }
 }

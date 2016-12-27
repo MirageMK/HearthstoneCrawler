@@ -11,17 +11,20 @@ using System.Windows.Forms;
 using HSCore.Model;
 using Telerik.WinControls;
 using Telerik.WinControls.UI;
+using Telerik.WinControls.UI.Export;
 
 namespace HSWindowsForms
 {
     public partial class DeckForm : Telerik.WinControls.UI.RadForm
     {
-        private Deck deck;
+        private readonly WebClient _wc;
 
         public DeckForm(Deck _deck)
         {
+            _wc = new WebClient();
+
             InitializeComponent();
-            deck = _deck;
+            Deck deck = _deck;
             Text = _deck.Name;
             radGridView1.DataSource = deck.Cards.OrderBy(x => x.Key.PlayerClass).ThenBy(x => x.Key.Cost);
             radGridView1.MasterTemplate.ShowRowHeaderColumn = false;
@@ -33,8 +36,8 @@ namespace HSWindowsForms
         {
             if (e.ColumnIndex != 0) return;
 
-            KeyValuePair<Card, int> card = (KeyValuePair<Card, int>) e.CellElement.RowInfo.DataBoundItem;
-            switch(card.Value - card.Key.Own)
+            KeyValuePair<Card, int> card = (KeyValuePair<Card, int>)e.CellElement.RowInfo.DataBoundItem;
+            switch (card.Value - card.Key.Own)
             {
                 case 2:
                     e.CellElement.DrawFill = true;
@@ -59,29 +62,25 @@ namespace HSWindowsForms
             e.Cancel = true;
         }
 
-        readonly RadOffice2007ScreenTipElement _screenTip = new RadOffice2007ScreenTipElement();
+        private readonly RadOffice2007ScreenTipElement _screenTip = new RadOffice2007ScreenTipElement();
         private void radGridView1_ScreenTipNeeded(object sender, ScreenTipNeededEventArgs e)
         {
+            e.Delay = 1;
             GridDataCellElement cell = e.Item as GridDataCellElement;
 
-            KeyValuePair<Card, int>? card = (KeyValuePair < Card, int>?) cell?.RowInfo.DataBoundItem;
+            KeyValuePair<Card, int>? card = (KeyValuePair<Card, int>?)cell?.RowInfo.DataBoundItem;
 
             if (card?.Key.Img == null) return;
-            
 
-            WebClient wc = new WebClient();
-            byte[] bytes = wc.DownloadData(card.Value.Key.Img);
+            byte[] bytes = _wc.DownloadData(card.Value.Key.Img);
             MemoryStream ms = new MemoryStream(bytes);
             _screenTip.MainTextLabel.Image = Image.FromStream(ms);
-            _screenTip.CaptionLabel.Text = "";
             _screenTip.MainTextLabel.Text = "";
-            _screenTip.CaptionLabel.Size = new Size(0, 0);
-
-            _screenTip.EnableCustomSize = true;
-            //Optionally set auto-size to false to specify exact size parameters
-            _screenTip.AutoSize = false;
-            _screenTip.Size = new Size(315, 460);
-
+            _screenTip.CaptionVisible = false;
+            _screenTip.FooterVisible = false;
+            _screenTip.MainTextLabel.Margin = new Padding(-5, -35, -15, -20);
+            
+            _screenTip.AutoSize = true;
             cell.ScreenTip = _screenTip;
         }
     }

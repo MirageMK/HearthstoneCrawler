@@ -19,6 +19,7 @@ namespace HSCore
         internal static readonly string[] NonColectable = { "Roaring Torch", "Tank Up!", "Kazakus Potion" };
 
         public static List<Card> Cards { get; }
+        public static int CardCount => Cards.Sum(card => card.Own);
 
         static MyCollection()
         {
