@@ -34,17 +34,16 @@ namespace HSWindowsForms
 
             InitializeComponent();
             WindowState = FormWindowState.Maximized;
-
             
             LoadMyCollection();
             
             LoadSummary(LoadDecks());
         }
 
-        private void LoadSummary(List<Deck> decks)
+        private static void LoadSummary(List<Deck> decks)
         {
             Dictionary<Card, double> value = new Dictionary<Card, double>();
-            foreach(Deck deck in decks)
+            foreach(Deck deck in decks.OrderBy(x=> x.Source))
             {
                 foreach(KeyValuePair<Card, int> dCard in deck.Cards)
                 {
