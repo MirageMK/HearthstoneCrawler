@@ -112,11 +112,14 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Extensions\IsolatedStorageExtensions.cs" />
+    <Compile Include="Model\Valuation.cs" />
     <Compile Include="MyCollection.cs" />
     <Compile Include="Model\Card.cs" />
     <Compile Include="Model\Deck.cs" />
     <Compile Include="Enums.cs" />
     <Compile Include="HeartstoneDB.cs" />
+    <Compile Include="NetDecks.cs" />
     <Compile Include="Readers\BaseReader.cs" />
     <Compile Include="Readers\HearthstoneTopDecksBaseReader.cs" />
     <Compile Include="Readers\ViciousSyndicateBaseReader.cs" />

@@ -15,7 +15,18 @@ namespace HSCore.Model
         public string Name { get; set; }
         public string Class { get; set; }
         public int Tier { get; set; }
-        public DeckType DeckType { get; set; }
+        private DeckType _deckType;
+
+        public DeckType DeckType
+        {
+            get
+            {
+                if (_deckType != DeckType.Undefined) return _deckType;
+                return Cards.Any(x => !x.Key.IsStandard) ? DeckType.Wild : DeckType.Standard;
+            }
+            set { _deckType = value; }
+        }
+
         public SourceEnum Source { get; set; }
         public string Id => Name + Source + DeckType;
         public int Dust => Cards.Sum(x => x.Value * x.Key.Dust);

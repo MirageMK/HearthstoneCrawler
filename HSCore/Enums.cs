@@ -41,6 +41,8 @@ namespace HSCore
 
     public enum DeckType
     {
+        [Description("Undefined")]
+        Undefined,
         [Description("Standard")]
         Standard,
         [Description("Wild")]

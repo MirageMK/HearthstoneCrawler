@@ -71,7 +71,6 @@
       <DependentUpon>DeckForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Helper\GroupComparer.cs" />
-    <Compile Include="Helper\IsolatedStorageExtensions.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -109,6 +108,7 @@
     <None Include="packages.config" />
     <None Include="Properties\DataSources\HSCore.Model.Card.datasource" />
     <None Include="Properties\DataSources\HSCore.Model.Deck.datasource" />
+    <None Include="Properties\DataSources\HSCore.Model.Valuation.datasource" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

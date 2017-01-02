@@ -53,6 +53,8 @@ namespace HSCore.Readers
             List<Deck> toReturn = new List<Deck>();
             foreach (DeckType dType in Enum.GetValues(typeof(DeckType)))
             {
+                if (dType == DeckType.Undefined) continue;
+
                 string deckTypeDescription = Enums.GetEnumDescription(dType);
                 string url = GetUrl(deckTypeDescription);
 

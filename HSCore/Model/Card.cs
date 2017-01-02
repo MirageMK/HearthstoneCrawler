@@ -70,7 +70,10 @@ namespace HSCore.Model
             }
         }
         public int Own { get; set; }
-        public int Missing => Rarity == "Legendary" ? 1 - Own : 2 - Own;
+        public int Missing => IsLegendary ? 1 - Own : 2 - Own;
+        public bool IsLegendary => Rarity == "Legendary";
+        public bool IsStandard => Enums.GetValueFromDescription<SetEnum>(CardSet) < SetEnum.Promo
+                                  || Enums.GetValueFromDescription<SetEnum>(CardSet) > SetEnum.GvG;
 
         public bool Equals(Card other)
         {

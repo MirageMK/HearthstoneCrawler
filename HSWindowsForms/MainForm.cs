@@ -8,6 +8,7 @@ using System.Linq;
 using System.Net;
 using System.Windows.Forms;
 using HSCore;
+using HSCore.Extensions;
 using HSCore.Model;
 using HSCore.Readers;
 using HSWindowsForms.Helper;
@@ -21,66 +22,33 @@ namespace HSWindowsForms
     public partial class MainForm : RadForm
     {
         private readonly WebClient _wc;
-        private readonly IsolatedStorageFile _isf;
-        private const string FILENAME = "HSDecks.txt";
 
         public MainForm()
         {
             _wc = new WebClient();
 
-            _isf = IsolatedStorageFile.GetStore(IsolatedStorageScope.User |
-           IsolatedStorageScope.Assembly | IsolatedStorageScope.Domain,
-           typeof(System.Security.Policy.Url), typeof(System.Security.Policy.Url));
-
             InitializeComponent();
             WindowState = FormWindowState.Maximized;
             
             LoadMyCollection();
+
+            LoadDecks();
             
-            LoadSummary(LoadDecks());
+            LoadSummary();
         }
 
-        private static void LoadSummary(List<Deck> decks)
+        private void LoadSummary()
         {
-            Dictionary<Card, double> value = new Dictionary<Card, double>();
-            foreach(Deck deck in decks.OrderBy(x=> x.Source))
-            {
-                foreach(KeyValuePair<Card, int> dCard in deck.Cards)
-                {
-                    if(!value.ContainsKey(dCard.Key))
-                        value.Add(dCard.Key, dCard.Value);
-                    else
-                        value[dCard.Key]+= dCard.Value;
-                }
-            }
+            radGridView1.DataSource = NetDecks.Valuations;
         }
 
-        private List<Deck> LoadDecks(bool force = false)
+        private void LoadDecks(bool force = false)
         {
-            DateTimeOffset lastChange = _isf.GetLastWriteTime(FILENAME);
-
-            List<Deck> decks = _isf.LoadObject<List<Deck>>(FILENAME);
-
-            if (decks == null || !lastChange.Date.Equals(DateTime.Now.Date) || force)
-            {
-                decks = new List<Deck>();
-                BaseReader reader = new TempoStormBaseReader();
-                decks.AddRange(reader.GetDecks());
-                reader = new HearthstoneTopDecksBaseReader();
-                decks.AddRange(reader.GetDecks());
-                reader = new ViciousSyndicateBaseReader();
-                decks.AddRange(reader.GetDecks());
-
-                _isf.SaveObject(decks, FILENAME);
-            }
-
-            gridViewDecks.DataSource = decks;
+            gridViewDecks.DataSource = force ? NetDecks.DownloadDecks() : NetDecks.Decks;
             if (gridViewDecks.SelectedRows.Count > 0)
             {
                 gridViewDecks.SelectedRows[0].IsCurrent = false;
             }
-
-            return decks;
         }
 
         private void LoadMyCollection()

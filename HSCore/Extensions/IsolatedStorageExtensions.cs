@@ -3,7 +3,7 @@ using System.IO;
 using System.IO.IsolatedStorage;
 using System.Runtime.Serialization.Formatters.Binary;
 
-namespace HSWindowsForms.Helper
+namespace HSCore.Extensions
 {
     public static class IsolatedStorageExtensions
     {
