@@ -75,6 +75,33 @@ namespace HSCore.Model
         public bool IsStandard => Enums.GetValueFromDescription<SetEnum>(CardSet) < SetEnum.Promo
                                   || Enums.GetValueFromDescription<SetEnum>(CardSet) > SetEnum.GvG;
 
+        public double ValuationFactor
+        {
+            get
+            {
+                double factor = 1.5;
+                if (!IsStandard) factor -= 0.5;
+
+                if (!IsLegendary) factor -= 0.5;
+
+                switch (Rarity)
+                    {
+                        case "Epic":
+                            factor -= 0.1;
+                            break;
+                        case "Rare":
+                            factor -= 0.2;
+                            break;
+                        case "Common":
+                        case "Free":
+                            factor -= 0.3;
+                            break;
+                    }
+
+                return factor;
+            }
+        }
+
         public bool Equals(Card other)
         {
             return other != null && other.Name == this.Name;

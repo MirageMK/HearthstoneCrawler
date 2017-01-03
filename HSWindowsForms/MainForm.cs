@@ -39,7 +39,12 @@ namespace HSWindowsForms
 
         private void LoadSummary()
         {
-            radGridView1.DataSource = NetDecks.Valuations;
+            gridCardValuation.DataSource = NetDecks.Valuations;
+
+            for(int i = 1; i < gridCardValuation.ColumnCount; i++)
+            {
+                gridCardValuation.Columns[i].FormatString = @"{0:N2}";
+            }
         }
 
         private void LoadDecks(bool force = false)
