@@ -29,11 +29,11 @@ namespace HSWindowsForms
 
             InitializeComponent();
             WindowState = FormWindowState.Maximized;
-            
+
             LoadMyCollection();
 
             LoadDecks();
-            
+
             LoadSummary();
         }
 
@@ -41,7 +41,7 @@ namespace HSWindowsForms
         {
             gridCardValuation.DataSource = NetDecks.Valuations;
 
-            foreach(GridViewDataColumn column in gridCardValuation.Columns)
+            foreach (GridViewDataColumn column in gridCardValuation.Columns)
             {
                 if (column.DataType == typeof(double))
                 {
@@ -89,7 +89,7 @@ namespace HSWindowsForms
             gridMyCollection.MasterTemplate.ExpandAllGroups();
         }
 
-        private void radGridView1_GroupSummaryEvaluate(object sender, GroupSummaryEvaluationEventArgs e)
+        private void gridMyCollection_GroupSummaryEvaluate(object sender, GroupSummaryEvaluationEventArgs e)
         {
             if (e.Parent != gridMyCollection.MasterTemplate && e.SummaryItem.AggregateExpression == null)
             {
@@ -99,7 +99,7 @@ namespace HSWindowsForms
         }
 
         private readonly RadOffice2007ScreenTipElement _screenTip = new RadOffice2007ScreenTipElement();
-        private void radGridView1_ScreenTipNeeded(object sender, ScreenTipNeededEventArgs e)
+        private void gridMyCollection_ScreenTipNeeded(object sender, ScreenTipNeededEventArgs e)
         {
             e.Delay = 1;
             GridDataCellElement cell = e.Item as GridDataCellElement;
@@ -108,6 +108,23 @@ namespace HSWindowsForms
 
             if (card?.Img == null) return;
 
+            cell.ScreenTip = GetScreenTip(card);
+        }
+
+        private void gridCardValuation_ScreenTipNeeded(object sender, ScreenTipNeededEventArgs e)
+        {
+            e.Delay = 1;
+            GridDataCellElement cell = e.Item as GridDataCellElement;
+
+            Valuation valuation = (Valuation)cell?.RowInfo.DataBoundItem;
+
+            if (valuation?.Card.Img == null) return;
+
+            cell.ScreenTip = GetScreenTip(valuation.Card);
+        }
+
+        private RadOffice2007ScreenTipElement GetScreenTip(Card card)
+        {
             byte[] bytes = _wc.DownloadData(card.Img);
             MemoryStream ms = new MemoryStream(bytes);
             _screenTip.MainTextLabel.Image = Image.FromStream(ms);
@@ -117,7 +134,8 @@ namespace HSWindowsForms
             _screenTip.MainTextLabel.Margin = new Padding(-5, -35, -15, -20);
 
             _screenTip.AutoSize = true;
-            cell.ScreenTip = _screenTip;
+
+            return _screenTip;
         }
 
         private void gridViewDecks_CellDoubleClick(object sender, GridViewCellEventArgs e)
