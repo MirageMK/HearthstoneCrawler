@@ -41,9 +41,12 @@ namespace HSWindowsForms
         {
             gridCardValuation.DataSource = NetDecks.Valuations;
 
-            for(int i = 1; i < gridCardValuation.ColumnCount; i++)
+            foreach(GridViewDataColumn column in gridCardValuation.Columns)
             {
-                gridCardValuation.Columns[i].FormatString = @"{0:N2}";
+                if (column.DataType == typeof(double))
+                {
+                    column.FormatString = @"{0:N2}";
+                }
             }
         }
 

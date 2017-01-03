@@ -106,7 +106,6 @@
             this.pvMainPager = new Telerik.WinControls.UI.RadPageView();
             this.pvpSummary = new Telerik.WinControls.UI.RadPageViewPage();
             this.gridCardValuation = new Telerik.WinControls.UI.RadGridView();
-            this.valuationBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.pvpDecks = new Telerik.WinControls.UI.RadPageViewPage();
             this.radPanel2 = new Telerik.WinControls.UI.RadPanel();
             this.gridViewDecks = new Telerik.WinControls.UI.RadGridView();
@@ -117,6 +116,7 @@
             this.rbClass = new Telerik.WinControls.UI.RadRadioButton();
             this.rbFree = new Telerik.WinControls.UI.RadRadioButton();
             this.pvpCollection = new Telerik.WinControls.UI.RadPageViewPage();
+            this.valuationBindingSource = new System.Windows.Forms.BindingSource(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.gridMyCollection)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.gridMyCollection.MasterTemplate)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.cardBindingSource)).BeginInit();
@@ -125,7 +125,6 @@
             this.pvpSummary.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.gridCardValuation)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.gridCardValuation.MasterTemplate)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.valuationBindingSource)).BeginInit();
             this.pvpDecks.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.radPanel2)).BeginInit();
             this.radPanel2.SuspendLayout();
@@ -139,6 +138,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.rbClass)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.rbFree)).BeginInit();
             this.pvpCollection.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.valuationBindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this)).BeginInit();
             this.SuspendLayout();
             // 
@@ -446,7 +446,7 @@
             gridViewDecimalColumn9.ReadOnly = true;
             gridViewDecimalColumn9.SortOrder = Telerik.WinControls.UI.RadSortOrder.Descending;
             gridViewDecimalColumn9.Width = 132;
-            gridViewDecimalColumn10.DataType = typeof(double);
+            gridViewDecimalColumn10.DataType = typeof(int);
             gridViewDecimalColumn10.EnableExpressionEditor = false;
             gridViewDecimalColumn10.FieldName = "InDecks1";
             gridViewDecimalColumn10.HeaderText = "Decks No";
@@ -454,7 +454,7 @@
             gridViewDecimalColumn10.Name = "InDecks1";
             gridViewDecimalColumn10.ReadOnly = true;
             gridViewDecimalColumn10.Width = 66;
-            gridViewDecimalColumn11.DataType = typeof(double);
+            gridViewDecimalColumn11.DataType = typeof(int);
             gridViewDecimalColumn11.EnableExpressionEditor = false;
             gridViewDecimalColumn11.FieldName = "Apperences1";
             gridViewDecimalColumn11.HeaderText = "Apperences";
@@ -478,7 +478,7 @@
             gridViewDecimalColumn13.Name = "Value1";
             gridViewDecimalColumn13.ReadOnly = true;
             gridViewDecimalColumn13.Width = 66;
-            gridViewDecimalColumn14.DataType = typeof(double);
+            gridViewDecimalColumn14.DataType = typeof(int);
             gridViewDecimalColumn14.EnableExpressionEditor = false;
             gridViewDecimalColumn14.FieldName = "InDecks2";
             gridViewDecimalColumn14.HeaderText = "Decks No";
@@ -486,7 +486,7 @@
             gridViewDecimalColumn14.Name = "InDecks2";
             gridViewDecimalColumn14.ReadOnly = true;
             gridViewDecimalColumn14.Width = 66;
-            gridViewDecimalColumn15.DataType = typeof(double);
+            gridViewDecimalColumn15.DataType = typeof(int);
             gridViewDecimalColumn15.EnableExpressionEditor = false;
             gridViewDecimalColumn15.FieldName = "Apperences2";
             gridViewDecimalColumn15.HeaderText = "Apperences";
@@ -510,7 +510,7 @@
             gridViewDecimalColumn17.Name = "Value2";
             gridViewDecimalColumn17.ReadOnly = true;
             gridViewDecimalColumn17.Width = 66;
-            gridViewDecimalColumn18.DataType = typeof(double);
+            gridViewDecimalColumn18.DataType = typeof(int);
             gridViewDecimalColumn18.EnableExpressionEditor = false;
             gridViewDecimalColumn18.FieldName = "InDecks3";
             gridViewDecimalColumn18.HeaderText = "Decks No";
@@ -518,7 +518,7 @@
             gridViewDecimalColumn18.Name = "InDecks3";
             gridViewDecimalColumn18.ReadOnly = true;
             gridViewDecimalColumn18.Width = 66;
-            gridViewDecimalColumn19.DataType = typeof(double);
+            gridViewDecimalColumn19.DataType = typeof(int);
             gridViewDecimalColumn19.EnableExpressionEditor = false;
             gridViewDecimalColumn19.FieldName = "Apperences3";
             gridViewDecimalColumn19.HeaderText = "Apperences";
@@ -608,10 +608,6 @@
             this.gridCardValuation.Size = new System.Drawing.Size(495, 554);
             this.gridCardValuation.TabIndex = 0;
             this.gridCardValuation.Text = "gridCardValuation";
-            // 
-            // valuationBindingSource
-            // 
-            this.valuationBindingSource.DataSource = typeof(HSCore.Model.Valuation);
             // 
             // pvpDecks
             // 
@@ -820,6 +816,10 @@
             this.pvpCollection.Size = new System.Drawing.Size(825, 554);
             this.pvpCollection.Text = "My Collection";
             // 
+            // valuationBindingSource
+            // 
+            this.valuationBindingSource.DataSource = typeof(HSCore.Model.Valuation);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -841,7 +841,6 @@
             this.pvpSummary.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.gridCardValuation.MasterTemplate)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.gridCardValuation)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.valuationBindingSource)).EndInit();
             this.pvpDecks.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.radPanel2)).EndInit();
             this.radPanel2.ResumeLayout(false);
@@ -856,6 +855,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.rbClass)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.rbFree)).EndInit();
             this.pvpCollection.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.valuationBindingSource)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this)).EndInit();
             this.ResumeLayout(false);
 

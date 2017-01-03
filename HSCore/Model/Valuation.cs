@@ -21,16 +21,16 @@ namespace HSCore.Model
         public double Value => Card.ValuationFactor * (6 - GetTierSum() / (float) GetInDecks()) * GetApperences();
         public double AvgValue => (Value1 + Value2 + Value3) / 3;
 
-        public double InDecks1 => GetInDecks(SourceEnum.HearthstoneTopDecks);
-        public double Apperences1 => GetApperences(SourceEnum.HearthstoneTopDecks);
+        public int InDecks1 => GetInDecks(SourceEnum.HearthstoneTopDecks);
+        public int Apperences1 => GetApperences(SourceEnum.HearthstoneTopDecks);
         public double TierSum1 => GetTierSum(SourceEnum.HearthstoneTopDecks) / (float) GetInDecks(SourceEnum.HearthstoneTopDecks);
         public double Value1 => GetInDecks(SourceEnum.HearthstoneTopDecks) != 0 ? (Card.ValuationFactor * (6 - GetTierSum(SourceEnum.HearthstoneTopDecks) / (float)GetInDecks(SourceEnum.HearthstoneTopDecks)) * GetApperences(SourceEnum.HearthstoneTopDecks)) : 0;
-        public double InDecks2 => GetInDecks(SourceEnum.TempoStorm);
-        public double Apperences2 => GetApperences(SourceEnum.TempoStorm);
+        public int InDecks2 => GetInDecks(SourceEnum.TempoStorm);
+        public int Apperences2 => GetApperences(SourceEnum.TempoStorm);
         public double TierSum2 => GetTierSum(SourceEnum.TempoStorm) / (float)GetInDecks(SourceEnum.TempoStorm);
         public double Value2 => GetInDecks(SourceEnum.TempoStorm) != 0 ? (Card.ValuationFactor * (6 - GetTierSum(SourceEnum.TempoStorm) / (float)GetInDecks(SourceEnum.TempoStorm)) * GetApperences(SourceEnum.TempoStorm)) : 0;
-        public double InDecks3 => GetInDecks(SourceEnum.ViciousSyndicate);
-        public double Apperences3 => GetApperences(SourceEnum.ViciousSyndicate);
+        public int InDecks3 => GetInDecks(SourceEnum.ViciousSyndicate);
+        public int Apperences3 => GetApperences(SourceEnum.ViciousSyndicate);
         public double TierSum3 => GetTierSum(SourceEnum.ViciousSyndicate) / (float)GetInDecks(SourceEnum.ViciousSyndicate);
         public double Value3 => GetInDecks(SourceEnum.ViciousSyndicate) != 0 ? (Card.ValuationFactor * (6 - GetTierSum(SourceEnum.ViciousSyndicate) / (float)GetInDecks(SourceEnum.ViciousSyndicate)) * GetApperences(SourceEnum.ViciousSyndicate)) : 0;
 
