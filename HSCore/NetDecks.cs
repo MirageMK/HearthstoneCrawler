@@ -37,11 +37,12 @@ namespace HSCore
             {
                 DownloadDecks();
             }
-}
+        }
 
         public static List<Deck> DownloadDecks()
         {
             Decks = new List<Deck>();
+
             BaseReader reader = new TempoStormBaseReader();
             Decks.AddRange(reader.GetDecks());
             reader = new HearthstoneTopDecksBaseReader();
@@ -50,6 +51,8 @@ namespace HSCore
             Decks.AddRange(reader.GetDecks());
 
             _isf.SaveObject(Decks, FILE_NAME);
+
+            RecalculateValuations();
 
             return Decks;
         }
@@ -61,26 +64,30 @@ namespace HSCore
         {
             get
             {
-                if(_valuations != null) return _valuations;
+                if (_valuations == null)
+                    RecalculateValuations();
 
-                _valuations = new List<Valuation>();
-
-                foreach(Deck deck in Decks)
-                {
-                    foreach(KeyValuePair<Card, int> dCard in deck.Cards)
-                    {
-                        Valuation v = _valuations.Find(x => x.Card == dCard.Key);
-                        if(v == null)
-                        {
-                            v = new Valuation(dCard.Key);
-                            _valuations.Add(v);
-                        }
-                        v.SetInDecks(deck.Source, 1);
-                        v.SetApperences(deck.Source, dCard.Value);
-                        v.SetTierSum(deck.Source, deck.Tier);
-                    }
-                }
                 return _valuations;
+            }
+        }
+
+        private static void RecalculateValuations()
+        {
+            _valuations = new List<Valuation>();
+            foreach (Deck deck in Decks)
+            {
+                foreach (KeyValuePair<Card, int> dCard in deck.Cards)
+                {
+                    Valuation v = _valuations.Find(x => x.Card == dCard.Key);
+                    if (v == null)
+                    {
+                        v = new Valuation(dCard.Key);
+                        _valuations.Add(v);
+                    }
+                    v.SetInDecks(deck.Source, 1);
+                    v.SetApperences(deck.Source, dCard.Value);
+                    v.SetTierSum(deck.Source, deck.Tier);
+                }
             }
         }
     }

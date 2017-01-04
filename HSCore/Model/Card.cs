@@ -79,24 +79,31 @@ namespace HSCore.Model
         {
             get
             {
-                double factor = 1.5;
-                if (!IsStandard) factor -= 0.5;
+                double factor = 1;
 
-                if (!IsLegendary) factor -= 0.5;
+                if (!IsStandard) factor -= 0.5;
+                if (Enums.GetValueFromDescription<SetEnum>(CardSet) > SetEnum.GvG && Enums.GetValueFromDescription<SetEnum>(CardSet) < SetEnum.WotOG)
+                {
+                    factor -= (DateTime.Now.Month + 8) * 0.5 / 12;
+                }
+
+                if (IsLegendary) factor += 0.25;
 
                 switch (Rarity)
-                    {
-                        case "Epic":
-                            factor -= 0.1;
-                            break;
-                        case "Rare":
-                            factor -= 0.2;
-                            break;
-                        case "Common":
-                        case "Free":
-                            factor -= 0.3;
-                            break;
-                    }
+                {
+                    case "Epic":
+                        factor -= 0.1;
+                        break;
+                    case "Rare":
+                        factor -= 0.2;
+                        break;
+                    case "Common":
+                        factor -= 0.3;
+                        break;
+                    case "Free":
+                        factor -= 0.4;
+                        break;
+                }
 
                 return factor;
             }

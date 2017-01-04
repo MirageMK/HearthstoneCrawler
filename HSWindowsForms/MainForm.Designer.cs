@@ -78,6 +78,7 @@
             Telerik.WinControls.UI.GridViewDecimalColumn gridViewDecimalColumn19 = new Telerik.WinControls.UI.GridViewDecimalColumn();
             Telerik.WinControls.UI.GridViewDecimalColumn gridViewDecimalColumn20 = new Telerik.WinControls.UI.GridViewDecimalColumn();
             Telerik.WinControls.UI.GridViewDecimalColumn gridViewDecimalColumn21 = new Telerik.WinControls.UI.GridViewDecimalColumn();
+            Telerik.WinControls.UI.GridViewTextBoxColumn gridViewTextBoxColumn19 = new Telerik.WinControls.UI.GridViewTextBoxColumn();
             Telerik.WinControls.Data.SortDescriptor sortDescriptor2 = new Telerik.WinControls.Data.SortDescriptor();
             Telerik.WinControls.UI.ColumnGroupsViewDefinition columnGroupsViewDefinition1 = new Telerik.WinControls.UI.ColumnGroupsViewDefinition();
             Telerik.WinControls.UI.GridViewColumnGroup gridViewColumnGroup1 = new Telerik.WinControls.UI.GridViewColumnGroup();
@@ -90,15 +91,15 @@
             Telerik.WinControls.UI.GridViewColumnGroupRow gridViewColumnGroupRow4 = new Telerik.WinControls.UI.GridViewColumnGroupRow();
             Telerik.WinControls.UI.GridViewColumnGroup gridViewColumnGroup5 = new Telerik.WinControls.UI.GridViewColumnGroup();
             Telerik.WinControls.UI.GridViewColumnGroupRow gridViewColumnGroupRow5 = new Telerik.WinControls.UI.GridViewColumnGroupRow();
-            Telerik.WinControls.UI.GridViewTextBoxColumn gridViewTextBoxColumn19 = new Telerik.WinControls.UI.GridViewTextBoxColumn();
             Telerik.WinControls.UI.GridViewTextBoxColumn gridViewTextBoxColumn20 = new Telerik.WinControls.UI.GridViewTextBoxColumn();
+            Telerik.WinControls.UI.GridViewTextBoxColumn gridViewTextBoxColumn21 = new Telerik.WinControls.UI.GridViewTextBoxColumn();
             Telerik.WinControls.UI.GridViewComboBoxColumn gridViewComboBoxColumn3 = new Telerik.WinControls.UI.GridViewComboBoxColumn();
             Telerik.WinControls.UI.GridViewDecimalColumn gridViewDecimalColumn22 = new Telerik.WinControls.UI.GridViewDecimalColumn();
             Telerik.WinControls.UI.GridViewComboBoxColumn gridViewComboBoxColumn4 = new Telerik.WinControls.UI.GridViewComboBoxColumn();
-            Telerik.WinControls.UI.GridViewTextBoxColumn gridViewTextBoxColumn21 = new Telerik.WinControls.UI.GridViewTextBoxColumn();
+            Telerik.WinControls.UI.GridViewTextBoxColumn gridViewTextBoxColumn22 = new Telerik.WinControls.UI.GridViewTextBoxColumn();
             Telerik.WinControls.UI.GridViewDecimalColumn gridViewDecimalColumn23 = new Telerik.WinControls.UI.GridViewDecimalColumn();
             Telerik.WinControls.UI.GridViewDecimalColumn gridViewDecimalColumn24 = new Telerik.WinControls.UI.GridViewDecimalColumn();
-            Telerik.WinControls.UI.GridViewTextBoxColumn gridViewTextBoxColumn22 = new Telerik.WinControls.UI.GridViewTextBoxColumn();
+            Telerik.WinControls.UI.GridViewTextBoxColumn gridViewTextBoxColumn23 = new Telerik.WinControls.UI.GridViewTextBoxColumn();
             Telerik.WinControls.Data.SortDescriptor sortDescriptor3 = new Telerik.WinControls.Data.SortDescriptor();
             Telerik.WinControls.UI.TableViewDefinition tableViewDefinition2 = new Telerik.WinControls.UI.TableViewDefinition();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
@@ -468,7 +469,7 @@
             this.pvMainPager.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pvMainPager.Location = new System.Drawing.Point(0, 0);
             this.pvMainPager.Name = "pvMainPager";
-            this.pvMainPager.SelectedPage = this.pvpCollection;
+            this.pvMainPager.SelectedPage = this.pvpSummary;
             this.pvMainPager.Size = new System.Drawing.Size(984, 562);
             this.pvMainPager.TabIndex = 1;
             this.pvMainPager.Text = "Pager";
@@ -620,6 +621,13 @@
             gridViewDecimalColumn21.Name = "Value3";
             gridViewDecimalColumn21.ReadOnly = true;
             gridViewDecimalColumn21.Width = 66;
+            gridViewTextBoxColumn19.EnableExpressionEditor = false;
+            gridViewTextBoxColumn19.IsPinned = true;
+            gridViewTextBoxColumn19.MaxWidth = 20;
+            gridViewTextBoxColumn19.MinWidth = 20;
+            gridViewTextBoxColumn19.Name = "color";
+            gridViewTextBoxColumn19.PinPosition = Telerik.WinControls.UI.PinnedColumnPosition.Left;
+            gridViewTextBoxColumn19.Width = 20;
             this.gridCardValuation.MasterTemplate.Columns.AddRange(new Telerik.WinControls.UI.GridViewDataColumn[] {
             gridViewTextBoxColumn18,
             gridViewDecimalColumn8,
@@ -635,7 +643,8 @@
             gridViewDecimalColumn18,
             gridViewDecimalColumn19,
             gridViewDecimalColumn20,
-            gridViewDecimalColumn21});
+            gridViewDecimalColumn21,
+            gridViewTextBoxColumn19});
             this.gridCardValuation.MasterTemplate.DataSource = this.valuationBindingSource;
             this.gridCardValuation.MasterTemplate.EnableGrouping = false;
             sortDescriptor2.Direction = System.ComponentModel.ListSortDirection.Descending;
@@ -645,6 +654,7 @@
             gridViewColumnGroup1.IsPinned = true;
             gridViewColumnGroup1.Name = "group5";
             gridViewColumnGroup1.PinPosition = Telerik.WinControls.UI.PinnedColumnPosition.Left;
+            gridViewColumnGroupRow1.ColumnNames.Add("color");
             gridViewColumnGroupRow1.ColumnNames.Add("Card");
             gridViewColumnGroup1.Rows.Add(gridViewColumnGroupRow1);
             gridViewColumnGroup1.Text = "";
@@ -686,6 +696,7 @@
             this.gridCardValuation.Size = new System.Drawing.Size(495, 554);
             this.gridCardValuation.TabIndex = 0;
             this.gridCardValuation.Text = "gridCardValuation";
+            this.gridCardValuation.CellFormatting += new Telerik.WinControls.UI.CellFormattingEventHandler(this.gridCardValuation_CellFormatting);
             this.gridCardValuation.ScreenTipNeeded += new Telerik.WinControls.ScreenTipNeededEventHandler(this.gridCardValuation_ScreenTipNeeded);
             // 
             // valuationBindingSource
@@ -728,21 +739,21 @@
             // 
             this.gridViewDecks.MasterTemplate.AllowAddNewRow = false;
             this.gridViewDecks.MasterTemplate.AutoSizeColumnsMode = Telerik.WinControls.UI.GridViewAutoSizeColumnsMode.Fill;
-            gridViewTextBoxColumn19.EnableExpressionEditor = false;
-            gridViewTextBoxColumn19.FieldName = "Name";
-            gridViewTextBoxColumn19.HeaderText = "Name";
-            gridViewTextBoxColumn19.IsAutoGenerated = true;
-            gridViewTextBoxColumn19.MinWidth = 150;
-            gridViewTextBoxColumn19.Name = "Name";
-            gridViewTextBoxColumn19.Width = 181;
             gridViewTextBoxColumn20.EnableExpressionEditor = false;
-            gridViewTextBoxColumn20.FieldName = "Class";
-            gridViewTextBoxColumn20.HeaderText = "Class";
+            gridViewTextBoxColumn20.FieldName = "Name";
+            gridViewTextBoxColumn20.HeaderText = "Name";
             gridViewTextBoxColumn20.IsAutoGenerated = true;
-            gridViewTextBoxColumn20.MinWidth = 100;
-            gridViewTextBoxColumn20.Name = "Class";
-            gridViewTextBoxColumn20.ReadOnly = true;
-            gridViewTextBoxColumn20.Width = 121;
+            gridViewTextBoxColumn20.MinWidth = 150;
+            gridViewTextBoxColumn20.Name = "Name";
+            gridViewTextBoxColumn20.Width = 181;
+            gridViewTextBoxColumn21.EnableExpressionEditor = false;
+            gridViewTextBoxColumn21.FieldName = "Class";
+            gridViewTextBoxColumn21.HeaderText = "Class";
+            gridViewTextBoxColumn21.IsAutoGenerated = true;
+            gridViewTextBoxColumn21.MinWidth = 100;
+            gridViewTextBoxColumn21.Name = "Class";
+            gridViewTextBoxColumn21.ReadOnly = true;
+            gridViewTextBoxColumn21.Width = 121;
             gridViewComboBoxColumn3.DataSource = this.enumBinder2;
             gridViewComboBoxColumn3.DataType = typeof(object);
             gridViewComboBoxColumn3.DisplayMember = "Description";
@@ -775,14 +786,14 @@
             gridViewComboBoxColumn4.ReadOnly = true;
             gridViewComboBoxColumn4.ValueMember = "Value";
             gridViewComboBoxColumn4.Width = 85;
-            gridViewTextBoxColumn21.EnableExpressionEditor = false;
-            gridViewTextBoxColumn21.FieldName = "Id";
-            gridViewTextBoxColumn21.HeaderText = "Id";
-            gridViewTextBoxColumn21.IsAutoGenerated = true;
-            gridViewTextBoxColumn21.IsVisible = false;
-            gridViewTextBoxColumn21.Name = "Id";
-            gridViewTextBoxColumn21.ReadOnly = true;
-            gridViewTextBoxColumn21.Width = 18;
+            gridViewTextBoxColumn22.EnableExpressionEditor = false;
+            gridViewTextBoxColumn22.FieldName = "Id";
+            gridViewTextBoxColumn22.HeaderText = "Id";
+            gridViewTextBoxColumn22.IsAutoGenerated = true;
+            gridViewTextBoxColumn22.IsVisible = false;
+            gridViewTextBoxColumn22.Name = "Id";
+            gridViewTextBoxColumn22.ReadOnly = true;
+            gridViewTextBoxColumn22.Width = 18;
             gridViewDecimalColumn23.DataType = typeof(int);
             gridViewDecimalColumn23.EnableExpressionEditor = false;
             gridViewDecimalColumn23.FieldName = "Dust";
@@ -802,24 +813,24 @@
             gridViewDecimalColumn24.ReadOnly = true;
             gridViewDecimalColumn24.SortOrder = Telerik.WinControls.UI.RadSortOrder.Ascending;
             gridViewDecimalColumn24.Width = 121;
-            gridViewTextBoxColumn22.DataType = typeof(System.Collections.Generic.Dictionary<HSCore.Model.Card, int>);
-            gridViewTextBoxColumn22.EnableExpressionEditor = false;
-            gridViewTextBoxColumn22.FieldName = "Cards";
-            gridViewTextBoxColumn22.HeaderText = "Cards";
-            gridViewTextBoxColumn22.IsAutoGenerated = true;
-            gridViewTextBoxColumn22.IsVisible = false;
-            gridViewTextBoxColumn22.Name = "Cards";
-            gridViewTextBoxColumn22.Width = 36;
+            gridViewTextBoxColumn23.DataType = typeof(System.Collections.Generic.Dictionary<HSCore.Model.Card, int>);
+            gridViewTextBoxColumn23.EnableExpressionEditor = false;
+            gridViewTextBoxColumn23.FieldName = "Cards";
+            gridViewTextBoxColumn23.HeaderText = "Cards";
+            gridViewTextBoxColumn23.IsAutoGenerated = true;
+            gridViewTextBoxColumn23.IsVisible = false;
+            gridViewTextBoxColumn23.Name = "Cards";
+            gridViewTextBoxColumn23.Width = 36;
             this.gridViewDecks.MasterTemplate.Columns.AddRange(new Telerik.WinControls.UI.GridViewDataColumn[] {
-            gridViewTextBoxColumn19,
             gridViewTextBoxColumn20,
+            gridViewTextBoxColumn21,
             gridViewComboBoxColumn3,
             gridViewDecimalColumn22,
             gridViewComboBoxColumn4,
-            gridViewTextBoxColumn21,
+            gridViewTextBoxColumn22,
             gridViewDecimalColumn23,
             gridViewDecimalColumn24,
-            gridViewTextBoxColumn22});
+            gridViewTextBoxColumn23});
             this.gridViewDecks.MasterTemplate.DataSource = this.deckBindingSource;
             this.gridViewDecks.MasterTemplate.EnableFiltering = true;
             sortDescriptor3.PropertyName = "MyDust";

@@ -34,25 +34,54 @@ namespace HSWindowsForms
 
         private void radGridView1_CellFormatting(object sender, CellFormattingEventArgs e)
         {
-            if (e.ColumnIndex != 0) return;
-
             KeyValuePair<Card, int> card = (KeyValuePair<Card, int>)e.CellElement.RowInfo.DataBoundItem;
-            switch (card.Value - card.Key.Own)
+
+            if(e.Column.Name == "color" || e.Column.Name == "Value")
             {
-                case 2:
-                    e.CellElement.DrawFill = true;
-                    e.CellElement.GradientStyle = GradientStyles.Solid;
-                    e.CellElement.BackColor = Color.Red;
+                e.CellElement.DrawFill = true;
+                e.CellElement.GradientStyle = GradientStyles.Linear;
+                e.CellElement.BackColor = Color.White;
+                e.CellElement.GradientAngle = 45;
+            }
+
+            switch(e.Column.Name)
+            {
+                case "color":
+                    switch(card.Value - card.Key.Own)
+                    {
+                        case 2:
+                            e.CellElement.BackColor2 = Color.Red;
+                            break;
+                        case 1:
+                            e.CellElement.BackColor2 = Color.Yellow;
+                            break;
+                        default:
+                            e.CellElement.ResetValue(LightVisualElement.BackColorProperty, ValueResetFlags.Local);
+                            e.CellElement.ResetValue(LightVisualElement.BackColor2Property, ValueResetFlags.Local);
+                            e.CellElement.ResetValue(LightVisualElement.GradientStyleProperty, ValueResetFlags.Local);
+                            e.CellElement.ResetValue(LightVisualElement.DrawFillProperty, ValueResetFlags.Local);
+                            break;
+                    }
                     break;
-                case 1:
-                    e.CellElement.DrawFill = true;
-                    e.CellElement.GradientStyle = GradientStyles.Solid;
-                    e.CellElement.BackColor = Color.Yellow;
-                    break;
-                default:
-                    e.CellElement.ResetValue(LightVisualElement.BackColorProperty, ValueResetFlags.Local);
-                    e.CellElement.ResetValue(LightVisualElement.GradientStyleProperty, ValueResetFlags.Local);
-                    e.CellElement.ResetValue(LightVisualElement.DrawFillProperty, ValueResetFlags.Local);
+                case "Value":
+                    switch(card.Key.Rarity)
+                    {
+                        case "Legendary":
+                            e.CellElement.BackColor2 = Color.Orange;
+                            break;
+                        case "Epic":
+                            e.CellElement.BackColor2 = Color.Orchid;
+                            break;
+                        case "Rare":
+                            e.CellElement.BackColor2 = Color.DodgerBlue;
+                            break;
+                        default:
+                            e.CellElement.ResetValue(LightVisualElement.BackColorProperty, ValueResetFlags.Local);
+                            e.CellElement.ResetValue(LightVisualElement.BackColor2Property, ValueResetFlags.Local);
+                            e.CellElement.ResetValue(LightVisualElement.GradientStyleProperty, ValueResetFlags.Local);
+                            e.CellElement.ResetValue(LightVisualElement.DrawFillProperty, ValueResetFlags.Local);
+                            break;
+                    }
                     break;
             }
         }
@@ -79,7 +108,7 @@ namespace HSWindowsForms
             _screenTip.CaptionVisible = false;
             _screenTip.FooterVisible = false;
             _screenTip.MainTextLabel.Margin = new Padding(-5, -35, -15, -20);
-            
+
             _screenTip.AutoSize = true;
             cell.ScreenTip = _screenTip;
         }
