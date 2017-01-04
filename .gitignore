@@ -251,4 +251,4 @@ paket-files/
 .idea/
 *.sln.iml
 
-HSCore/client_secret.json
+client_secret.json
