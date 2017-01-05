@@ -16,7 +16,7 @@ namespace HSCore
     {
         static readonly string[] Scopes = { SheetsService.Scope.Spreadsheets };
         static readonly string ApplicationName = "Hearthstone Crawler";
-        internal static readonly string[] NonColectable = { "Roaring Torch", "Tank Up!", "Kazakus Potion" };
+        internal static readonly string[] NonColectable = { "Roaring Torch", "Tank Up!", "Kazakus Potion", "The Storm Guardian" };
 
         public static List<Card> Cards { get; }
         public static int CardCount => Cards.Sum(card => card.Own);
