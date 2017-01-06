@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web.Helpers;
 using HSCore.Model;
 using HtmlAgilityPack;
 
 namespace HSCore.Readers
 {
-    public class HearthstoneTopDecksBaseReader : BaseReader
+    public class HearthstoneTopDecksReader : BaseReader
     {
         private const string URL = "http://www.hearthstonetopdecks.com/";
 
@@ -54,7 +53,7 @@ namespace HSCore.Readers
                 if (script == "") continue;
                 try
                 {
-                    string winRateString = script.Split(new string[] { "data: [" }, StringSplitOptions.None)[1].Split(new string[] { ", ]" }, StringSplitOptions.None)[0];
+                    string winRateString = script.Split(new[] { "data: [" }, StringSplitOptions.None)[1].Split(new[] { ", ]" }, StringSplitOptions.None)[0];
                     string[] winRateArray = winRateString.Split(',');
 
                     double total = winRateArray.Aggregate(0.0, (current, winRate) => current + int.Parse(winRate));
@@ -93,7 +92,7 @@ namespace HSCore.Readers
 
             foreach (HtmlNode cardLink in doc.DocumentNode.SelectNodes("//*[contains(@class,'card-frame')]"))
             {
-                string cardName = cardLink.SelectSingleNode("*[contains(@class,'card-name')]").InnerText.Replace("&#8217;", "'"); ;
+                string cardName = cardLink.SelectSingleNode("*[contains(@class,'card-name')]").InnerText.Replace("&#8217;", "'");
                 string cardCount = cardLink.SelectSingleNode("*[contains(@class,'card-count')]").InnerText;
 
                 Card card = MyCollection.Get(cardName);

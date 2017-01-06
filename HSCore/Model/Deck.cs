@@ -47,5 +47,19 @@ namespace HSCore.Model
         {
             return obj.Name.GetHashCode();
         }
+
+        public List<IList<object>> ToMatrix()
+        {
+            List<IList<object>> toReturn = new List<IList<object>>();
+
+            foreach (KeyValuePair<Card, int> keyValuePair in Cards)
+            {
+                IList<object> row = keyValuePair.Key.ToList();
+                row.Add(keyValuePair.Value);
+                toReturn.Add(row);
+            }
+
+            return toReturn;
+        }
     }
 }

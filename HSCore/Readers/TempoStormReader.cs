@@ -1,15 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Reflection;
 using System.Web.Helpers;
 using HSCore.Model;
-using HtmlAgilityPack;
 using RestSharp;
 
 namespace HSCore.Readers
 {
-    public class TempoStormBaseReader : BaseReader
+    public class TempoStormReader : BaseReader
     {
         private const string URL = "http://www.tempostorm.com/";
 

@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO.IsolatedStorage;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using HSCore.Extensions;
 using HSCore.Model;
 using HSCore.Readers;
@@ -43,11 +40,11 @@ namespace HSCore
         {
             Decks = new List<Deck>();
 
-            BaseReader reader = new TempoStormBaseReader();
+            BaseReader reader = new TempoStormReader();
             Decks.AddRange(reader.GetDecks());
-            reader = new HearthstoneTopDecksBaseReader();
+            reader = new HearthstoneTopDecksReader();
             Decks.AddRange(reader.GetDecks());
-            reader = new ViciousSyndicateBaseReader();
+            reader = new ViciousSyndicateReader();
             Decks.AddRange(reader.GetDecks());
 
             _isf.SaveObject(Decks, FILE_NAME);

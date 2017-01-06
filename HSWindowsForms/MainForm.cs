@@ -69,12 +69,19 @@ namespace HSWindowsForms
         {
             Valuation valuation = (Valuation)e.CellElement.RowInfo.DataBoundItem;
 
-            if (e.Column.Name == "color" || e.Column.Name == "Card")
+            if(e.Column.Name == "color" || e.Column.Name == "Card")
             {
                 e.CellElement.DrawFill = true;
                 e.CellElement.GradientStyle = GradientStyles.Linear;
                 e.CellElement.BackColor = Color.White;
                 e.CellElement.GradientAngle = 45;
+            }
+            else
+            {
+                e.CellElement.ResetValue(LightVisualElement.BackColorProperty, ValueResetFlags.Local);
+                e.CellElement.ResetValue(LightVisualElement.BackColor2Property, ValueResetFlags.Local);
+                e.CellElement.ResetValue(LightVisualElement.GradientStyleProperty, ValueResetFlags.Local);
+                e.CellElement.ResetValue(LightVisualElement.DrawFillProperty, ValueResetFlags.Local);
             }
 
             switch (e.Column.Name)

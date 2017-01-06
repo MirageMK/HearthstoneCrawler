@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
+using RestSharp;
 
 namespace HSCore.Model
 {
@@ -111,7 +111,7 @@ namespace HSCore.Model
 
         public bool Equals(Card other)
         {
-            return other != null && other.Name == this.Name;
+            return other != null && other.Name == Name;
         }
 
         public bool Equals(Card x, Card y)
@@ -127,6 +127,11 @@ namespace HSCore.Model
         public override string ToString()
         {
             return Name;
+        }
+
+        public IList<object> ToList()
+        {
+            return new List<object> { Name, ValuationFactor };
         }
     }
 

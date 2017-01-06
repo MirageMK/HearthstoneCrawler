@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using HSCore;
 using HSCore.Model;
 using HSCore.Readers;
+using HSCore.Writers;
 
 namespace HSConsole
 {
@@ -13,12 +14,9 @@ namespace HSConsole
     {
         static void Main(string[] args)
         {
-            BaseReader r = new TempoStormBaseReader();
-            
-            foreach (Deck deck in r.GetDecks())
-            {
-                //Console.WriteLine(card.Name + " " + card.Own);
-            }
+            BaseWriter bw = new GoogleSpreedsheetWriter();
+
+            bw.WriteDecks();
 
             Console.WriteLine(MyCollection.Cards.Count);
             Console.ReadLine();

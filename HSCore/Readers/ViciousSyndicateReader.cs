@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Threading;
 using System.Web.Helpers;
 using Google.Apis.Auth.OAuth2;
@@ -13,11 +11,10 @@ using Google.Apis.Sheets.v4.Data;
 using Google.Apis.Util.Store;
 using HSCore.Model;
 using HtmlAgilityPack;
-using RestSharp;
 
 namespace HSCore.Readers
 {
-    public class ViciousSyndicateBaseReader : BaseReader
+    public class ViciousSyndicateReader : BaseReader
     {
         static readonly string[] Scopes = { SheetsService.Scope.SpreadsheetsReadonly };
         private const string APPLICATION_NAME = "Hearthstone Crawler";
@@ -145,7 +142,7 @@ namespace HSCore.Readers
             if(graph == null) return null;
             string script = graph.InnerHtml;
 
-            dynamic cardJson = Json.Decode(script.Split(new string[] { "var n = " }, StringSplitOptions.None)[1].Split(';')[0]);
+            dynamic cardJson = Json.Decode(script.Split(new[] { "var n = " }, StringSplitOptions.None)[1].Split(';')[0]);
 
             foreach (KeyValuePair<string, dynamic> cardObj in cardJson)
             {

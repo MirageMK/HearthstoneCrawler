@@ -121,10 +121,12 @@
     <Compile Include="HeartstoneDB.cs" />
     <Compile Include="NetDecks.cs" />
     <Compile Include="Readers\BaseReader.cs" />
-    <Compile Include="Readers\HearthstoneTopDecksBaseReader.cs" />
-    <Compile Include="Readers\ViciousSyndicateBaseReader.cs" />
-    <Compile Include="Readers\TempoStormBaseReader.cs" />
+    <Compile Include="Readers\HearthstoneTopDecksReader.cs" />
+    <Compile Include="Readers\ViciousSyndicateReader.cs" />
+    <Compile Include="Readers\TempoStormReader.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Writers\GoogleSpreedsheetWriter.cs" />
+    <Compile Include="Writers\BaseWriter.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -133,9 +135,7 @@
     </Content>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Writers\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
