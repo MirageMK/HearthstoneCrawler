@@ -26,7 +26,7 @@ namespace HSWindowsForms
             InitializeComponent();
             Deck deck = _deck;
             Text = _deck.Name;
-            radGridView1.DataSource = deck.Cards.OrderBy(x => x.Key.PlayerClass == "Neutral").ThenBy(x => x.Key.PlayerClass).ThenBy(x => x.Key.Cost);
+            radGridView1.DataSource = deck.Cards.OrderBy(x => x.Key.PlayerClass == "Neutral").ThenBy(x => x.Key.PlayerClass).ThenBy(x => x.Key.Cost).ThenBy(x => x.Key.Name);
             radGridView1.MasterTemplate.ShowRowHeaderColumn = false;
 
             this.Size = new Size(this.Width, 100 + (deck.Cards.Count * 23));

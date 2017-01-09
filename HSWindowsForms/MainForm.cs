@@ -78,6 +78,7 @@ namespace HSWindowsForms
             }
             else
             {
+                e.CellElement.DrawFill = false;
                 e.CellElement.ResetValue(LightVisualElement.BackColorProperty, ValueResetFlags.Local);
                 e.CellElement.ResetValue(LightVisualElement.BackColor2Property, ValueResetFlags.Local);
                 e.CellElement.ResetValue(LightVisualElement.GradientStyleProperty, ValueResetFlags.Local);
@@ -96,6 +97,7 @@ namespace HSWindowsForms
                             e.CellElement.BackColor2 = Color.Yellow;
                             break;
                         default:
+                            e.CellElement.DrawFill = false;
                             e.CellElement.ResetValue(LightVisualElement.BackColorProperty, ValueResetFlags.Local);
                             e.CellElement.ResetValue(LightVisualElement.BackColor2Property, ValueResetFlags.Local);
                             e.CellElement.ResetValue(LightVisualElement.GradientStyleProperty, ValueResetFlags.Local);
@@ -116,6 +118,7 @@ namespace HSWindowsForms
                             e.CellElement.BackColor2 = Color.DodgerBlue;
                             break;
                         default:
+                            e.CellElement.DrawFill = false;
                             e.CellElement.ResetValue(LightVisualElement.BackColorProperty, ValueResetFlags.Local);
                             e.CellElement.ResetValue(LightVisualElement.BackColor2Property, ValueResetFlags.Local);
                             e.CellElement.ResetValue(LightVisualElement.GradientStyleProperty, ValueResetFlags.Local);
@@ -209,6 +212,29 @@ namespace HSWindowsForms
 
             gridViewDecks.MasterTemplate.ExpandAllGroups();
         }
+
+        private void gridViewDecks_CellFormatting(object sender, CellFormattingEventArgs e)
+        {
+            Deck currentDeck = (Deck)e.CellElement.RowInfo.DataBoundItem;
+            // Reset the color of the cell.  
+            e.CellElement.DrawFill = false;
+
+            if (e.Column.Name == "Name")
+            {
+                for(int i = 0; i < this.gridViewDecks.Rows.Count; i++)
+                {
+                    Deck tempDeck = (Deck) this.gridViewDecks.Rows[i].DataBoundItem;
+                    if(currentDeck.DuplicateIndicatior == tempDeck.DuplicateIndicatior && currentDeck.Source != tempDeck.Source)
+                    {
+                        e.CellElement.DrawFill = true;
+                        e.CellElement.GradientStyle = GradientStyles.Linear;
+                        e.CellElement.BackColor = Color.LightCyan;
+                        e.CellElement.BackColor2 = Color.White;
+                        e.CellElement.GradientAngle = 45;
+                    }
+                }
+            }
+        }
         #endregion
 
         #region My Collection
@@ -294,5 +320,15 @@ namespace HSWindowsForms
 
             return _screenTip;
         }
+
+        /*private void HighlightCell(GridViewCellInfo cell)
+        {
+            if (cell.CellElement != null && cell.CellElement.DrawFill == false)
+            {
+                cell.CellElement.GradientStyle = GradientStyles.Solid;
+                cell.CellElement.BackColor = Color.Red;
+                cell.CellElement.DrawFill = true;
+            }
+        }*/
     }
 }

@@ -893,6 +893,7 @@
             this.gridViewDecks.Size = new System.Drawing.Size(825, 504);
             this.gridViewDecks.TabIndex = 3;
             this.gridViewDecks.Text = "gridViewDecks";
+            this.gridViewDecks.CellFormatting += new Telerik.WinControls.UI.CellFormattingEventHandler(this.gridViewDecks_CellFormatting);
             this.gridViewDecks.CellDoubleClick += new Telerik.WinControls.UI.GridViewCellEventHandler(this.gridViewDecks_CellDoubleClick);
             // 
             // deckBindingSource
