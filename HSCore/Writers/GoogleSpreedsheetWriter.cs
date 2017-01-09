@@ -33,11 +33,11 @@ namespace HSCore.Writers
                 }
             }
 
-            
-
-            ValueRange vr = new ValueRange();
-            vr.Values = toBeExported;
-            vr.MajorDimension = "ROWS";
+            ValueRange vr = new ValueRange
+                            {
+                                Values = toBeExported,
+                                MajorDimension = "ROWS"
+                            };
 
             SpreadsheetsResource.ValuesResource.BatchClearRequest clearRequest =
                 service.Spreadsheets.Values.BatchClear(new BatchClearValuesRequest() { Ranges = new List<string>() { range } }, spreadsheetId);

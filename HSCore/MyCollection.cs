@@ -50,6 +50,7 @@ namespace HSCore
 
             // Define request parameters.
             string spreadsheetId = "1bWsfZ3bH0wfnCqN6kJQzDTMXLaCzYLWDlao-KSuZFLY";
+            //string spreadsheetId = "1mBHQp3sd8390K8Nh-sJuTUNA1m114SrLpYqXZREZAEA"; //Kanga
             string range = "HiddenData!B7:P";
             SpreadsheetsResource.ValuesResource.GetRequest request =
                     service.Spreadsheets.Values.Get(spreadsheetId, range);
@@ -74,7 +75,8 @@ namespace HSCore
 
         public static Card Get(string name)
         {
-            Card newCard = Cards.Find(x => x.Name.ToLower() == name.ToLower());
+            name = Mapper(name);
+            Card newCard = Cards.Find(x => string.Equals(x.Name, name, StringComparison.CurrentCultureIgnoreCase));
             if (newCard != null) return newCard;
 
             if (NonColectable.Contains(name))
@@ -82,7 +84,20 @@ namespace HSCore
                 return null;
             }
 
-            throw new Exception("Cannot find card with name:" + name);
+            throw new Exception("MY - Cannot find card with name:" + name);
+        }
+
+        private static string Mapper(string name)
+        {
+            switch(name)
+            {
+                case "Upgrade":
+                    return "Upgrade!";
+                case "Dopplegangster":
+                    return "Doppelgangster";
+                default:
+                    return name;
+            }
         }
     }
 }

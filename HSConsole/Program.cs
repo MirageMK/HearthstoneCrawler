@@ -14,6 +14,8 @@ namespace HSConsole
     {
         static void Main(string[] args)
         {
+            BaseReader br = new MetabombReader();
+            br.GetDecks();
             BaseWriter bw = new GoogleSpreedsheetWriter();
 
             bw.WriteDecks();

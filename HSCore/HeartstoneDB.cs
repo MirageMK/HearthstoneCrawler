@@ -30,12 +30,24 @@ namespace HSCore
 
         public static Card Get(string name)
         {
-            Card newCard = Cards.Find(x => x.Name == name);
+            name = Mapper(name);
+            Card newCard = Cards.Find(x => string.Equals(x.Name, name, StringComparison.CurrentCultureIgnoreCase));
 
             if (newCard == null)
-                throw new Exception("Cannot find card with name:" + name);
+                throw new Exception("DB - Cannot find card with name:" + name);
 
             return newCard;
+        }
+
+        private static string Mapper(string name)
+        {
+            switch (name)
+            {
+                case "King Crush":
+                    return "King Krush";
+                default:
+                    return name;
+            }
         }
     }
 }

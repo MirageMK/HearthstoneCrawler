@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.IO.IsolatedStorage;
 using HSCore.Extensions;
 using HSCore.Model;
@@ -30,6 +31,11 @@ namespace HSCore
             DateTimeOffset lastChange = _isf.GetLastWriteTime(FILE_NAME);
             Decks = _isf.LoadObject<List<Deck>>(FILE_NAME);
 
+            // Get the root and file portions of the search string.
+            string fileString = Path.GetFileName("*");
+
+            List<String> fileList = new List<String>(_isf.GetFileNames("*"));
+
             if (Decks == null || !lastChange.Date.Equals(DateTime.Now.Date))
             {
                 DownloadDecks();
@@ -38,6 +44,13 @@ namespace HSCore
 
         public static List<Deck> DownloadDecks()
         {
+            if(_isf == null)
+            {
+                _isf = IsolatedStorageFile.GetStore(IsolatedStorageScope.User |
+IsolatedStorageScope.Assembly | IsolatedStorageScope.Domain,
+typeof(System.Security.Policy.Url), typeof(System.Security.Policy.Url));
+            }
+
             Decks = new List<Deck>();
 
             BaseReader reader = new TempoStormReader();
@@ -45,6 +58,8 @@ namespace HSCore
             reader = new HearthstoneTopDecksReader();
             Decks.AddRange(reader.GetDecks());
             reader = new ViciousSyndicateReader();
+            Decks.AddRange(reader.GetDecks());
+            reader = new MetabombReader();
             Decks.AddRange(reader.GetDecks());
 
             _isf.SaveObject(Decks, FILE_NAME);

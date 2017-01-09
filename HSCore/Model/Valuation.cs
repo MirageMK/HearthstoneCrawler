@@ -19,7 +19,7 @@ namespace HSCore.Model
         public Card Card { get; }
 
         public double Value => Card.ValuationFactor * (6 - GetTierSum() / (float) GetInDecks()) * GetApperences();
-        public double AvgValue => (Value1 + Value2 + Value3) / 3;
+        public double AvgValue => (Value1 + Value2 + Value3 + Value4) / 4;
 
         public int InDecks1 => GetInDecks(SourceEnum.HearthstoneTopDecks);
         public int Apperences1 => GetApperences(SourceEnum.HearthstoneTopDecks);
@@ -33,6 +33,10 @@ namespace HSCore.Model
         public int Apperences3 => GetApperences(SourceEnum.ViciousSyndicate);
         public double TierSum3 => GetTierSum(SourceEnum.ViciousSyndicate) / (float)GetInDecks(SourceEnum.ViciousSyndicate);
         public double Value3 => GetInDecks(SourceEnum.ViciousSyndicate) != 0 ? (Card.ValuationFactor * (6 - GetTierSum(SourceEnum.ViciousSyndicate) / (float)GetInDecks(SourceEnum.ViciousSyndicate)) * GetApperences(SourceEnum.ViciousSyndicate)) : 0;
+        public int InDecks4 => GetInDecks(SourceEnum.Metabomb);
+        public int Apperences4 => GetApperences(SourceEnum.Metabomb);
+        public double TierSum4 => GetTierSum(SourceEnum.Metabomb) / (float)GetInDecks(SourceEnum.Metabomb);
+        public double Value4 => GetInDecks(SourceEnum.Metabomb) != 0 ? (Card.ValuationFactor * (6 - GetTierSum(SourceEnum.Metabomb) / (float)GetInDecks(SourceEnum.Metabomb)) * GetApperences(SourceEnum.Metabomb)) : 0;
 
         private readonly Dictionary<SourceEnum, int> _inDecks;
         public void SetInDecks(SourceEnum source, int value)

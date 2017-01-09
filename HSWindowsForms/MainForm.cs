@@ -135,7 +135,7 @@ namespace HSWindowsForms
 
         private void gridViewDecks_CellDoubleClick(object sender, GridViewCellEventArgs e)
         {
-            if (gridViewDecks.CurrentRow == null) return;
+            if (gridViewDecks.CurrentRow.DataBoundItem == null) return;
 
             DeckForm deckForm = new DeckForm(gridViewDecks.CurrentRow.DataBoundItem as Deck);
             deckForm.Show();
@@ -145,7 +145,7 @@ namespace HSWindowsForms
         {
             gridViewDecks.GroupDescriptors.Clear();
             gridViewDecks.FilterDescriptors.Clear();
-            rbCValue.ToggleState = ToggleState.Off;
+            rbSource.ToggleState = ToggleState.Off;
             rbClass.ToggleState = ToggleState.Off;
             rbFree.ToggleState = ToggleState.Off;
             LoadDecks(true);
@@ -192,7 +192,13 @@ namespace HSWindowsForms
                     fDescriptor.IsFilterEditor = true;
                     gridViewDecks.Columns["DeckType"].FilterDescriptor = fDescriptor;
                     break;
-                case "rbCValue":
+                case "rbSource":
+                    gDescriptor.GroupNames.Add("Source", ListSortDirection.Ascending);
+                    gridViewDecks.GroupDescriptors.Add(gDescriptor);
+
+                    sDescriptor.PropertyName = "Tier";
+                    sDescriptor.Direction = ListSortDirection.Ascending;
+                    gridViewDecks.MasterTemplate.SortDescriptors.Add(sDescriptor);
                     break;
             }
 

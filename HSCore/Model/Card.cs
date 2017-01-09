@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using RestSharp;
 
 namespace HSCore.Model
 {
@@ -8,26 +7,8 @@ namespace HSCore.Model
     public class Card : IEquatable<Card>, IEqualityComparer<Card>
     {
         public string CardId { get; set; }
-
-        private string _name;
-
-        public string Name
-        {
-            get
-            {
-                switch (_name)
-                {
-                    case "King Krush":
-                        return "King Crush";
-                    case "One-eyed Cheat":
-                        return "One-Eyed Cheat";
-                    default:
-                        return _name;
-                }
-            }
-            set { _name = value; }
-        }
-
+        
+        public string Name { get; set; }
         public string CardSet { get; set; }
         public string Type { get; set; }
         public string Faction { get; set; }

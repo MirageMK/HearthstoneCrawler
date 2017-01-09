@@ -64,6 +64,7 @@
             Telerik.WinControls.Data.SortDescriptor sortDescriptor1 = new Telerik.WinControls.Data.SortDescriptor();
             Telerik.WinControls.UI.TableViewDefinition tableViewDefinition1 = new Telerik.WinControls.UI.TableViewDefinition();
             Telerik.WinControls.UI.GridViewTextBoxColumn gridViewTextBoxColumn18 = new Telerik.WinControls.UI.GridViewTextBoxColumn();
+            Telerik.WinControls.UI.GridViewTextBoxColumn gridViewTextBoxColumn19 = new Telerik.WinControls.UI.GridViewTextBoxColumn();
             Telerik.WinControls.UI.GridViewDecimalColumn gridViewDecimalColumn8 = new Telerik.WinControls.UI.GridViewDecimalColumn();
             Telerik.WinControls.UI.GridViewDecimalColumn gridViewDecimalColumn9 = new Telerik.WinControls.UI.GridViewDecimalColumn();
             Telerik.WinControls.UI.GridViewDecimalColumn gridViewDecimalColumn10 = new Telerik.WinControls.UI.GridViewDecimalColumn();
@@ -78,7 +79,10 @@
             Telerik.WinControls.UI.GridViewDecimalColumn gridViewDecimalColumn19 = new Telerik.WinControls.UI.GridViewDecimalColumn();
             Telerik.WinControls.UI.GridViewDecimalColumn gridViewDecimalColumn20 = new Telerik.WinControls.UI.GridViewDecimalColumn();
             Telerik.WinControls.UI.GridViewDecimalColumn gridViewDecimalColumn21 = new Telerik.WinControls.UI.GridViewDecimalColumn();
-            Telerik.WinControls.UI.GridViewTextBoxColumn gridViewTextBoxColumn19 = new Telerik.WinControls.UI.GridViewTextBoxColumn();
+            Telerik.WinControls.UI.GridViewDecimalColumn gridViewDecimalColumn22 = new Telerik.WinControls.UI.GridViewDecimalColumn();
+            Telerik.WinControls.UI.GridViewDecimalColumn gridViewDecimalColumn23 = new Telerik.WinControls.UI.GridViewDecimalColumn();
+            Telerik.WinControls.UI.GridViewDecimalColumn gridViewDecimalColumn24 = new Telerik.WinControls.UI.GridViewDecimalColumn();
+            Telerik.WinControls.UI.GridViewDecimalColumn gridViewDecimalColumn25 = new Telerik.WinControls.UI.GridViewDecimalColumn();
             Telerik.WinControls.Data.SortDescriptor sortDescriptor2 = new Telerik.WinControls.Data.SortDescriptor();
             Telerik.WinControls.UI.ColumnGroupsViewDefinition columnGroupsViewDefinition1 = new Telerik.WinControls.UI.ColumnGroupsViewDefinition();
             Telerik.WinControls.UI.GridViewColumnGroup gridViewColumnGroup1 = new Telerik.WinControls.UI.GridViewColumnGroup();
@@ -91,14 +95,16 @@
             Telerik.WinControls.UI.GridViewColumnGroupRow gridViewColumnGroupRow4 = new Telerik.WinControls.UI.GridViewColumnGroupRow();
             Telerik.WinControls.UI.GridViewColumnGroup gridViewColumnGroup5 = new Telerik.WinControls.UI.GridViewColumnGroup();
             Telerik.WinControls.UI.GridViewColumnGroupRow gridViewColumnGroupRow5 = new Telerik.WinControls.UI.GridViewColumnGroupRow();
+            Telerik.WinControls.UI.GridViewColumnGroup gridViewColumnGroup6 = new Telerik.WinControls.UI.GridViewColumnGroup();
+            Telerik.WinControls.UI.GridViewColumnGroupRow gridViewColumnGroupRow6 = new Telerik.WinControls.UI.GridViewColumnGroupRow();
             Telerik.WinControls.UI.GridViewTextBoxColumn gridViewTextBoxColumn20 = new Telerik.WinControls.UI.GridViewTextBoxColumn();
             Telerik.WinControls.UI.GridViewTextBoxColumn gridViewTextBoxColumn21 = new Telerik.WinControls.UI.GridViewTextBoxColumn();
             Telerik.WinControls.UI.GridViewComboBoxColumn gridViewComboBoxColumn3 = new Telerik.WinControls.UI.GridViewComboBoxColumn();
-            Telerik.WinControls.UI.GridViewDecimalColumn gridViewDecimalColumn22 = new Telerik.WinControls.UI.GridViewDecimalColumn();
+            Telerik.WinControls.UI.GridViewDecimalColumn gridViewDecimalColumn26 = new Telerik.WinControls.UI.GridViewDecimalColumn();
             Telerik.WinControls.UI.GridViewComboBoxColumn gridViewComboBoxColumn4 = new Telerik.WinControls.UI.GridViewComboBoxColumn();
             Telerik.WinControls.UI.GridViewTextBoxColumn gridViewTextBoxColumn22 = new Telerik.WinControls.UI.GridViewTextBoxColumn();
-            Telerik.WinControls.UI.GridViewDecimalColumn gridViewDecimalColumn23 = new Telerik.WinControls.UI.GridViewDecimalColumn();
-            Telerik.WinControls.UI.GridViewDecimalColumn gridViewDecimalColumn24 = new Telerik.WinControls.UI.GridViewDecimalColumn();
+            Telerik.WinControls.UI.GridViewDecimalColumn gridViewDecimalColumn27 = new Telerik.WinControls.UI.GridViewDecimalColumn();
+            Telerik.WinControls.UI.GridViewDecimalColumn gridViewDecimalColumn28 = new Telerik.WinControls.UI.GridViewDecimalColumn();
             Telerik.WinControls.UI.GridViewTextBoxColumn gridViewTextBoxColumn23 = new Telerik.WinControls.UI.GridViewTextBoxColumn();
             Telerik.WinControls.Data.SortDescriptor sortDescriptor3 = new Telerik.WinControls.Data.SortDescriptor();
             Telerik.WinControls.UI.TableViewDefinition tableViewDefinition2 = new Telerik.WinControls.UI.TableViewDefinition();
@@ -117,7 +123,7 @@
             this.deckBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.radPanel1 = new Telerik.WinControls.UI.RadPanel();
             this.btnRefresh = new Telerik.WinControls.UI.RadButton();
-            this.rbCValue = new Telerik.WinControls.UI.RadRadioButton();
+            this.rbSource = new Telerik.WinControls.UI.RadRadioButton();
             this.rbClass = new Telerik.WinControls.UI.RadRadioButton();
             this.rbFree = new Telerik.WinControls.UI.RadRadioButton();
             this.pvpCollection = new Telerik.WinControls.UI.RadPageViewPage();
@@ -139,7 +145,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.radPanel1)).BeginInit();
             this.radPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.btnRefresh)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.rbCValue)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.rbSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.rbClass)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.rbFree)).BeginInit();
             this.pvpCollection.SuspendLayout();
@@ -498,20 +504,27 @@
             // 
             // 
             // 
-            gridViewTextBoxColumn18.DataType = typeof(HSCore.Model.Card);
             gridViewTextBoxColumn18.EnableExpressionEditor = false;
-            gridViewTextBoxColumn18.FieldName = "Card";
-            gridViewTextBoxColumn18.HeaderText = "Card";
-            gridViewTextBoxColumn18.IsAutoGenerated = true;
             gridViewTextBoxColumn18.IsPinned = true;
-            gridViewTextBoxColumn18.Name = "Card";
+            gridViewTextBoxColumn18.MaxWidth = 20;
+            gridViewTextBoxColumn18.MinWidth = 20;
+            gridViewTextBoxColumn18.Name = "color";
             gridViewTextBoxColumn18.PinPosition = Telerik.WinControls.UI.PinnedColumnPosition.Left;
-            gridViewTextBoxColumn18.ReadOnly = true;
-            gridViewTextBoxColumn18.Width = 192;
+            gridViewTextBoxColumn18.Width = 20;
+            gridViewTextBoxColumn19.DataType = typeof(HSCore.Model.Card);
+            gridViewTextBoxColumn19.EnableExpressionEditor = false;
+            gridViewTextBoxColumn19.FieldName = "Card";
+            gridViewTextBoxColumn19.HeaderText = "Card";
+            gridViewTextBoxColumn19.IsAutoGenerated = true;
+            gridViewTextBoxColumn19.IsPinned = true;
+            gridViewTextBoxColumn19.Name = "Card";
+            gridViewTextBoxColumn19.PinPosition = Telerik.WinControls.UI.PinnedColumnPosition.Left;
+            gridViewTextBoxColumn19.ReadOnly = true;
+            gridViewTextBoxColumn19.Width = 192;
             gridViewDecimalColumn8.DataType = typeof(double);
             gridViewDecimalColumn8.EnableExpressionEditor = false;
             gridViewDecimalColumn8.FieldName = "Value";
-            gridViewDecimalColumn8.HeaderText = "Culminative Value";
+            gridViewDecimalColumn8.HeaderText = "Value";
             gridViewDecimalColumn8.IsAutoGenerated = true;
             gridViewDecimalColumn8.Name = "Value";
             gridViewDecimalColumn8.ReadOnly = true;
@@ -519,7 +532,7 @@
             gridViewDecimalColumn9.DataType = typeof(double);
             gridViewDecimalColumn9.EnableExpressionEditor = false;
             gridViewDecimalColumn9.FieldName = "AvgValue";
-            gridViewDecimalColumn9.HeaderText = "Value";
+            gridViewDecimalColumn9.HeaderText = "AvgValue";
             gridViewDecimalColumn9.IsAutoGenerated = true;
             gridViewDecimalColumn9.Name = "AvgValue";
             gridViewDecimalColumn9.ReadOnly = true;
@@ -528,7 +541,7 @@
             gridViewDecimalColumn10.DataType = typeof(int);
             gridViewDecimalColumn10.EnableExpressionEditor = false;
             gridViewDecimalColumn10.FieldName = "InDecks1";
-            gridViewDecimalColumn10.HeaderText = "Decks No";
+            gridViewDecimalColumn10.HeaderText = "InDecks1";
             gridViewDecimalColumn10.IsAutoGenerated = true;
             gridViewDecimalColumn10.Name = "InDecks1";
             gridViewDecimalColumn10.ReadOnly = true;
@@ -536,7 +549,7 @@
             gridViewDecimalColumn11.DataType = typeof(int);
             gridViewDecimalColumn11.EnableExpressionEditor = false;
             gridViewDecimalColumn11.FieldName = "Apperences1";
-            gridViewDecimalColumn11.HeaderText = "Apperences";
+            gridViewDecimalColumn11.HeaderText = "Apperences1";
             gridViewDecimalColumn11.IsAutoGenerated = true;
             gridViewDecimalColumn11.Name = "Apperences1";
             gridViewDecimalColumn11.ReadOnly = true;
@@ -544,7 +557,7 @@
             gridViewDecimalColumn12.DataType = typeof(double);
             gridViewDecimalColumn12.EnableExpressionEditor = false;
             gridViewDecimalColumn12.FieldName = "TierSum1";
-            gridViewDecimalColumn12.HeaderText = "Avg Tier";
+            gridViewDecimalColumn12.HeaderText = "TierSum1";
             gridViewDecimalColumn12.IsAutoGenerated = true;
             gridViewDecimalColumn12.Name = "TierSum1";
             gridViewDecimalColumn12.ReadOnly = true;
@@ -552,7 +565,7 @@
             gridViewDecimalColumn13.DataType = typeof(double);
             gridViewDecimalColumn13.EnableExpressionEditor = false;
             gridViewDecimalColumn13.FieldName = "Value1";
-            gridViewDecimalColumn13.HeaderText = "Value";
+            gridViewDecimalColumn13.HeaderText = "Value1";
             gridViewDecimalColumn13.IsAutoGenerated = true;
             gridViewDecimalColumn13.Name = "Value1";
             gridViewDecimalColumn13.ReadOnly = true;
@@ -560,7 +573,7 @@
             gridViewDecimalColumn14.DataType = typeof(int);
             gridViewDecimalColumn14.EnableExpressionEditor = false;
             gridViewDecimalColumn14.FieldName = "InDecks2";
-            gridViewDecimalColumn14.HeaderText = "Decks No";
+            gridViewDecimalColumn14.HeaderText = "InDecks2";
             gridViewDecimalColumn14.IsAutoGenerated = true;
             gridViewDecimalColumn14.Name = "InDecks2";
             gridViewDecimalColumn14.ReadOnly = true;
@@ -568,7 +581,7 @@
             gridViewDecimalColumn15.DataType = typeof(int);
             gridViewDecimalColumn15.EnableExpressionEditor = false;
             gridViewDecimalColumn15.FieldName = "Apperences2";
-            gridViewDecimalColumn15.HeaderText = "Apperences";
+            gridViewDecimalColumn15.HeaderText = "Apperences2";
             gridViewDecimalColumn15.IsAutoGenerated = true;
             gridViewDecimalColumn15.Name = "Apperences2";
             gridViewDecimalColumn15.ReadOnly = true;
@@ -576,7 +589,7 @@
             gridViewDecimalColumn16.DataType = typeof(double);
             gridViewDecimalColumn16.EnableExpressionEditor = false;
             gridViewDecimalColumn16.FieldName = "TierSum2";
-            gridViewDecimalColumn16.HeaderText = "Avg Tier";
+            gridViewDecimalColumn16.HeaderText = "TierSum2";
             gridViewDecimalColumn16.IsAutoGenerated = true;
             gridViewDecimalColumn16.Name = "TierSum2";
             gridViewDecimalColumn16.ReadOnly = true;
@@ -584,7 +597,7 @@
             gridViewDecimalColumn17.DataType = typeof(double);
             gridViewDecimalColumn17.EnableExpressionEditor = false;
             gridViewDecimalColumn17.FieldName = "Value2";
-            gridViewDecimalColumn17.HeaderText = "Value";
+            gridViewDecimalColumn17.HeaderText = "Value2";
             gridViewDecimalColumn17.IsAutoGenerated = true;
             gridViewDecimalColumn17.Name = "Value2";
             gridViewDecimalColumn17.ReadOnly = true;
@@ -592,7 +605,7 @@
             gridViewDecimalColumn18.DataType = typeof(int);
             gridViewDecimalColumn18.EnableExpressionEditor = false;
             gridViewDecimalColumn18.FieldName = "InDecks3";
-            gridViewDecimalColumn18.HeaderText = "Decks No";
+            gridViewDecimalColumn18.HeaderText = "InDecks3";
             gridViewDecimalColumn18.IsAutoGenerated = true;
             gridViewDecimalColumn18.Name = "InDecks3";
             gridViewDecimalColumn18.ReadOnly = true;
@@ -600,7 +613,7 @@
             gridViewDecimalColumn19.DataType = typeof(int);
             gridViewDecimalColumn19.EnableExpressionEditor = false;
             gridViewDecimalColumn19.FieldName = "Apperences3";
-            gridViewDecimalColumn19.HeaderText = "Apperences";
+            gridViewDecimalColumn19.HeaderText = "Apperences3";
             gridViewDecimalColumn19.IsAutoGenerated = true;
             gridViewDecimalColumn19.Name = "Apperences3";
             gridViewDecimalColumn19.ReadOnly = true;
@@ -608,7 +621,7 @@
             gridViewDecimalColumn20.DataType = typeof(double);
             gridViewDecimalColumn20.EnableExpressionEditor = false;
             gridViewDecimalColumn20.FieldName = "TierSum3";
-            gridViewDecimalColumn20.HeaderText = "Avg Tier";
+            gridViewDecimalColumn20.HeaderText = "TierSum3";
             gridViewDecimalColumn20.IsAutoGenerated = true;
             gridViewDecimalColumn20.Name = "TierSum3";
             gridViewDecimalColumn20.ReadOnly = true;
@@ -616,20 +629,46 @@
             gridViewDecimalColumn21.DataType = typeof(double);
             gridViewDecimalColumn21.EnableExpressionEditor = false;
             gridViewDecimalColumn21.FieldName = "Value3";
-            gridViewDecimalColumn21.HeaderText = "Value";
+            gridViewDecimalColumn21.HeaderText = "Value3";
             gridViewDecimalColumn21.IsAutoGenerated = true;
             gridViewDecimalColumn21.Name = "Value3";
             gridViewDecimalColumn21.ReadOnly = true;
             gridViewDecimalColumn21.Width = 66;
-            gridViewTextBoxColumn19.EnableExpressionEditor = false;
-            gridViewTextBoxColumn19.IsPinned = true;
-            gridViewTextBoxColumn19.MaxWidth = 20;
-            gridViewTextBoxColumn19.MinWidth = 20;
-            gridViewTextBoxColumn19.Name = "color";
-            gridViewTextBoxColumn19.PinPosition = Telerik.WinControls.UI.PinnedColumnPosition.Left;
-            gridViewTextBoxColumn19.Width = 20;
+            gridViewDecimalColumn22.DataType = typeof(int);
+            gridViewDecimalColumn22.EnableExpressionEditor = false;
+            gridViewDecimalColumn22.FieldName = "InDecks4";
+            gridViewDecimalColumn22.HeaderText = "InDecks4";
+            gridViewDecimalColumn22.IsAutoGenerated = true;
+            gridViewDecimalColumn22.Name = "InDecks4";
+            gridViewDecimalColumn22.ReadOnly = true;
+            gridViewDecimalColumn22.Width = 66;
+            gridViewDecimalColumn23.DataType = typeof(int);
+            gridViewDecimalColumn23.EnableExpressionEditor = false;
+            gridViewDecimalColumn23.FieldName = "Apperences4";
+            gridViewDecimalColumn23.HeaderText = "Apperences4";
+            gridViewDecimalColumn23.IsAutoGenerated = true;
+            gridViewDecimalColumn23.Name = "Apperences4";
+            gridViewDecimalColumn23.ReadOnly = true;
+            gridViewDecimalColumn23.Width = 66;
+            gridViewDecimalColumn24.DataType = typeof(double);
+            gridViewDecimalColumn24.EnableExpressionEditor = false;
+            gridViewDecimalColumn24.FieldName = "TierSum4";
+            gridViewDecimalColumn24.HeaderText = "TierSum4";
+            gridViewDecimalColumn24.IsAutoGenerated = true;
+            gridViewDecimalColumn24.Name = "TierSum4";
+            gridViewDecimalColumn24.ReadOnly = true;
+            gridViewDecimalColumn24.Width = 66;
+            gridViewDecimalColumn25.DataType = typeof(double);
+            gridViewDecimalColumn25.EnableExpressionEditor = false;
+            gridViewDecimalColumn25.FieldName = "Value4";
+            gridViewDecimalColumn25.HeaderText = "Value4";
+            gridViewDecimalColumn25.IsAutoGenerated = true;
+            gridViewDecimalColumn25.Name = "Value4";
+            gridViewDecimalColumn25.ReadOnly = true;
+            gridViewDecimalColumn25.Width = 66;
             this.gridCardValuation.MasterTemplate.Columns.AddRange(new Telerik.WinControls.UI.GridViewDataColumn[] {
             gridViewTextBoxColumn18,
+            gridViewTextBoxColumn19,
             gridViewDecimalColumn8,
             gridViewDecimalColumn9,
             gridViewDecimalColumn10,
@@ -644,7 +683,10 @@
             gridViewDecimalColumn19,
             gridViewDecimalColumn20,
             gridViewDecimalColumn21,
-            gridViewTextBoxColumn19});
+            gridViewDecimalColumn22,
+            gridViewDecimalColumn23,
+            gridViewDecimalColumn24,
+            gridViewDecimalColumn25});
             this.gridCardValuation.MasterTemplate.DataSource = this.valuationBindingSource;
             this.gridCardValuation.MasterTemplate.EnableGrouping = false;
             sortDescriptor2.Direction = System.ComponentModel.ListSortDirection.Descending;
@@ -684,11 +726,19 @@
             gridViewColumnGroupRow5.ColumnNames.Add("TierSum3");
             gridViewColumnGroup5.Rows.Add(gridViewColumnGroupRow5);
             gridViewColumnGroup5.Text = "Vicious Syndicate";
+            gridViewColumnGroup6.Name = "group6";
+            gridViewColumnGroupRow6.ColumnNames.Add("Value4");
+            gridViewColumnGroupRow6.ColumnNames.Add("TierSum4");
+            gridViewColumnGroupRow6.ColumnNames.Add("Apperences4");
+            gridViewColumnGroupRow6.ColumnNames.Add("InDecks4");
+            gridViewColumnGroup6.Rows.Add(gridViewColumnGroupRow6);
+            gridViewColumnGroup6.Text = "Metabomb";
             columnGroupsViewDefinition1.ColumnGroups.Add(gridViewColumnGroup1);
             columnGroupsViewDefinition1.ColumnGroups.Add(gridViewColumnGroup2);
             columnGroupsViewDefinition1.ColumnGroups.Add(gridViewColumnGroup3);
             columnGroupsViewDefinition1.ColumnGroups.Add(gridViewColumnGroup4);
             columnGroupsViewDefinition1.ColumnGroups.Add(gridViewColumnGroup5);
+            columnGroupsViewDefinition1.ColumnGroups.Add(gridViewColumnGroup6);
             this.gridCardValuation.MasterTemplate.ViewDefinition = columnGroupsViewDefinition1;
             this.gridCardValuation.Name = "gridCardValuation";
             this.gridCardValuation.ReadOnly = true;
@@ -765,15 +815,15 @@
             gridViewComboBoxColumn3.Name = "Source";
             gridViewComboBoxColumn3.ValueMember = "Value";
             gridViewComboBoxColumn3.Width = 121;
-            gridViewDecimalColumn22.DataType = typeof(int);
-            gridViewDecimalColumn22.EnableExpressionEditor = false;
-            gridViewDecimalColumn22.FieldName = "Tier";
-            gridViewDecimalColumn22.HeaderText = "Tier";
-            gridViewDecimalColumn22.IsAutoGenerated = true;
-            gridViewDecimalColumn22.MinWidth = 50;
-            gridViewDecimalColumn22.Name = "Tier";
-            gridViewDecimalColumn22.ReadOnly = true;
-            gridViewDecimalColumn22.Width = 60;
+            gridViewDecimalColumn26.DataType = typeof(int);
+            gridViewDecimalColumn26.EnableExpressionEditor = false;
+            gridViewDecimalColumn26.FieldName = "Tier";
+            gridViewDecimalColumn26.HeaderText = "Tier";
+            gridViewDecimalColumn26.IsAutoGenerated = true;
+            gridViewDecimalColumn26.MinWidth = 50;
+            gridViewDecimalColumn26.Name = "Tier";
+            gridViewDecimalColumn26.ReadOnly = true;
+            gridViewDecimalColumn26.Width = 60;
             gridViewComboBoxColumn4.DataSource = this.enumBinder1;
             gridViewComboBoxColumn4.DataType = typeof(object);
             gridViewComboBoxColumn4.DisplayMember = "Description";
@@ -794,25 +844,25 @@
             gridViewTextBoxColumn22.Name = "Id";
             gridViewTextBoxColumn22.ReadOnly = true;
             gridViewTextBoxColumn22.Width = 18;
-            gridViewDecimalColumn23.DataType = typeof(int);
-            gridViewDecimalColumn23.EnableExpressionEditor = false;
-            gridViewDecimalColumn23.FieldName = "Dust";
-            gridViewDecimalColumn23.HeaderText = "Dust";
-            gridViewDecimalColumn23.IsAutoGenerated = true;
-            gridViewDecimalColumn23.MinWidth = 100;
-            gridViewDecimalColumn23.Name = "Dust";
-            gridViewDecimalColumn23.ReadOnly = true;
-            gridViewDecimalColumn23.Width = 121;
-            gridViewDecimalColumn24.DataType = typeof(int);
-            gridViewDecimalColumn24.EnableExpressionEditor = false;
-            gridViewDecimalColumn24.FieldName = "MyDust";
-            gridViewDecimalColumn24.HeaderText = "My Dust";
-            gridViewDecimalColumn24.IsAutoGenerated = true;
-            gridViewDecimalColumn24.MinWidth = 100;
-            gridViewDecimalColumn24.Name = "MyDust";
-            gridViewDecimalColumn24.ReadOnly = true;
-            gridViewDecimalColumn24.SortOrder = Telerik.WinControls.UI.RadSortOrder.Ascending;
-            gridViewDecimalColumn24.Width = 121;
+            gridViewDecimalColumn27.DataType = typeof(int);
+            gridViewDecimalColumn27.EnableExpressionEditor = false;
+            gridViewDecimalColumn27.FieldName = "Dust";
+            gridViewDecimalColumn27.HeaderText = "Dust";
+            gridViewDecimalColumn27.IsAutoGenerated = true;
+            gridViewDecimalColumn27.MinWidth = 100;
+            gridViewDecimalColumn27.Name = "Dust";
+            gridViewDecimalColumn27.ReadOnly = true;
+            gridViewDecimalColumn27.Width = 121;
+            gridViewDecimalColumn28.DataType = typeof(int);
+            gridViewDecimalColumn28.EnableExpressionEditor = false;
+            gridViewDecimalColumn28.FieldName = "MyDust";
+            gridViewDecimalColumn28.HeaderText = "My Dust";
+            gridViewDecimalColumn28.IsAutoGenerated = true;
+            gridViewDecimalColumn28.MinWidth = 100;
+            gridViewDecimalColumn28.Name = "MyDust";
+            gridViewDecimalColumn28.ReadOnly = true;
+            gridViewDecimalColumn28.SortOrder = Telerik.WinControls.UI.RadSortOrder.Ascending;
+            gridViewDecimalColumn28.Width = 121;
             gridViewTextBoxColumn23.DataType = typeof(System.Collections.Generic.Dictionary<HSCore.Model.Card, int>);
             gridViewTextBoxColumn23.EnableExpressionEditor = false;
             gridViewTextBoxColumn23.FieldName = "Cards";
@@ -825,11 +875,11 @@
             gridViewTextBoxColumn20,
             gridViewTextBoxColumn21,
             gridViewComboBoxColumn3,
-            gridViewDecimalColumn22,
+            gridViewDecimalColumn26,
             gridViewComboBoxColumn4,
             gridViewTextBoxColumn22,
-            gridViewDecimalColumn23,
-            gridViewDecimalColumn24,
+            gridViewDecimalColumn27,
+            gridViewDecimalColumn28,
             gridViewTextBoxColumn23});
             this.gridViewDecks.MasterTemplate.DataSource = this.deckBindingSource;
             this.gridViewDecks.MasterTemplate.EnableFiltering = true;
@@ -852,7 +902,7 @@
             // radPanel1
             // 
             this.radPanel1.Controls.Add(this.btnRefresh);
-            this.radPanel1.Controls.Add(this.rbCValue);
+            this.radPanel1.Controls.Add(this.rbSource);
             this.radPanel1.Controls.Add(this.rbClass);
             this.radPanel1.Controls.Add(this.rbFree);
             this.radPanel1.Dock = System.Windows.Forms.DockStyle.Top;
@@ -874,14 +924,14 @@
             this.btnRefresh.Text = "Refresh";
             this.btnRefresh.Click += new System.EventHandler(this.btnRefresh_Click);
             // 
-            // rbCValue
+            // rbSource
             // 
-            this.rbCValue.Location = new System.Drawing.Point(235, 13);
-            this.rbCValue.Name = "rbCValue";
-            this.rbCValue.Size = new System.Drawing.Size(106, 18);
-            this.rbCValue.TabIndex = 5;
-            this.rbCValue.Text = "By Crafting Value";
-            this.rbCValue.CheckStateChanged += new System.EventHandler(this.radRadioButton_CheckStateChanged);
+            this.rbSource.Location = new System.Drawing.Point(235, 13);
+            this.rbSource.Name = "rbSource";
+            this.rbSource.Size = new System.Drawing.Size(69, 18);
+            this.rbSource.TabIndex = 5;
+            this.rbSource.Text = "By Source";
+            this.rbSource.CheckStateChanged += new System.EventHandler(this.radRadioButton_CheckStateChanged);
             // 
             // rbClass
             // 
@@ -942,7 +992,7 @@
             this.radPanel1.ResumeLayout(false);
             this.radPanel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.btnRefresh)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.rbCValue)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.rbSource)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.rbClass)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.rbFree)).EndInit();
             this.pvpCollection.ResumeLayout(false);
@@ -963,7 +1013,7 @@
         private Telerik.WinControls.UI.Data.EnumBinder enumBinder2;
         private Telerik.WinControls.UI.RadButton btnRefresh;
         private Telerik.WinControls.UI.RadRadioButton rbClass;
-        private Telerik.WinControls.UI.RadRadioButton rbCValue;
+        private Telerik.WinControls.UI.RadRadioButton rbSource;
         private Telerik.WinControls.UI.RadRadioButton rbFree;
         private Telerik.WinControls.UI.RadPanel radPanel2;
         private Telerik.WinControls.UI.RadPanel radPanel1;
