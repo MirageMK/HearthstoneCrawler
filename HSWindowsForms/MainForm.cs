@@ -23,6 +23,8 @@ namespace HSWindowsForms
     {
         private readonly WebClient _wc;
         private readonly RadOffice2007ScreenTipElement _screenTip = new RadOffice2007ScreenTipElement();
+        Random randomGen = new Random();
+        List<KnownColor> names = Enum.GetValues(typeof(KnownColor)).Cast<KnownColor>().ToList();
 
         public MainForm()
         {
@@ -138,7 +140,7 @@ namespace HSWindowsForms
 
         private void gridViewDecks_CellDoubleClick(object sender, GridViewCellEventArgs e)
         {
-            if (gridViewDecks.CurrentRow.DataBoundItem == null) return;
+            if (gridViewDecks.CurrentRow?.DataBoundItem == null) return;
 
             DeckForm deckForm = new DeckForm(gridViewDecks.CurrentRow.DataBoundItem as Deck);
             deckForm.Show();
@@ -219,20 +221,30 @@ namespace HSWindowsForms
             // Reset the color of the cell.  
             e.CellElement.DrawFill = false;
 
-            if (e.Column.Name == "Name")
+            if(e.Column.Name != "Name") return;
+
+            foreach (GridViewRowInfo t in gridViewDecks.Rows)
             {
-                for(int i = 0; i < this.gridViewDecks.Rows.Count; i++)
+                Deck parDeck = (Deck) t.DataBoundItem;
+
+                if (currentDeck.DuplicateIndicatior != parDeck.DuplicateIndicatior || currentDeck.Source == parDeck.Source) continue;
+
+                e.CellElement.DrawFill = true;
+                e.CellElement.GradientStyle = GradientStyles.Linear;
+                e.CellElement.BackColor2 = Color.White;
+                e.CellElement.GradientAngle = 225;
+
+                Color parBackColor = t.Cells["Name"].Style.BackColor;
+                if (parBackColor.ToArgb().Equals(Color.FromArgb(105, 105, 105).ToArgb()))
                 {
-                    Deck tempDeck = (Deck) this.gridViewDecks.Rows[i].DataBoundItem;
-                    if(currentDeck.DuplicateIndicatior == tempDeck.DuplicateIndicatior && currentDeck.Source != tempDeck.Source)
-                    {
-                        e.CellElement.DrawFill = true;
-                        e.CellElement.GradientStyle = GradientStyles.Linear;
-                        e.CellElement.BackColor = Color.LightCyan;
-                        e.CellElement.BackColor2 = Color.White;
-                        e.CellElement.GradientAngle = 45;
-                    }
+                    KnownColor randomColorName = names.ElementAt(randomGen.Next(names.Count));
+                    Color randomColor = Color.FromKnownColor(randomColorName);
+                    parBackColor = randomColor;
                 }
+
+                e.CellElement.BackColor = parBackColor;
+                e.Row.Cells["Name"].Style.BackColor = parBackColor;
+                t.Cells["Name"].Style.BackColor = parBackColor;
             }
         }
         #endregion
@@ -320,15 +332,5 @@ namespace HSWindowsForms
 
             return _screenTip;
         }
-
-        /*private void HighlightCell(GridViewCellInfo cell)
-        {
-            if (cell.CellElement != null && cell.CellElement.DrawFill == false)
-            {
-                cell.CellElement.GradientStyle = GradientStyles.Solid;
-                cell.CellElement.BackColor = Color.Red;
-                cell.CellElement.DrawFill = true;
-            }
-        }*/
     }
 }
