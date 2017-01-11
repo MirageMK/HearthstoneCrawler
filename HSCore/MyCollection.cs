@@ -95,6 +95,8 @@ namespace HSCore
                     return "Upgrade!";
                 case "Dopplegangster":
                     return "Doppelgangster";
+                case "Argent Hunter":
+                    return "Argent Squire";
                 default:
                     return name;
             }
