@@ -38,6 +38,7 @@ namespace HSWindowsForms
             LoadMyCollection();
 
             UnselectGrids();
+  
         }
         
         #region Summary
@@ -128,6 +129,18 @@ namespace HSWindowsForms
                             break;
                     }
                     break;
+            }
+        }
+
+        private void gridCardValuation_ViewCellFormatting(object sender, CellFormattingEventArgs e)
+        {
+            if (e.CellElement is GridFilterCellElement)
+            {
+                // sample condition
+                if (e.CellElement.ColumnInfo.Name != "Card")
+                {
+                    e.CellElement.Visibility = ElementVisibility.Collapsed;
+                }
             }
         }
         #endregion
@@ -331,6 +344,11 @@ namespace HSWindowsForms
             _screenTip.AutoSize = true;
 
             return _screenTip;
+        }
+
+        private void btnWFeed_Click(object sender, EventArgs e)
+        {
+            Clipboard.SetText(NetDecks.GetWeightedFeed());
         }
     }
 }

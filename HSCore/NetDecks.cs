@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.IO;
 using System.IO.IsolatedStorage;
+using System.Linq;
+using System.Text;
 using HSCore.Extensions;
 using HSCore.Model;
 using HSCore.Readers;
@@ -101,6 +103,25 @@ typeof(System.Security.Policy.Url), typeof(System.Security.Policy.Url));
                     v.SetTierSum(deck.Source, deck.Tier);
                 }
             }
+        }
+
+        public static string GetWeightedFeed()
+        {
+            StringBuilder toBeReturned = new StringBuilder();
+            toBeReturned.AppendLine("PACT_WF 1.3");
+            var maxValuationValue = Valuations.Max(x => x.AvgValue);
+            foreach (Card card in MyCollection.Cards)
+            {
+                double scaledValue = 0;
+                Valuation firstOrDefault = Valuations.FirstOrDefault(x => x.Card == card);
+                if(firstOrDefault != null)
+                {
+                    scaledValue = firstOrDefault.AvgValue / maxValuationValue;
+                }
+
+                toBeReturned.AppendLine($"{card.Name}; {scaledValue}; {scaledValue}");
+            }
+            return toBeReturned.ToString();
         }
     }
 }
