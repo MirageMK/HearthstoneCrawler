@@ -33,11 +33,6 @@ namespace HSCore
             DateTimeOffset lastChange = _isf.GetLastWriteTime(FILE_NAME);
             Decks = _isf.LoadObject<List<Deck>>(FILE_NAME);
 
-            // Get the root and file portions of the search string.
-            string fileString = Path.GetFileName("*");
-
-            List<String> fileList = new List<String>(_isf.GetFileNames("*"));
-
             if (Decks == null || !lastChange.Date.Equals(DateTime.Now.Date))
             {
                 DownloadDecks();
@@ -98,9 +93,7 @@ typeof(System.Security.Policy.Url), typeof(System.Security.Policy.Url));
                         v = new Valuation(dCard.Key);
                         _valuations.Add(v);
                     }
-                    v.SetInDecks(deck.Source, 1);
-                    v.SetApperences(deck.Source, dCard.Value);
-                    v.SetTierSum(deck.Source, deck.Tier);
+                    v.Decks.Add(deck, dCard.Value);
                 }
             }
         }
@@ -109,7 +102,7 @@ typeof(System.Security.Policy.Url), typeof(System.Security.Policy.Url));
         {
             StringBuilder toBeReturned = new StringBuilder();
             toBeReturned.AppendLine("PACT_WF 1.3");
-            var maxValuationValue = Valuations.Max(x => x.AvgValue);
+            double maxValuationValue = Valuations.Max(x => x.AvgValue);
             foreach (Card card in MyCollection.Cards)
             {
                 double scaledValue = 0;
