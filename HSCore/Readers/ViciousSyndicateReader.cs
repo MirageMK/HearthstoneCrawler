@@ -77,7 +77,9 @@ namespace HSCore.Readers
                     {
                         Deck deck = new Deck();
                         deck.Name = row[0].ToString();
-                        if(deckWinPercent >= 0.55)
+                        deck.UpdateDateString = values[0][0].ToString();
+
+                        if (deckWinPercent >= 0.55)
                         {
                             deck.Tier = 1;
                         }

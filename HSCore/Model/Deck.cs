@@ -28,6 +28,20 @@ namespace HSCore.Model
         }
 
         public SourceEnum Source { get; set; }
+
+        private DateTime _updateDate;
+        public DateTime UpdateDate => _updateDate;
+        public string UpdateDateString
+        {
+            set
+            {
+                if (!DateTime.TryParse(value, out _updateDate))
+                {
+                    _updateDate = DateTime.Now;
+                }
+            }
+        }
+
         public string Id => Name + Source + DeckType;
         public int Dust => Cards.Sum(x => x.Value * x.Key.Dust);
         public int MyDust => Cards.Sum(x => (x.Value - x.Key.Own < 0 ? 0 : x.Value - x.Key.Own) * x.Key.Dust);

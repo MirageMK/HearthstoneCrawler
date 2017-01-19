@@ -66,13 +66,15 @@ namespace HSCore.Readers
 
             if(doc.DocumentNode.SelectNodes("//*[contains(@class,'article-content')]") == null) return null;
 
+            toReturn.UpdateDateString = doc.DocumentNode.SelectSingleNode("//*[contains(@itemprop,'datePublished')]").GetAttributeValue("content","");
+
             foreach (HtmlNode cardSection in doc.DocumentNode.SelectNodes("//*[contains(@class,'article-content')]/section"))
             {
                 HtmlNode table = cardSection.SelectSingleNode("table");
                 if (table == null) continue;
 
                 toReturn.Class = table.SelectSingleNode("thead/tr/th[1]").InnerText;
-
+                
                 foreach (HtmlNode cardNode in table.SelectNodes("tbody/tr/td"))
                 {
                     string cardName = cardNode.InnerText;

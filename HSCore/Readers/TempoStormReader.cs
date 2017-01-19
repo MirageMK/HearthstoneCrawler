@@ -86,6 +86,8 @@ namespace HSCore.Readers
             IRestResponse response = client.Execute(request);
             dynamic deck = Json.Decode(response.Content);
 
+            toReturn.UpdateDateString = deck.createdDate;
+
             foreach (dynamic cardObj in deck.cards)
             {
                 Card card = MyCollection.Get(cardObj.card.name);

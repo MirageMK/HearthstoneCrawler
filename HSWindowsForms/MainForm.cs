@@ -196,6 +196,10 @@ namespace HSWindowsForms
                     sDescriptor.PropertyName = "Tier";
                     sDescriptor.Direction = ListSortDirection.Ascending;
                     gridViewDecks.MasterTemplate.SortDescriptors.Add(sDescriptor);
+                    sDescriptor = new SortDescriptor();
+                    sDescriptor.PropertyName = "Dust";
+                    sDescriptor.Direction = ListSortDirection.Descending;
+                    gridViewDecks.MasterTemplate.SortDescriptors.Add(sDescriptor);
                     break;
                 case "rbClass":
                     gDescriptor.GroupNames.Add("Class", ListSortDirection.Ascending);
@@ -203,6 +207,14 @@ namespace HSWindowsForms
 
                     sDescriptor.PropertyName = "MyDust";
                     sDescriptor.Direction = ListSortDirection.Ascending;
+                    gridViewDecks.MasterTemplate.SortDescriptors.Add(sDescriptor);
+                    sDescriptor = new SortDescriptor();
+                    sDescriptor.PropertyName = "Tier";
+                    sDescriptor.Direction = ListSortDirection.Ascending;
+                    gridViewDecks.MasterTemplate.SortDescriptors.Add(sDescriptor);
+                    sDescriptor = new SortDescriptor();
+                    sDescriptor.PropertyName = "Dust";
+                    sDescriptor.Direction = ListSortDirection.Descending;
                     gridViewDecks.MasterTemplate.SortDescriptors.Add(sDescriptor);
 
                     fDescriptor.Operator = FilterOperator.IsEqualTo;
@@ -215,6 +227,10 @@ namespace HSWindowsForms
                     gridViewDecks.GroupDescriptors.Add(gDescriptor);
 
                     sDescriptor.PropertyName = "Tier";
+                    sDescriptor.Direction = ListSortDirection.Ascending;
+                    gridViewDecks.MasterTemplate.SortDescriptors.Add(sDescriptor);
+                    sDescriptor = new SortDescriptor();
+                    sDescriptor.PropertyName = "MyDust";
                     sDescriptor.Direction = ListSortDirection.Ascending;
                     gridViewDecks.MasterTemplate.SortDescriptors.Add(sDescriptor);
                     break;

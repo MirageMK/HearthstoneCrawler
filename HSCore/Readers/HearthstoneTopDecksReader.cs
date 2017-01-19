@@ -89,10 +89,11 @@ namespace HSCore.Readers
             }
 
             toReturn.Class = doc.DocumentNode.SelectNodes("//*[contains(@class,'deck-info')]/a")[0].InnerText;
+            toReturn.UpdateDateString = doc.DocumentNode.SelectSingleNode("//*[contains(@class,'updated')]").GetAttributeValue("datetime", DateTime.Now.ToString());
 
             foreach (HtmlNode cardLink in doc.DocumentNode.SelectNodes("//*[contains(@class,'card-frame')]"))
             {
-                string cardName = cardLink.SelectSingleNode("*[contains(@class,'card-name')]").InnerText.Replace("&#8217;", "'");
+                string cardName = cardLink.SelectSingleNode("a/*[contains(@class,'card-name')]").InnerText.Replace("&#8217;", "'");
                 string cardCount = cardLink.SelectSingleNode("*[contains(@class,'card-count')]").InnerText;
 
                 Card card = MyCollection.Get(cardName);
