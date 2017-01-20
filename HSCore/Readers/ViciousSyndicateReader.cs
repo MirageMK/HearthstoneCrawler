@@ -125,6 +125,7 @@ namespace HSCore.Readers
                 deck.Source = SourceEnum.ViciousSyndicate;
                 deck.Name = tempDeck.Name;
                 deck.Tier = tempDeck.Tier;
+                deck.UpdateDateString = tempDeck.UpdateDate.ToString();
                 deck.Class = deckClass;
 
                 toReturn.Add(deck);

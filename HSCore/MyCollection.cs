@@ -99,6 +99,8 @@ namespace HSCore
                     return "Argent Squire";
                 case "Smuggler's  Run":
                     return "Smuggler's Run";
+                case "Argent's Lance":
+                    return "Argent Lance";
                 default:
                     return name;
             }
