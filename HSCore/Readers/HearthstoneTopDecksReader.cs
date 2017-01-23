@@ -8,7 +8,8 @@ namespace HSCore.Readers
 {
     public class HearthstoneTopDecksReader : BaseReader
     {
-        private const string URL = "http://www.hearthstonetopdecks.com/";
+        //private const string URL = @"http://www.hearthstonetopdecks.com/";
+        private const string URL = @"http://www.hearthstonetopdecks.com/hearthstones-best-standard-ladder-decks/";
 
         private string GetUrl()
         {
@@ -22,7 +23,7 @@ namespace HSCore.Readers
         {
             List<Deck> toReturn = new List<Deck>();
             HtmlWeb web = new HtmlWeb();
-            HtmlDocument doc = web.Load(GetUrl());
+            HtmlDocument doc = web.Load(URL);
 
             foreach (HtmlNode deckLink in doc.DocumentNode.SelectNodes("//*[contains(@class,'deck-box-header')]/a[@href]"))
             {
