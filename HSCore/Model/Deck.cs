@@ -76,5 +76,10 @@ namespace HSCore.Model
 
             return toReturn;
         }
+
+        public override string ToString()
+        {
+            return Name;
+        }
     }
 }

@@ -10,6 +10,7 @@ namespace HSCore.Model
         
         public string Name { get; set; }
         public string CardSet { get; set; }
+        public SetEnum CardSetEnum => Enums.GetValueFromDescription<SetEnum>(CardSet);
         public string Type { get; set; }
         public string Faction { get; set; }
         public string Rarity { get; set; }
@@ -53,8 +54,7 @@ namespace HSCore.Model
         public int Own { get; set; }
         public int Missing => IsLegendary ? 1 - Own : 2 - Own;
         public bool IsLegendary => Rarity == "Legendary";
-        public bool IsStandard => Enums.GetValueFromDescription<SetEnum>(CardSet) < SetEnum.Promo
-                                  || Enums.GetValueFromDescription<SetEnum>(CardSet) > SetEnum.GvG;
+        public bool IsStandard => CardSetEnum < SetEnum.Promo || CardSetEnum > SetEnum.GvG;
 
         public double ValuationFactor
         {
@@ -63,7 +63,7 @@ namespace HSCore.Model
                 double factor = 1;
 
                 if (!IsStandard) factor -= 0.5;
-                if (Enums.GetValueFromDescription<SetEnum>(CardSet) > SetEnum.GvG && Enums.GetValueFromDescription<SetEnum>(CardSet) < SetEnum.WotOG)
+                if (CardSetEnum > SetEnum.GvG && CardSetEnum < SetEnum.WotOG)
                 {
                     factor -= (DateTime.Now.Month + 8) * 0.5 / 12;
                 }

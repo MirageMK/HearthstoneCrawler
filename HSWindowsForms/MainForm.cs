@@ -6,6 +6,7 @@ using System.IO;
 using System.IO.IsolatedStorage;
 using System.Linq;
 using System.Net;
+using System.Text;
 using System.Windows.Forms;
 using HSCore;
 using HSCore.Extensions;
@@ -54,6 +55,14 @@ namespace HSWindowsForms
                     column.FormatString = @"{0:N2}";
                 }
             }
+
+            StringBuilder sbLabelText = new StringBuilder();
+            sbLabelText.AppendLine($@"{MyCollection.Cards.Sum(x => x.Own)}/ {MyCollection.Cards.Sum(x => x.Missing)}");
+            sbLabelText.AppendLine($@"Clasic: {MyCollection.Cards.Where(x => x.CardSetEnum == SetEnum.Classic).Sum(x => x.Own)}/ {MyCollection.Cards.Where(x => x.CardSetEnum == SetEnum.Classic).Sum(x => x.Missing)}");
+            sbLabelText.AppendLine($@"MSoG: {MyCollection.Cards.Where(x => x.CardSetEnum == SetEnum.MSoG).Sum(x => x.Own)}/ {MyCollection.Cards.Where(x => x.CardSetEnum == SetEnum.MSoG).Sum(x => x.Missing)}");
+            sbLabelText.AppendLine($@"{MyCollection.Cards.Count(x => x.IsLegendary && x.Missing == 0)} legendaries");
+
+            radLabel1.Text = sbLabelText.ToString();
         }
 
         private void gridCardValuation_ScreenTipNeeded(object sender, ScreenTipNeededEventArgs e)
@@ -142,6 +151,13 @@ namespace HSWindowsForms
                     e.CellElement.Visibility = ElementVisibility.Collapsed;
                 }
             }
+        }
+        private void gridCardValuation_CellDoubleClick(object sender, GridViewCellEventArgs e)
+        {
+            if (gridCardValuation.CurrentRow?.DataBoundItem == null) return;
+
+            CardForm cardForm = new CardForm((gridCardValuation.CurrentRow.DataBoundItem as Valuation).Card);
+            cardForm.Show();
         }
         #endregion
 

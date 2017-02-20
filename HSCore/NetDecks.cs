@@ -102,14 +102,14 @@ typeof(System.Security.Policy.Url), typeof(System.Security.Policy.Url));
         {
             StringBuilder toBeReturned = new StringBuilder();
             toBeReturned.AppendLine("PACT_WF 1.3");
-            double maxValuationValue = Valuations.Max(x => x.AvgValue);
+            double maxValuationValue = Valuations.Max(x => x.Value);
             foreach (Card card in MyCollection.Cards)
             {
                 double scaledValue = 0;
                 Valuation firstOrDefault = Valuations.FirstOrDefault(x => x.Card == card);
                 if(firstOrDefault != null)
                 {
-                    scaledValue = firstOrDefault.AvgValue / maxValuationValue;
+                    scaledValue = firstOrDefault.Value / maxValuationValue;
                 }
 
                 toBeReturned.AppendLine($"{card.Name}; {scaledValue}; {scaledValue}");
