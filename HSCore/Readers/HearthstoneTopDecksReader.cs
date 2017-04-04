@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using HSCore.Model;
 using HtmlAgilityPack;
 
@@ -30,7 +31,7 @@ namespace HSCore.Readers
                 string deckUrl = deckLink.GetAttributeValue("href", string.Empty);
                 if (deckUrl == "") continue;
                 Deck deck = GetDeck(deckUrl);
-                deck.Name = deckLink.InnerText.Replace("&#8217;", "'");
+                deck.Name = WebUtility.HtmlDecode(deckLink.InnerText);
                 deck.Source = SourceEnum.HearthstoneTopDecks;
                 toReturn.Add(deck);
             }
@@ -94,7 +95,7 @@ namespace HSCore.Readers
 
             foreach (HtmlNode cardLink in doc.DocumentNode.SelectNodes("//*[contains(@class,'card-frame')]"))
             {
-                string cardName = cardLink.SelectSingleNode("a/*[contains(@class,'card-name')]").InnerText.Replace("&#8217;", "'");
+                string cardName = WebUtility.HtmlDecode(cardLink.SelectSingleNode("a/*[contains(@class,'card-name')]").InnerText).Replace('’', '\'');
                 string cardCount = cardLink.SelectSingleNode("*[contains(@class,'card-count')]").InnerText;
 
                 Card card = MyCollection.Get(cardName);

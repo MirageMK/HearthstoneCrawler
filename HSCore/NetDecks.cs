@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.IO.IsolatedStorage;
 using System.Linq;
 using System.Text;
@@ -41,7 +40,7 @@ namespace HSCore
 
         public static List<Deck> DownloadDecks()
         {
-            if(_isf == null)
+            if (_isf == null)
             {
                 _isf = IsolatedStorageFile.GetStore(IsolatedStorageScope.User |
 IsolatedStorageScope.Assembly | IsolatedStorageScope.Domain,
@@ -107,7 +106,7 @@ typeof(System.Security.Policy.Url), typeof(System.Security.Policy.Url));
             {
                 double scaledValue = 0;
                 Valuation firstOrDefault = Valuations.FirstOrDefault(x => x.Card == card);
-                if(firstOrDefault != null)
+                if (firstOrDefault != null)
                 {
                     scaledValue = firstOrDefault.Value / maxValuationValue;
                 }

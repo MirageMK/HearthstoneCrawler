@@ -1,22 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Threading;
-using Google.Apis.Auth.OAuth2;
-using Google.Apis.Services;
-using Google.Apis.Sheets.v4;
-using Google.Apis.Sheets.v4.Data;
-using Google.Apis.Util.Store;
+using System.Net;
 using HSCore.Model;
+using HtmlAgilityPack;
 
 namespace HSCore
 {
     public static class MyCollection
     {
-        static readonly string[] Scopes = { SheetsService.Scope.Spreadsheets };
-        static readonly string ApplicationName = "Hearthstone Crawler";
+        //static readonly string[] Scopes = { SheetsService.Scope.Spreadsheets };
+        //static readonly string ApplicationName = "Hearthstone Crawler";
         internal static readonly string[] NonColectable = { "Roaring Torch", "Tank Up!", "Kazakus Potion", "The Storm Guardian" };
+        private const string USER_NAME = "Miragemk";
 
         public static List<Card> Cards { get; }
         public static int CardCount => Cards.Sum(card => card.Own);
@@ -25,51 +21,29 @@ namespace HSCore
         {
             List<Card> toReturn = new List<Card>();
 
-            UserCredential credential;
+            HtmlWeb web = new HtmlWeb();
+            HtmlDocument doc = web.Load($"http://www.hearthpwn.com/members/{USER_NAME}/collection");
 
-            using (var stream =
-                new FileStream("client_secret.json", FileMode.Open, FileAccess.Read))
+            foreach(HtmlNode cardLink in doc.DocumentNode.SelectNodes("//*[contains(@class,'card-image-item')]"))
             {
-                string credPath = Environment.GetFolderPath(
-                    Environment.SpecialFolder.Personal);
+                string cardName = WebUtility.HtmlDecode(cardLink.GetAttributeValue("data-card-name", string.Empty));
+                int cardCount = Int32.Parse(cardLink.SelectSingleNode("a/span[contains(@class,'inline-card-count')]").GetAttributeValue("data-card-count", string.Empty));
 
-                credential = GoogleWebAuthorizationBroker.AuthorizeAsync(
-                    GoogleClientSecrets.Load(stream).Secrets,
-                    Scopes,
-                    "user",
-                    CancellationToken.None,
-                    new FileDataStore(credPath, true)).Result;
-            }
+                Card tempCard = toReturn.FirstOrDefault(x => x.Name == cardName);
 
-            // Create Google Sheets API service.
-            var service = new SheetsService(new BaseClientService.Initializer()
-            {
-                HttpClientInitializer = credential,
-                ApplicationName = ApplicationName,
-            });
-
-            // Define request parameters.
-            string spreadsheetId = "1bWsfZ3bH0wfnCqN6kJQzDTMXLaCzYLWDlao-KSuZFLY";
-            //string spreadsheetId = "1mBHQp3sd8390K8Nh-sJuTUNA1m114SrLpYqXZREZAEA"; //Kanga
-            string range = "HiddenData!B7:P";
-            SpreadsheetsResource.ValuesResource.GetRequest request =
-                    service.Spreadsheets.Values.Get(spreadsheetId, range);
-
-            ValueRange response = request.Execute();
-            IList<IList<object>> values = response.Values;
-            if (values != null && values.Count > 0)
-            {
-                foreach (IList<object> row in values)
+                if(tempCard == null)
                 {
-                    int cardCount;
-                    if (row.Count > 14 && int.TryParse(row[14].ToString(), out cardCount))
-                    {
-                        Card card = HeartstoneDB.Get(row[0].ToString());
-                        card.Own = cardCount;
-                        toReturn.Add(card);
-                    }
+                    Card card = HeartstoneDB.Get(cardName);
+                    card.Own = cardCount;
+                    toReturn.Add(card);
+                }
+                else
+                {
+                    tempCard.Own += cardCount;
+                    if(tempCard.Own >= 2) tempCard.Own = 2;
                 }
             }
+
             Cards = toReturn;
         }
 

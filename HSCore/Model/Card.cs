@@ -65,7 +65,7 @@ namespace HSCore.Model
                 if (!IsStandard) factor -= 0.5;
                 if (CardSetEnum > SetEnum.GvG && CardSetEnum < SetEnum.WotOG)
                 {
-                    factor -= (DateTime.Now.Month + 8) * 0.5 / 12;
+                    factor -= (((DateTime.Now.Month + 8) % 12) + 1) * 0.5 / 12;
                 }
 
                 if (IsLegendary) factor += 0.25;

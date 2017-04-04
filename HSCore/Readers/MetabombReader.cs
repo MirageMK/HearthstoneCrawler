@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
+﻿using System.Collections.Generic;
 using HSCore.Model;
 using HtmlAgilityPack;
 
@@ -81,7 +78,7 @@ namespace HSCore.Readers
                     if (cardName == "") continue;
                     cardName = cardName.Substring(3).Trim();
 
-                    int cardCount = 0;
+                    int cardCount;
                     if (cardNode.InnerText.Contains("2 x"))
                     {
                         cardCount = 2;
