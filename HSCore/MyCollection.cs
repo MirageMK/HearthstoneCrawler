@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using HSCore.Model;
 using HtmlAgilityPack;
+using HSCore.Extensions;
 
 namespace HSCore
 {
@@ -24,14 +25,14 @@ namespace HSCore
             HtmlWeb web = new HtmlWeb();
             HtmlDocument doc = web.Load($"http://www.hearthpwn.com/members/{USER_NAME}/collection");
 
-            foreach(HtmlNode cardLink in doc.DocumentNode.SelectNodes("//*[contains(@class,'card-image-item')]"))
+            foreach (HtmlNode cardLink in doc.DocumentNode.SelectNodes("//*[contains(@class,'card-image-item')]"))
             {
                 string cardName = WebUtility.HtmlDecode(cardLink.GetAttributeValue("data-card-name", string.Empty));
-                int cardCount = Int32.Parse(cardLink.SelectSingleNode("a/span[contains(@class,'inline-card-count')]").GetAttributeValue("data-card-count", string.Empty));
+                int cardCount = int.Parse(cardLink.SelectSingleNode("a/span[contains(@class,'inline-card-count')]").GetAttributeValue("data-card-count", string.Empty));
 
                 Card tempCard = toReturn.FirstOrDefault(x => x.Name == cardName);
 
-                if(tempCard == null)
+                if (tempCard == null)
                 {
                     Card card = HeartstoneDB.Get(cardName);
                     card.Own = cardCount;
@@ -40,7 +41,7 @@ namespace HSCore
                 else
                 {
                     tempCard.Own += cardCount;
-                    if(tempCard.Own >= 2) tempCard.Own = 2;
+                    if (tempCard.Own >= 2) tempCard.Own = 2;
                 }
             }
 
@@ -49,35 +50,25 @@ namespace HSCore
 
         public static Card Get(string name)
         {
-            name = Mapper(name);
-            Card newCard = Cards.Find(x => string.Equals(x.Name, name, StringComparison.CurrentCultureIgnoreCase));
-            if (newCard != null) return newCard;
-
             if (NonColectable.Contains(name))
             {
                 return null;
             }
+
+            Card newCard = Cards.Find(x => string.Equals(x.Name, name, StringComparison.CurrentCultureIgnoreCase));
+            if (newCard != null) return newCard;
+
+            newCard = Cards.Find(x => string.Equals(x.Name, Mapper(name), StringComparison.CurrentCultureIgnoreCase));
+            if (newCard != null) return newCard;
 
             throw new Exception("MY - Cannot find card with name:" + name);
         }
 
         private static string Mapper(string name)
         {
-            switch(name)
-            {
-                case "Upgrade":
-                    return "Upgrade!";
-                case "Dopplegangster":
-                    return "Doppelgangster";
-                case "Argent Hunter":
-                    return "Argent Squire";
-                case "Smuggler's  Run":
-                    return "Smuggler's Run";
-                case "Argent's Lance":
-                    return "Argent Lance";
-                default:
-                    return name;
-            }
+            List<int> matchList = Cards.Select(card => Algorithms.LevenshteinDistance(card.Name, name)).ToList();
+
+            return Cards.ElementAt(matchList.IndexOf(matchList.Min())).Name;
         }
     }
 }

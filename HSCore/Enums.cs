@@ -20,8 +20,8 @@ namespace HSCore
         Classic = 2,
         [Description("Promo")]
         Promo = 3,
-        [Description("Reward")]
-        Reward = 4,
+        [Description("Hall of Fame")]
+        HoF = 4,
         [Description("Naxxramas")]
         Naxx = 5,
         [Description("Goblins vs Gnomes")]
@@ -37,7 +37,9 @@ namespace HSCore
         [Description("Karazhan")]
         Kara = 11,
         [Description("Mean Streets of Gadgetzan")]
-        MSoG = 12
+        MSoG = 12,
+        [Description("Journey to Un\'Goro")]
+        JtU = 13
     }
 
     public enum DeckType

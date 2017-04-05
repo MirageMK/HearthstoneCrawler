@@ -113,6 +113,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Extensions\IsolatedStorageExtensions.cs" />
+    <Compile Include="Extensions\Utlity.cs" />
     <Compile Include="Model\Valuation.cs" />
     <Compile Include="MyCollection.cs" />
     <Compile Include="Model\Card.cs" />

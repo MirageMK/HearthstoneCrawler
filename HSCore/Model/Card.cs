@@ -54,7 +54,7 @@ namespace HSCore.Model
         public int Own { get; set; }
         public int Missing => IsLegendary ? 1 - Own : 2 - Own;
         public bool IsLegendary => Rarity == "Legendary";
-        public bool IsStandard => CardSetEnum < SetEnum.Promo || CardSetEnum > SetEnum.GvG;
+        public bool IsStandard => CardSetEnum < SetEnum.Promo || CardSetEnum > SetEnum.LoE;
 
         public double ValuationFactor
         {
@@ -63,7 +63,7 @@ namespace HSCore.Model
                 double factor = 1;
 
                 if (!IsStandard) factor -= 0.5;
-                if (CardSetEnum > SetEnum.GvG && CardSetEnum < SetEnum.WotOG)
+                if (CardSetEnum > SetEnum.LoE && CardSetEnum < SetEnum.JtU)
                 {
                     factor -= (((DateTime.Now.Month + 8) % 12) + 1) * 0.5 / 12;
                 }

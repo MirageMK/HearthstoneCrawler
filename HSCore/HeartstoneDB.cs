@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using HSCore.Extensions;
 using HSCore.Model;
 using RestSharp;
 
@@ -23,31 +24,27 @@ namespace HSCore
                 request.AddHeader("X-Mashape-Key", X_MASHAPE_KEY);
 
                 RestResponse<List<Card>> response = client.Execute<List<Card>>(request) as RestResponse<List<Card>>;
-                if(response != null) toReturn.AddRange(response.Data.Where(x => x.Type != "Hero"));
+                if (response != null) toReturn.AddRange(response.Data.Where(x => x.Type != "Hero"));
             }
             Cards = toReturn;
         }
 
         public static Card Get(string name)
         {
-            name = Mapper(name);
             Card newCard = Cards.Find(x => string.Equals(x.Name, name, StringComparison.CurrentCultureIgnoreCase));
+            if (newCard != null) return newCard;
 
-            if (newCard == null)
-                throw new Exception("DB - Cannot find card with name:" + name);
+            newCard = Cards.Find(x => string.Equals(x.Name, Mapper(name), StringComparison.CurrentCultureIgnoreCase));
+            if (newCard != null) return newCard;
 
-            return newCard;
+            throw new Exception("DB - Cannot find card with name:" + name);
         }
 
         private static string Mapper(string name)
         {
-            switch (name)
-            {
-                case "King Crush":
-                    return "King Krush";
-                default:
-                    return name;
-            }
+            List<int> matchList = Cards.Select(card => Algorithms.LevenshteinDistance(card.Name, name)).ToList();
+
+            return Cards.ElementAt(matchList.IndexOf(matchList.Min())).Name;
         }
     }
 }
