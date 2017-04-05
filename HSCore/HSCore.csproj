@@ -113,7 +113,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Extensions\IsolatedStorageExtensions.cs" />
-    <Compile Include="Extensions\Utlity.cs" />
+    <Compile Include="Extensions\Algorithms.cs" />
     <Compile Include="Model\Valuation.cs" />
     <Compile Include="MyCollection.cs" />
     <Compile Include="Model\Card.cs" />
@@ -122,6 +122,7 @@
     <Compile Include="HeartstoneDB.cs" />
     <Compile Include="NetDecks.cs" />
     <Compile Include="Readers\BaseReader.cs" />
+    <Compile Include="Readers\DisgusedToastReader.cs" />
     <Compile Include="Readers\MetabombReader.cs" />
     <Compile Include="Readers\HearthstoneTopDecksReader.cs" />
     <Compile Include="Readers\ViciousSyndicateReader.cs" />

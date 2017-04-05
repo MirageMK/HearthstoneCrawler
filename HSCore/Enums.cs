@@ -9,7 +9,8 @@ namespace HSCore
         TempoStorm,
         HearthstoneTopDecks,
         ViciousSyndicate,
-        Metabomb
+        Metabomb,
+        DisguisedToast
     }
 
     public enum SetEnum

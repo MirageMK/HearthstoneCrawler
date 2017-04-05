@@ -57,6 +57,8 @@ typeof(System.Security.Policy.Url), typeof(System.Security.Policy.Url));
             Decks.AddRange(reader.GetDecks());
             reader = new MetabombReader();
             Decks.AddRange(reader.GetDecks());
+            reader = new DisgusedToastReader();
+            Decks.AddRange(reader.GetDecks());
 
             _isf.SaveObject(Decks, FILE_NAME);
 
