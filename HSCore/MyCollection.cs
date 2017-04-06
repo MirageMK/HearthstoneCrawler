@@ -64,6 +64,14 @@ namespace HSCore
             throw new Exception("MY - Cannot find card with name:" + name);
         }
 
+        public static Card GetByID(string id)
+        {
+            Card newCard = Cards.Find(x => string.Equals(x.CardId, id, StringComparison.CurrentCultureIgnoreCase));
+            if (newCard != null) return newCard;
+
+            throw new Exception("MY - Cannot find card with Id:" + id);
+        }
+
         private static string Mapper(string name)
         {
             List<int> matchList = Cards.Select(card => Algorithms.LevenshteinDistance(card.Name, name)).ToList();

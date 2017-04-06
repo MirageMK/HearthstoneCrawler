@@ -19,7 +19,7 @@ namespace HSCore.Readers
         static readonly string[] Scopes = { SheetsService.Scope.SpreadsheetsReadonly };
         private const string APPLICATION_NAME = "Hearthstone Crawler";
 
-        private const string DECK_URL = "http://vicioussyndicate.s3-us-west-1.amazonaws.com/datareaper/radar/{deckName}/index.html";
+        private const string DECK_URL = "http://www.vicioussyndicate.com/deck-library/{class}-decks/{deckName}/";
 
 
         private List<Deck> GetDeckRanks()
@@ -118,7 +118,7 @@ namespace HSCore.Readers
             {
                 string deckClass = tempDeck.Name.Split(' ').Last();
 
-                string deckUrl = DECK_URL.Replace("{deckName}", tempDeck.Name);
+                string deckUrl = DECK_URL.Replace("{class}", deckClass).Replace("{deckName}", tempDeck.Name);
 
                 Deck deck = GetDeck(deckUrl);
                 if(deck == null) continue;
@@ -141,21 +141,28 @@ namespace HSCore.Readers
             HtmlWeb web = new HtmlWeb();
             HtmlDocument doc = web.Load(url);
 
-            HtmlNode graph = doc.DocumentNode.SelectSingleNode("//*[@id=\"graph\"]/script");
-            if(graph == null) return null;
-            string script = graph.InnerHtml;
+            HtmlNode deckLink = doc.DocumentNode.SelectSingleNode("//*[contains(@class,'article-content')]/p/a/img");
+            if (deckLink == null) deckLink = doc.DocumentNode.SelectSingleNode("//*[contains(@class,'entry-content')]/p/a/img");
 
-            dynamic cardJson = Json.Decode(script.Split(new[] { "var n = " }, StringSplitOptions.None)[1].Split(';')[0]);
+            var temp = deckLink.ParentNode.GetAttributeValue("href", string.Empty);
+            doc = web.Load(temp);
 
-            foreach (KeyValuePair<string, dynamic> cardObj in cardJson)
+            HtmlNode cardsMeta = doc.DocumentNode.SelectSingleNode("//meta[@property='x-hearthstone:deck:cards']");
+            string cardsString = cardsMeta.GetAttributeValue("content", string.Empty);
+
+            foreach(string cardID in cardsString.Split(','))
             {
-                Card card = MyCollection.Get(cardObj.Key);
-                if(card != null)
+                Card card = MyCollection.GetByID(cardID);
+                if(toReturn.Cards.ContainsKey(card))
                 {
-                    toReturn.Cards.Add(card, card.Own + card.Missing);
+                    toReturn.Cards[card]++;
+                }
+                else
+                {
+                    toReturn.Cards.Add(card, 1);
                 }
             }
-
+            
             return toReturn;
         }
     }

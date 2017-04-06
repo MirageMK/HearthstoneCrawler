@@ -15,17 +15,7 @@ namespace HSCore.Model
         public string Name { get; set; }
         public string Class { get; set; }
         public int Tier { get; set; }
-        private DeckType _deckType;
-
-        public DeckType DeckType
-        {
-            get
-            {
-                if (_deckType != DeckType.Undefined) return _deckType;
-                return Cards.Any(x => !x.Key.IsStandard) ? DeckType.Wild : DeckType.Standard;
-            }
-            set { _deckType = value; }
-        }
+        public DeckType DeckType => Cards.Any(x => !x.Key.IsStandard) ? DeckType.Wild : DeckType.Standard;
 
         public SourceEnum Source { get; set; }
 

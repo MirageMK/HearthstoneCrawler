@@ -65,7 +65,6 @@ namespace HSCore.Readers
                     string deckurl = deckObj.deck.slugs[0].slug;
 
                     Deck deck = GetDeck(deckurl);
-                    deck.DeckType = dType;
                     deck.Name = deckObj.name + " - T" + deckObj.tier;
                     deck.Class = deckObj.deck.playerClass;
                     deck.Tier = deckObj.tier;
