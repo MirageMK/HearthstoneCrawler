@@ -53,5 +53,18 @@ namespace HSCore.Model
                        ? Card.ValuationFactor * (6 - GetTier()) * GetApperences()
                        : GetInDecks(source) != 0 ? Card.ValuationFactor * (6 - GetTier(source)) * GetApperences(source) : 0;
         }
+
+        public List<object> ToValuationArray()
+        {
+            List<object> toReturn = new List<object>();
+            var normalizedValue = Value / NetDecks.Valuations.Max(x => x.Value);
+            toReturn.Add(Card.Name);
+            toReturn.Add(normalizedValue);
+            toReturn.Add(Card.Own);
+            toReturn.Add(Card.Own + Card.Missing * (1 - normalizedValue));
+            toReturn.Add(Card.MaxInDeck);
+
+            return toReturn;
+        }
     }
 }

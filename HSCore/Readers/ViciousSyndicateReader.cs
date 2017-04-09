@@ -28,26 +28,26 @@ namespace HSCore.Readers
 
             UserCredential credential;
 
-            using(var stream =
-                new FileStream("client_secret.json", FileMode.Open, FileAccess.Read))
-            {
-                string credPath = Environment.GetFolderPath(
-                                                            Environment.SpecialFolder.Personal);
+            string credPath = Environment.GetFolderPath(
+                                                        Environment.SpecialFolder.Personal);
 
-                credential = GoogleWebAuthorizationBroker.AuthorizeAsync(
-                                                                         GoogleClientSecrets.Load(stream).Secrets,
-                                                                         Scopes,
-                                                                         "user",
-                                                                         CancellationToken.None,
-                                                                         new FileDataStore(credPath, true)).Result;
-            }
+            credential = GoogleWebAuthorizationBroker.AuthorizeAsync(
+                                                                                     new ClientSecrets
+                                                                                     {
+                                                                                         ClientId = @"910604975065-l7l1l4o1r6b30mot8310vcsckl3k79qt.apps.googleusercontent.com",
+                                                                                         ClientSecret = @"eugcRbe0V6IlSREi1HTb4xF6"
+                                                                                     },
+                                                                     Scopes,
+                                                                     "user",
+                                                                     CancellationToken.None,
+                                                                     new FileDataStore(credPath, true)).Result;
 
             // Create Google Sheets API service.
             var service = new SheetsService(new BaseClientService.Initializer()
-                                            {
-                                                HttpClientInitializer = credential,
-                                                ApplicationName = APPLICATION_NAME,
-                                            });
+            {
+                HttpClientInitializer = credential,
+                ApplicationName = APPLICATION_NAME,
+            });
 
             // Define request parameters.
             string spreadsheetId = "1osCVci8-7ttXp_CjWORzEUYf5VQlGWN_ZsOUrbCX0AI";
@@ -57,23 +57,24 @@ namespace HSCore.Readers
 
             ValueRange response = request.Execute();
             IList<IList<object>> values = response.Values;
-            if(values != null && values.Count > 0)
+            if (values != null && values.Count > 0)
             {
                 Dictionary<Deck, double> decks = new Dictionary<Deck, double>();
 
                 int i = 0;
-                while(true)
+                while (true)
                 {
-                    if (values[0][i].ToString() == "") { 
+                    if (values[0][i].ToString() == "")
+                    {
                         break;
                     }
                     i++;
                 }
                 i++;
-                foreach(IList<object> row in values.Skip(1))
+                foreach (IList<object> row in values.Skip(1))
                 {
                     double deckWinPercent;
-                    if(row.Count > i && double.TryParse(row[i].ToString(), out deckWinPercent))
+                    if (row.Count > i && double.TryParse(row[i].ToString(), out deckWinPercent))
                     {
                         Deck deck = new Deck();
                         deck.Name = row[0].ToString();
@@ -83,7 +84,8 @@ namespace HSCore.Readers
                         {
                             deck.Tier = 1;
                         }
-                        else if(deckWinPercent >= 0.50) {
+                        else if (deckWinPercent >= 0.50)
+                        {
                             deck.Tier = 2;
                         }
                         else if (deckWinPercent >= 0.45)
@@ -114,14 +116,14 @@ namespace HSCore.Readers
         {
             List<Deck> toReturn = new List<Deck>();
 
-            foreach(Deck tempDeck in GetDeckRanks())
+            foreach (Deck tempDeck in GetDeckRanks())
             {
                 string deckClass = tempDeck.Name.Split(' ').Last();
 
                 string deckUrl = DECK_URL.Replace("{class}", deckClass).Replace("{deckName}", tempDeck.Name);
 
                 Deck deck = GetDeck(deckUrl);
-                if(deck == null) continue;
+                if (deck == null) continue;
                 deck.Source = SourceEnum.ViciousSyndicate;
                 deck.Name = tempDeck.Name;
                 deck.Tier = tempDeck.Tier;
@@ -143,17 +145,17 @@ namespace HSCore.Readers
 
             HtmlNode deckLink = doc.DocumentNode.SelectSingleNode("//*[contains(@class,'article-content')]/p/a/img");
             if (deckLink == null) deckLink = doc.DocumentNode.SelectSingleNode("//*[contains(@class,'entry-content')]/p/a/img");
-            if(deckLink == null) return null;
+            if (deckLink == null) return null;
             var temp = deckLink.ParentNode.GetAttributeValue("href", string.Empty);
             doc = web.Load(temp);
 
             HtmlNode cardsMeta = doc.DocumentNode.SelectSingleNode("//meta[@property='x-hearthstone:deck:cards']");
             string cardsString = cardsMeta.GetAttributeValue("content", string.Empty);
 
-            foreach(string cardID in cardsString.Split(','))
+            foreach (string cardID in cardsString.Split(','))
             {
                 Card card = MyCollection.GetByID(cardID);
-                if(toReturn.Cards.ContainsKey(card))
+                if (toReturn.Cards.ContainsKey(card))
                 {
                     toReturn.Cards[card]++;
                 }
@@ -162,7 +164,7 @@ namespace HSCore.Readers
                     toReturn.Cards.Add(card, 1);
                 }
             }
-            
+
             return toReturn;
         }
     }

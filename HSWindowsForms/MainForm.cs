@@ -39,9 +39,9 @@ namespace HSWindowsForms
             LoadMyCollection();
 
             UnselectGrids();
-  
+
         }
-        
+
         #region Summary
         private void LoadSummary()
         {
@@ -57,10 +57,23 @@ namespace HSWindowsForms
             }
 
             StringBuilder sbLabelText = new StringBuilder();
-            sbLabelText.AppendLine($@"{MyCollection.Cards.Sum(x => x.Own)}/ {MyCollection.Cards.Sum(x => x.Missing)}");
-            sbLabelText.AppendLine($@"Clasic: {MyCollection.Cards.Where(x => x.CardSetEnum == SetEnum.Classic).Sum(x => x.Own)}/ {MyCollection.Cards.Where(x => x.CardSetEnum == SetEnum.Classic).Sum(x => x.Missing)}");
-            sbLabelText.AppendLine($@"MSoG: {MyCollection.Cards.Where(x => x.CardSetEnum == SetEnum.MSoG).Sum(x => x.Own)}/ {MyCollection.Cards.Where(x => x.CardSetEnum == SetEnum.MSoG).Sum(x => x.Missing)}");
+            sbLabelText.AppendLine($@"{MyCollection.Cards.Sum(x => x.Own)}/ {MyCollection.Cards.Sum(x => x.MaxInDeck)}");
+            sbLabelText.AppendLine();
+            sbLabelText.AppendLine(
+                                   $@"Common: {MyCollection.Cards.Where(x => x.CardSetEnum == SetEnum.JtU && x.Rarity == "Common").Sum(x => x.Own)}/ {MyCollection.Cards.Where(x => x.CardSetEnum == SetEnum.JtU && x.Rarity == "Common").Sum(x => x.MaxInDeck)}");
+            sbLabelText.AppendLine(
+                                   $@"Rare: {MyCollection.Cards.Where(x => x.CardSetEnum == SetEnum.JtU && x.Rarity == "Rare").Sum(x => x.Own)}/ {MyCollection.Cards.Where(x => x.CardSetEnum == SetEnum.JtU && x.Rarity == "Rare").Sum(x => x.MaxInDeck)}");
+            sbLabelText.AppendLine(
+                                   $@"Epic: {MyCollection.Cards.Where(x => x.CardSetEnum == SetEnum.JtU && x.Rarity == "Epic").Sum(x => x.Own)}/ {MyCollection.Cards.Where(x => x.CardSetEnum == SetEnum.JtU && x.Rarity == "Epic").Sum(x => x.MaxInDeck)}");
+            sbLabelText.AppendLine(
+                                   $@"Legendary: {MyCollection.Cards.Where(x => x.CardSetEnum == SetEnum.JtU && x.Rarity == "Legendary").Sum(x => x.Own)}/ {MyCollection.Cards.Where(x => x.CardSetEnum == SetEnum.JtU && x.Rarity == "Legendary").Sum(x => x.MaxInDeck)}");
+            sbLabelText.AppendLine(
+                                   $@"All: {MyCollection.Cards.Where(x => x.CardSetEnum == SetEnum.JtU).Sum(x => x.Own)}/ {MyCollection.Cards.Where(x => x.CardSetEnum == SetEnum.JtU).
+                                                                                                                                        Sum(x => x.MaxInDeck)}");
+            sbLabelText.AppendLine();
             sbLabelText.AppendLine($@"{MyCollection.Cards.Count(x => x.IsLegendary && x.Missing == 0)} legendaries");
+
+            sbLabelText.AppendLine();
 
             radLabel1.Text = sbLabelText.ToString();
         }
@@ -81,7 +94,7 @@ namespace HSWindowsForms
         {
             Valuation valuation = (Valuation)e.CellElement.RowInfo.DataBoundItem;
 
-            if(e.Column.Name == "color" || e.Column.Name == "Card")
+            if (e.Column.Name == "color" || e.Column.Name == "Card")
             {
                 e.CellElement.DrawFill = true;
                 e.CellElement.GradientStyle = GradientStyles.Linear;
@@ -266,11 +279,11 @@ namespace HSWindowsForms
             // Reset the color of the cell.  
             e.CellElement.DrawFill = false;
 
-            if(e.Column.Name != "Name") return;
+            if (e.Column.Name != "Name") return;
 
             foreach (GridViewRowInfo t in gridViewDecks.Rows)
             {
-                Deck parDeck = (Deck) t.DataBoundItem;
+                Deck parDeck = (Deck)t.DataBoundItem;
 
                 if (currentDeck.DuplicateIndicatior != parDeck.DuplicateIndicatior || currentDeck.Source == parDeck.Source) continue;
 

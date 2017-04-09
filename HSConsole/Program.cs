@@ -14,13 +14,12 @@ namespace HSConsole
     {
         static void Main(string[] args)
         {
-            BaseReader br = new MetabombReader();
-            br.GetDecks();
-            BaseWriter bw = new GoogleSpreedsheetWriter();
+            var tempa = MyCollection.Cards;
+            NetDecks.DownloadDecks();
+            var temp = new GoogleSpreedsheetWriter();
+            temp.WriteDecks();
 
-            bw.WriteDecks();
-
-            Console.WriteLine(MyCollection.Cards.Count);
+            Console.WriteLine("DONE");
             Console.ReadLine();
         }
     }
