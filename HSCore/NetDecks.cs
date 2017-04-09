@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO.IsolatedStorage;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using HSCore.Extensions;
 using HSCore.Model;
 using HSCore.Readers;
@@ -14,15 +15,6 @@ namespace HSCore
         private static IsolatedStorageFile _isf;
         private const string FILE_NAME = "HSDecks.dat";
 
-        static NetDecks()
-        {
-            if (Decks == null)
-            {
-                LoadDecks();
-            }
-
-        }
-
         private static void LoadDecks()
         {
             _isf = IsolatedStorageFile.GetStore(IsolatedStorageScope.User |
@@ -30,9 +22,9 @@ namespace HSCore
           typeof(System.Security.Policy.Url), typeof(System.Security.Policy.Url));
 
             DateTimeOffset lastChange = _isf.GetLastWriteTime(FILE_NAME);
-            Decks = _isf.LoadObject<List<Deck>>(FILE_NAME);
+            _decks = _isf.LoadObject<List<Deck>>(FILE_NAME);
 
-            if (Decks == null || !lastChange.Date.Equals(DateTime.Now.Date))
+            if (_decks == null || !lastChange.Date.Equals(DateTime.Now.Date))
             {
                 DownloadDecks();
             }
@@ -47,27 +39,28 @@ IsolatedStorageScope.Assembly | IsolatedStorageScope.Domain,
 typeof(System.Security.Policy.Url), typeof(System.Security.Policy.Url));
             }
 
-            Decks = new List<Deck>();
+            _decks = new List<Deck>();
 
             BaseReader reader = new TempoStormReader();
-            Decks.AddRange(reader.GetDecks());
+            _decks.AddRange(reader.GetDecks());
             reader = new HearthstoneTopDecksReader();
-            Decks.AddRange(reader.GetDecks());
+            _decks.AddRange(reader.GetDecks());
             reader = new ViciousSyndicateReader();
-            Decks.AddRange(reader.GetDecks());
+            _decks.AddRange(reader.GetDecks());
             reader = new MetabombReader();
-            Decks.AddRange(reader.GetDecks());
+            _decks.AddRange(reader.GetDecks());
             reader = new DisgusedToastReader();
-            Decks.AddRange(reader.GetDecks());
+            _decks.AddRange(reader.GetDecks());
 
-            _isf.SaveObject(Decks, FILE_NAME);
+            _isf.SaveObject(_decks, FILE_NAME);
 
             RecalculateValuations();
 
-            return Decks;
+            return _decks;
         }
 
-        public static List<Deck> Decks { get; set; }
+        private static List<Deck> _decks;
+        public static List<Deck> Decks => _decks ?? DownloadDecks();
 
         private static List<Valuation> _valuations;
         public static List<Valuation> Valuations
@@ -116,6 +109,11 @@ typeof(System.Security.Policy.Url), typeof(System.Security.Policy.Url));
                 toBeReturned.AppendLine($"{card.Name}; {scaledValue}; {scaledValue}");
             }
             return toBeReturned.ToString();
+        }
+
+        public static async void DownloadDecksAsync()
+        {
+            await Task.Run(() => DownloadDecks());
         }
     }
 }

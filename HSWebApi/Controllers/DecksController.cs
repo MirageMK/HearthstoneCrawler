@@ -18,9 +18,9 @@ namespace HSWebApi.Controllers
         }
 
         // GET api/values/5
-        public string Get(int id)
+        public IEnumerable<Deck> Get(int id)
         {
-            return "value";
+            return NetDecks.DownloadDecks();
         }
     }
 }
