@@ -35,7 +35,7 @@ namespace HSCore
                 if (tempCard == null)
                 {
                     Card card = HeartstoneDB.Get(cardName);
-                    card.Own = cardCount;
+                    card.Own = (cardCount > 2 ? 2 : cardCount);
                     toReturn.Add(card);
                 }
                 else

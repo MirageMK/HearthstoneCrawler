@@ -19,28 +19,26 @@ namespace HSCore
         Basic = 1,
         [Description("Classic")]
         Classic = 2,
-        [Description("Promo")]
-        Promo = 3,
         [Description("Hall of Fame")]
-        HoF = 4,
+        HoF = 3,
         [Description("Naxxramas")]
-        Naxx = 5,
+        Naxx = 4,
         [Description("Goblins vs Gnomes")]
-        GvG = 6,
+        GvG = 5,
         [Description("Blackrock Mountain")]
-        BRM = 7,
+        BRM = 6,
         [Description("The Grand Tournament")]
-        TGT = 8,
+        TGT = 7,
         [Description("The League of Explorers")]
-        LoE = 9,
+        LoE = 8,
         [Description("Whispers of the Old Gods")]
-        WotOG = 10,
+        WotOG = 9,
         [Description("Karazhan")]
-        Kara = 11,
+        Kara = 10,
         [Description("Mean Streets of Gadgetzan")]
-        MSoG = 12,
+        MSoG = 11,
         [Description("Journey to Un\'Goro")]
-        JtU = 13
+        JtU = 12
     }
 
     public enum DeckType

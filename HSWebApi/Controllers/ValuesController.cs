@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using HSCore;
 
 namespace HSWebApi.Controllers
 {
@@ -12,7 +13,7 @@ namespace HSWebApi.Controllers
         // GET api/values
         public IEnumerable<string> Get()
         {
-            return new string[] { "value1", "value2" };
+            return new string[] { MyCollection.Cards.Count.ToString(), MyCollection.CardCount.ToString() };
         }
 
         // GET api/values/5

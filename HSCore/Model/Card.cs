@@ -52,9 +52,10 @@ namespace HSCore.Model
             }
         }
         public int Own { get; set; }
-        public int Missing => IsLegendary ? 1 - Own : 2 - Own;
+        public int Missing => MaxInDeck - Own;
+        public int MaxInDeck => IsLegendary ? 1 : 2;
         public bool IsLegendary => Rarity == "Legendary";
-        public bool IsStandard => CardSetEnum < SetEnum.Promo || CardSetEnum > SetEnum.LoE;
+        public bool IsStandard => CardSetEnum < SetEnum.HoF || CardSetEnum > SetEnum.LoE;
 
         public double ValuationFactor
         {

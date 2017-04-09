@@ -143,7 +143,7 @@ namespace HSCore.Readers
 
             HtmlNode deckLink = doc.DocumentNode.SelectSingleNode("//*[contains(@class,'article-content')]/p/a/img");
             if (deckLink == null) deckLink = doc.DocumentNode.SelectSingleNode("//*[contains(@class,'entry-content')]/p/a/img");
-
+            if(deckLink == null) return null;
             var temp = deckLink.ParentNode.GetAttributeValue("href", string.Empty);
             doc = web.Load(temp);
 
