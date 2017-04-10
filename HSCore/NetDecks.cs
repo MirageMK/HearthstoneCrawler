@@ -15,7 +15,7 @@ namespace HSCore
         private static IsolatedStorageFile _isf;
         private const string FILE_NAME = "HSDecks.dat";
 
-        private static void LoadDecks()
+        private static List<Deck> LoadDecks()
         {
             _isf = IsolatedStorageFile.GetStore(IsolatedStorageScope.User |
           IsolatedStorageScope.Assembly | IsolatedStorageScope.Domain,
@@ -24,11 +24,17 @@ namespace HSCore
             DateTimeOffset lastChange = _isf.GetLastWriteTime(FILE_NAME);
             _decks = _isf.LoadObject<List<Deck>>(FILE_NAME);
 
-            if (_decks == null || !lastChange.Date.Equals(DateTime.Now.Date))
+            if(_decks == null || !lastChange.Date.Equals(DateTime.Now.Date))
             {
-                DownloadDecks();
+                return DownloadDecks();
+            }
+            else
+            {
+                return _decks;
             }
         }
+
+        private static bool isDownloading = false;
 
         public static List<Deck> DownloadDecks()
         {
@@ -41,6 +47,9 @@ typeof(System.Security.Policy.Url), typeof(System.Security.Policy.Url));
 
             _decks = new List<Deck>();
 
+            if(isDownloading) return _decks;
+
+            isDownloading = true;
             BaseReader reader = new TempoStormReader();
             _decks.AddRange(reader.GetDecks());
             reader = new HearthstoneTopDecksReader();
@@ -55,19 +64,22 @@ typeof(System.Security.Policy.Url), typeof(System.Security.Policy.Url));
             _isf.SaveObject(_decks, FILE_NAME);
 
             RecalculateValuations();
+            isDownloading = false;
 
             return _decks;
         }
 
         private static List<Deck> _decks;
-        public static List<Deck> Decks => _decks ?? DownloadDecks();
+        public static List<Deck> Decks => _decks ?? LoadDecks();
 
         private static List<Valuation> _valuations;
         public static List<Valuation> Valuations
         {
             get
             {
-                if (_valuations == null)
+                if(_decks == null)
+                    LoadDecks();
+                else if (_valuations == null)
                     RecalculateValuations();
 
                 return _valuations;
@@ -77,7 +89,7 @@ typeof(System.Security.Policy.Url), typeof(System.Security.Policy.Url));
         private static void RecalculateValuations()
         {
             _valuations = new List<Valuation>();
-            foreach (Deck deck in Decks)
+            foreach (Deck deck in _decks)
             {
                 foreach (KeyValuePair<Card, int> dCard in deck.Cards)
                 {

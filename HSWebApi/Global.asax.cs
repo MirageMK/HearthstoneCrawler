@@ -20,7 +20,7 @@ namespace HSWebApi
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
 
-            NetDecks.DownloadDecks();
+            NetDecks.DownloadDecksAsync();
         }
     }
 }
