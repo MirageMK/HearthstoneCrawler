@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace HSCore.Model
 {
@@ -7,7 +8,7 @@ namespace HSCore.Model
     public class Card : IEquatable<Card>, IEqualityComparer<Card>
     {
         public string CardId { get; set; }
-        
+
         public string Name { get; set; }
         public string CardSet { get; set; }
         public SetEnum CardSetEnum => Enums.GetValueFromDescription<SetEnum>(CardSet);
@@ -52,6 +53,16 @@ namespace HSCore.Model
             }
         }
         public int Own { get; set; }
+        public double OwnW
+        {
+            get
+            {
+                Valuation firstOrDefault = NetDecks.Valuations.FirstOrDefault(x => x.Card.Name == Name);
+                if (firstOrDefault != null) return Own + Missing * (1 - firstOrDefault.NormalizedValue);
+                else return MaxInDeck;
+            }
+        }
+
         public int Missing => MaxInDeck - Own;
         public int MaxInDeck => IsLegendary ? 1 : 2;
         public bool IsLegendary => Rarity == "Legendary";

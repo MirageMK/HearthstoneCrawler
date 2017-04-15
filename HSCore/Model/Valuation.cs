@@ -18,6 +18,7 @@ namespace HSCore.Model
         public Dictionary<Deck, int> Decks { get; }
 
         public double Value => GetValue();
+        public double NormalizedValue => GetValue() / NetDecks.Valuations.Max(x => x.Value);
         public double AvgValue => (Value1 + Value2 + Value3 + Value4 + Value5) / 5;
 
         public double Value1 => GetValue(SourceEnum.HearthstoneTopDecks);
@@ -57,11 +58,10 @@ namespace HSCore.Model
         public List<object> ToValuationArray()
         {
             List<object> toReturn = new List<object>();
-            var normalizedValue = Value / NetDecks.Valuations.Max(x => x.Value);
             toReturn.Add(Card.Name);
-            toReturn.Add(normalizedValue);
+            toReturn.Add(NormalizedValue);
             toReturn.Add(Card.Own);
-            toReturn.Add(Card.Own + Card.Missing * (1 - normalizedValue));
+            toReturn.Add(Card.Own + Card.Missing * (1 - NormalizedValue));
             toReturn.Add(Card.MaxInDeck);
 
             return toReturn;

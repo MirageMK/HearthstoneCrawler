@@ -82,7 +82,7 @@ typeof(System.Security.Policy.Url), typeof(System.Security.Policy.Url));
             {
                 if(_decks == null)
                     LoadDecks();
-                else if (_valuations == null)
+                if (_valuations == null)
                     RecalculateValuations();
 
                 return _valuations;
