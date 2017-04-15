@@ -8,8 +8,12 @@ namespace HSCore.Readers
 {
     public class TempoStormReader : BaseReader
     {
-        private const string URL = "http://www.tempostorm.com/";
+        private static readonly log4net.ILog log = log4net.LogManager.GetLogger
+ (System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
+        private const string URL = "http://www.tempostorm.com/";
+        private const string DECK_URL = @"http://www.tempostorm.com/hearthstone/decks/";
+        
         private const string END_POINT_SNAPSHOT =
             "api/snapshots/findOne?filter=%7B%22where%22%3A%7B%22slug%22%3A%22{date}%22%2C%22snapshotType%22%3A%22{type}%22%7D%2C%22include%22%3A%5B%7B%22relation%22%3A%22deckTiers%22%2C%22scope%22%3A%7B%22include%22%3A%5B%7B%22relation%22%3A%22deck%22%2C%22scope%22%3A%7B%22fields%22%3A%5B%22id%22%2C%22name%22%2C%22slug%22%2C%22playerClass%22%5D%2C%22include%22%3A%7B%22relation%22%3A%22slugs%22%2C%22scope%22%3A%7B%22fields%22%3A%5B%22linked%22%2C%22slug%22%5D%7D%7D%7D%7D%5D%7D%7D%5D%7D";
         private const string END_POINT_DECK =
@@ -48,30 +52,39 @@ namespace HSCore.Readers
         public override List<Deck> GetDecks()
         {
             List<Deck> toReturn = new List<Deck>();
-            foreach (DeckType dType in Enum.GetValues(typeof(DeckType)))
+
+            try
             {
-                if (dType == DeckType.Undefined) continue;
-
-                string deckTypeDescription = Enums.GetEnumDescription(dType);
-                string url = GetUrl(deckTypeDescription);
-
-                RestClient client = new RestClient(url);
-                RestRequest request = new RestRequest();
-                IRestResponse response = client.Execute(request);
-                dynamic snapshot = Json.Decode(response.Content);
-
-                foreach (dynamic deckObj in snapshot.deckTiers)
+                foreach(DeckType dType in Enum.GetValues(typeof(DeckType)))
                 {
-                    string deckurl = deckObj.deck.slugs[0].slug;
+                    if(dType == DeckType.Undefined) continue;
 
-                    Deck deck = GetDeck(deckurl);
-                    deck.Name = $"{deckObj.name} - T{deckObj.tier}";
-                    deck.Class = deckObj.deck.playerClass;
-                    deck.Tier = deckObj.tier;
-                    deck.Source = SourceEnum.TempoStorm;
-                    toReturn.Add(deck);
+                    string deckTypeDescription = Enums.GetEnumDescription(dType);
+                    string url = GetUrl(deckTypeDescription);
+
+                    RestClient client = new RestClient(url);
+                    RestRequest request = new RestRequest();
+                    IRestResponse response = client.Execute(request);
+                    dynamic snapshot = Json.Decode(response.Content);
+
+                    foreach(dynamic deckObj in snapshot.deckTiers)
+                    {
+                        string deckurl = deckObj.deck.slugs[0].slug;
+
+                        Deck deck = GetDeck(deckurl);
+                        deck.Name = $"{deckObj.name} - T{deckObj.tier}";
+                        deck.Class = deckObj.deck.playerClass;
+                        deck.Tier = deckObj.tier;
+                        deck.Source = SourceEnum.TempoStorm;
+                        toReturn.Add(deck);
+                    }
                 }
             }
+            catch(Exception ex)
+            {
+                log.Error("Problem", ex);
+            }
+
             return toReturn;
         }
 
@@ -86,6 +99,7 @@ namespace HSCore.Readers
             dynamic deck = Json.Decode(response.Content);
 
             toReturn.UpdateDateString = deck.createdDate;
+            toReturn.Url = DECK_URL + url;
 
             foreach (dynamic cardObj in deck.cards)
             {

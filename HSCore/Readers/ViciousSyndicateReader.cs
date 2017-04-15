@@ -16,6 +16,9 @@ namespace HSCore.Readers
 {
     public class ViciousSyndicateReader : BaseReader
     {
+        private static readonly log4net.ILog log = log4net.LogManager.GetLogger
+ (System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
         static readonly string[] Scopes = { SheetsService.Scope.SpreadsheetsReadonly };
         private const string APPLICATION_NAME = "Hearthstone Crawler";
 
@@ -116,21 +119,28 @@ namespace HSCore.Readers
         {
             List<Deck> toReturn = new List<Deck>();
 
-            foreach (Deck tempDeck in GetDeckRanks())
+            try
             {
-                string deckClass = tempDeck.Name.Split(' ').Last();
+                foreach(Deck tempDeck in GetDeckRanks())
+                {
+                    string deckClass = tempDeck.Name.Split(' ').Last();
 
-                string deckUrl = DECK_URL.Replace("{class}", deckClass).Replace("{deckName}", tempDeck.Name);
+                    string deckUrl = DECK_URL.Replace("{class}", deckClass).Replace("{deckName}", tempDeck.Name);
 
-                Deck deck = GetDeck(deckUrl);
-                if (deck == null) continue;
-                deck.Source = SourceEnum.ViciousSyndicate;
-                deck.Name = tempDeck.Name;
-                deck.Tier = tempDeck.Tier;
-                deck.UpdateDateString = tempDeck.UpdateDate.ToString();
-                deck.Class = deckClass;
+                    Deck deck = GetDeck(deckUrl);
+                    if(deck == null) continue;
+                    deck.Source = SourceEnum.ViciousSyndicate;
+                    deck.Name = tempDeck.Name;
+                    deck.Tier = tempDeck.Tier;
+                    deck.UpdateDateString = tempDeck.UpdateDate.ToString();
+                    deck.Class = deckClass;
 
-                toReturn.Add(deck);
+                    toReturn.Add(deck);
+                }
+            }
+            catch(Exception ex)
+            {
+                log.Error("Problem", ex);
             }
 
             return toReturn;
@@ -143,6 +153,7 @@ namespace HSCore.Readers
             HtmlWeb web = new HtmlWeb();
             HtmlDocument doc = web.Load(url);
 
+            toReturn.Url = url;
             HtmlNode deckLink = doc.DocumentNode.SelectSingleNode("//*[contains(@class,'article-content')]/p/a/img");
             if (deckLink == null) deckLink = doc.DocumentNode.SelectSingleNode("//*[contains(@class,'entry-content')]/p/a/img");
             if (deckLink == null) return null;

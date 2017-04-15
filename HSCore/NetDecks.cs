@@ -12,6 +12,9 @@ namespace HSCore
 {
     public static class NetDecks
     {
+        private static readonly log4net.ILog log = log4net.LogManager.GetLogger
+    (System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
         private static IsolatedStorageFile _isf;
         private const string FILE_NAME = "HSDecks.dat";
 
@@ -48,7 +51,7 @@ typeof(System.Security.Policy.Url), typeof(System.Security.Policy.Url));
             _decks = new List<Deck>();
 
             if(isDownloading) return _decks;
-
+            log.Info("START");
             isDownloading = true;
             BaseReader reader = new TempoStormReader();
             _decks.AddRange(reader.GetDecks());
@@ -65,7 +68,7 @@ typeof(System.Security.Policy.Url), typeof(System.Security.Policy.Url));
 
             RecalculateValuations();
             isDownloading = false;
-
+            log.Info("FINISH");
             return _decks;
         }
 

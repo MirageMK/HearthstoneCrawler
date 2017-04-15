@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using HSCore.Model;
 using HtmlAgilityPack;
 
@@ -6,6 +7,9 @@ namespace HSCore.Readers
 {
     public class MetabombReader : BaseReader
     {
+        private static readonly log4net.ILog log = log4net.LogManager.GetLogger
+ (System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
         private const string URL = "http://hearthstone.metabomb.net";
 
         private string GetUrl()
@@ -27,31 +31,38 @@ namespace HSCore.Readers
         public override List<Deck> GetDecks()
         {
             List<Deck> toReturn = new List<Deck>();
-            HtmlWeb web = new HtmlWeb();
-            HtmlDocument doc = web.Load(GetUrl());
 
-            int tier = 0;
-
-            foreach (HtmlNode deckSection in doc.DocumentNode.SelectNodes("//*[contains(@class,'article-content')]/section"))
+            try
             {
-                HtmlNodeCollection deckNode = deckSection.SelectNodes("table/tbody/tr");
-                if (deckNode == null) continue;
-                foreach (HtmlNode deckLink in deckNode)
-                {
-                    if (deckLink.ChildNodes[0].InnerHtml != "") tier++;
+                HtmlWeb web = new HtmlWeb();
+                HtmlDocument doc = web.Load(GetUrl());
 
-                    if (deckLink.SelectSingleNode("td/a") == null) continue;
-                    string deckUrl = deckLink.SelectSingleNode("td/a").GetAttributeValue("href", string.Empty);
-                    if (deckUrl == "") continue;
-                    Deck deck = GetDeck(deckUrl);
-                    if(deck == null) continue;
-                    deck.Tier = tier;
-                    deck.Name = deckLink.ChildNodes[1].InnerText;
-                    deck.Source = SourceEnum.Metabomb;
-                    toReturn.Add(deck);
+                int tier = 0;
+
+                foreach(HtmlNode deckSection in doc.DocumentNode.SelectNodes("//*[contains(@class,'article-content')]/section"))
+                {
+                    HtmlNodeCollection deckNode = deckSection.SelectNodes("table/tbody/tr");
+                    if(deckNode == null) continue;
+                    foreach(HtmlNode deckLink in deckNode)
+                    {
+                        if(deckLink.ChildNodes[0].InnerHtml != "" && tier < 5) tier++;
+
+                        if(deckLink.SelectSingleNode("td/a") == null) continue;
+                        string deckUrl = deckLink.SelectSingleNode("td/a").GetAttributeValue("href", string.Empty);
+                        if(deckUrl == "") continue;
+                        Deck deck = GetDeck(deckUrl);
+                        if(deck == null) continue;
+                        deck.Tier = tier;
+                        deck.Name = deckLink.ChildNodes[1].InnerText;
+                        deck.Source = SourceEnum.Metabomb;
+                        toReturn.Add(deck);
+                    }
                 }
             }
-
+            catch(Exception ex)
+            {
+                log.Error("Problem", ex);
+            }
             return toReturn;
         }
 
@@ -61,7 +72,8 @@ namespace HSCore.Readers
             HtmlWeb web = new HtmlWeb();
             HtmlDocument doc = web.Load(url);
 
-            if(doc.DocumentNode.SelectNodes("//*[contains(@class,'article-content')]") == null) return null;
+            toReturn.Url = url;
+            if (doc.DocumentNode.SelectNodes("//*[contains(@class,'article-content')]") == null) return null;
 
             toReturn.UpdateDateString = doc.DocumentNode.SelectSingleNode("//*[contains(@itemprop,'datePublished')]").GetAttributeValue("content","");
 
@@ -96,6 +108,8 @@ namespace HSCore.Readers
                     if(card == null) continue;
                     toReturn.Cards.Add(card, cardCount);
                 }
+
+                break;
             }
 
             return toReturn;

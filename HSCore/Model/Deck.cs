@@ -18,6 +18,7 @@ namespace HSCore.Model
         public DeckType DeckType => Cards.Any(x => !x.Key.IsStandard) ? DeckType.Wild : DeckType.Standard;
 
         public SourceEnum Source { get; set; }
+        public string Url { get; set; }
 
         private DateTime _updateDate;
         public DateTime UpdateDate => _updateDate;
