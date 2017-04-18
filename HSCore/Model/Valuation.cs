@@ -19,6 +19,16 @@ namespace HSCore.Model
 
         public double Value => GetValue();
         public double NormalizedValue => GetValue() / NetDecks.Valuations.Max(x => x.Value);
+
+        public double NormalizedValueAdjusted
+        {
+            get
+            {
+                double value = GetValue() / NetDecks.Valuations.Where(x => x.Card.Missing > 0).Max(x => x.Value);
+                if(value > 1) value = 1;
+                return value;
+            }
+        } 
         public double AvgValue => (Value1 + Value2 + Value3 + Value4 + Value5) / 5;
 
         public double Value1 => GetValue(SourceEnum.HearthstoneTopDecks);

@@ -34,5 +34,13 @@ namespace HSWindowsForms
                 this.Size = new Size(this.Width, 70 + (valuation.Decks.Count * 25));
             }
         }
+
+        private void radGridView1_DoubleClick(object sender, EventArgs e)
+        {
+            if (radGridView1.CurrentRow?.DataBoundItem == null) return;
+
+            DeckForm deckForm = new DeckForm(radGridView1.CurrentRow.DataBoundItem as Deck);
+            deckForm.Show();
+        }
     }
 }

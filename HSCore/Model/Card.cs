@@ -58,12 +58,13 @@ namespace HSCore.Model
             get
             {
                 Valuation firstOrDefault = NetDecks.Valuations.FirstOrDefault(x => x.Card.Name == Name);
-                if (firstOrDefault != null) return Own + Missing * (1 - firstOrDefault.NormalizedValue);
-                else return MaxInDeck;
+                if (firstOrDefault != null) return Own + Missing * (1 - firstOrDefault.NormalizedValueAdjusted);
+                return MaxInDeck;
             }
         }
 
         public int Missing => MaxInDeck - Own;
+        public double MissingW => MaxInDeck - OwnW;
         public int MaxInDeck => IsLegendary ? 1 : 2;
         public bool IsLegendary => Rarity == "Legendary";
         public bool IsStandard => CardSetEnum < SetEnum.HoF || CardSetEnum > SetEnum.LoE;

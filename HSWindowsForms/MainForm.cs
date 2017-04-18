@@ -56,6 +56,15 @@ namespace HSWindowsForms
                 }
             }
 
+            gridPack.DataSource = (from SetEnum sType in Enum.GetValues(typeof(SetEnum)) select new Pack(sType)).Where(x => x.CanBuy).ToList();
+            foreach (GridViewDataColumn column in gridPack.Columns)
+            {
+                if (column.DataType == typeof(double))
+                {
+                    column.FormatString = @"{0:N2}";
+                }
+            }
+
             StringBuilder sbLabelText = new StringBuilder();
             sbLabelText.AppendLine($@"{MyCollection.Cards.Sum(x => x.Own)}/ {MyCollection.Cards.Sum(x => x.MaxInDeck)}");
             sbLabelText.AppendLine();
@@ -178,6 +187,11 @@ namespace HSWindowsForms
         private void LoadDecks(bool force = false)
         {
             gridViewDecks.DataSource = force ? NetDecks.DownloadDecks() : NetDecks.Decks;
+
+            if (!force) return;
+
+            gridCardValuation.DataSource = NetDecks.Valuations;
+            gridPack.DataSource = (from SetEnum sType in Enum.GetValues(typeof(SetEnum)) select new Pack(sType)).Where(x => x.CanBuy).ToList();
         }
 
         private void gridViewDecks_CellDoubleClick(object sender, GridViewCellEventArgs e)

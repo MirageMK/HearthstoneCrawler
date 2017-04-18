@@ -156,6 +156,7 @@
     <None Include="packages.config" />
     <None Include="Properties\DataSources\HSCore.Model.Card.datasource" />
     <None Include="Properties\DataSources\HSCore.Model.Deck.datasource" />
+    <None Include="Properties\DataSources\HSCore.Model.Pack.datasource" />
     <None Include="Properties\DataSources\HSCore.Model.Valuation.datasource" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

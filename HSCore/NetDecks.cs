@@ -37,7 +37,7 @@ namespace HSCore
             }
         }
 
-        private static bool isDownloading = false;
+        private static bool isDownloading;
 
         public static List<Deck> DownloadDecks()
         {
