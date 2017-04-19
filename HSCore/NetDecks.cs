@@ -63,6 +63,8 @@ typeof(System.Security.Policy.Url), typeof(System.Security.Policy.Url));
             _decks.AddRange(reader.GetDecks());
             reader = new DisgusedToastReader();
             _decks.AddRange(reader.GetDecks());
+            reader = new HSReplayReader();
+            _decks.AddRange(reader.GetDecks());
 
             _isf.SaveObject(_decks, FILE_NAME);
 

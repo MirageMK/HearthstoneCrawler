@@ -29,13 +29,14 @@ namespace HSCore.Model
                 return value;
             }
         } 
-        public double AvgValue => (Value1 + Value2 + Value3 + Value4 + Value5) / 5;
+        public double AvgValue => (Value1 + Value2 + Value3 + Value4 + Value5 + Value6) / 6;
 
         public double Value1 => GetValue(SourceEnum.HearthstoneTopDecks);
         public double Value2 => GetValue(SourceEnum.TempoStorm);
         public double Value3 => GetValue(SourceEnum.ViciousSyndicate);
         public double Value4 => GetValue(SourceEnum.Metabomb);
         public double Value5 => GetValue(SourceEnum.DisguisedToast);
+        public double Value6 => GetValue(SourceEnum.HSReplay);
 
         public int GetInDecks(SourceEnum? source = null)
         {

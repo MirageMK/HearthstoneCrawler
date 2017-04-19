@@ -10,7 +10,8 @@ namespace HSCore
         HearthstoneTopDecks,
         ViciousSyndicate,
         Metabomb,
-        DisguisedToast
+        DisguisedToast,
+        HSReplay
     }
 
     public enum SetEnum

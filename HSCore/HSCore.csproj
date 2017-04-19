@@ -131,6 +131,7 @@
     <Compile Include="HeartstoneDB.cs" />
     <Compile Include="NetDecks.cs" />
     <Compile Include="Readers\BaseReader.cs" />
+    <Compile Include="Readers\HSReplayReader.cs" />
     <Compile Include="Readers\DisgusedToastReader.cs" />
     <Compile Include="Readers\MetabombReader.cs" />
     <Compile Include="Readers\HearthstoneTopDecksReader.cs" />
