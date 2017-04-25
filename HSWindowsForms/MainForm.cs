@@ -295,6 +295,7 @@ namespace HSWindowsForms
 
             if (e.Column.Name != "Name") return;
 
+            List<string> usedColours = new List<string>();
             foreach (GridViewRowInfo t in gridViewDecks.Rows)
             {
                 Deck parDeck = (Deck)t.DataBoundItem;
@@ -311,7 +312,15 @@ namespace HSWindowsForms
                 {
                     KnownColor randomColorName = names.ElementAt(randomGen.Next(names.Count));
                     Color randomColor = Color.FromKnownColor(randomColorName);
+                    double a = 1 - (0.299 * randomColor.R + 0.587 * randomColor.G + 0.114 * randomColor.B) / 255;
+                    while(a < 0.3 || usedColours.Contains(randomColor.Name))
+                    {
+                        randomColorName = names.ElementAt(randomGen.Next(names.Count));
+                        randomColor = Color.FromKnownColor(randomColorName);
+                        a = 1 - (0.299 * randomColor.R + 0.587 * randomColor.G + 0.114 * randomColor.B) / 255;
+                    }
                     parBackColor = randomColor;
+                    usedColours.Add(randomColor.Name);
                 }
 
                 e.CellElement.BackColor = parBackColor;

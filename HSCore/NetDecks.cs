@@ -37,7 +37,7 @@ namespace HSCore
             }
         }
 
-        private static bool isDownloading;
+        public static bool IsDownloading { get; private set; }
 
         public static List<Deck> DownloadDecks()
         {
@@ -50,9 +50,9 @@ typeof(System.Security.Policy.Url), typeof(System.Security.Policy.Url));
 
             _decks = new List<Deck>();
 
-            if(isDownloading) return _decks;
+            if(IsDownloading) return _decks;
             log.Info("START");
-            isDownloading = true;
+            IsDownloading = true;
             BaseReader reader = new TempoStormReader();
             _decks.AddRange(reader.GetDecks());
             reader = new HearthstoneTopDecksReader();
@@ -69,7 +69,7 @@ typeof(System.Security.Policy.Url), typeof(System.Security.Policy.Url));
             _isf.SaveObject(_decks, FILE_NAME);
 
             RecalculateValuations();
-            isDownloading = false;
+            IsDownloading = false;
             log.Info("FINISH");
             return _decks;
         }

@@ -14,7 +14,9 @@ namespace HSCore
         //static readonly string ApplicationName = "Hearthstone Crawler";
         internal static readonly string[] NonColectable = { "Roaring Torch", "Tank Up!", "Kazakus Potion", "The Storm Guardian" };
         private const string USER_NAME = "Miragemk";
-
+        //private const string USER_NAME = "GlAdIaToR_kanga";
+        //private const string USER_NAME = "NikoRuso";
+        
         public static List<Card> Cards { get; }
         public static int CardCount => Cards.Sum(card => card.Own);
 
