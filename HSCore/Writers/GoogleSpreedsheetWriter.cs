@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading;
 using Google.Apis.Auth.OAuth2;
@@ -61,20 +62,19 @@ namespace HSCore.Writers
             string ApplicationName = "Hearthstone Crawler";
 
             UserCredential credential;
+            string root = AppDomain.CurrentDomain.BaseDirectory;
+            using (var stream =
+                new FileStream(Path.Combine(root, "client_secret.json"), FileMode.Open, FileAccess.Read))
+            {
+                string credPath = Path.Combine(root, ".credentials");
 
-            string credPath = Environment.GetFolderPath(
-                Environment.SpecialFolder.Personal);
-
-            credential = GoogleWebAuthorizationBroker.AuthorizeAsync(
-                new ClientSecrets
-                {
-                    ClientId = @"910604975065-l7l1l4o1r6b30mot8310vcsckl3k79qt.apps.googleusercontent.com",
-                    ClientSecret = @"eugcRbe0V6IlSREi1HTb4xF6"
-                },
-                Scopes,
-                "user",
-                CancellationToken.None,
-                new FileDataStore(credPath, true)).Result;
+                credential = GoogleWebAuthorizationBroker.AuthorizeAsync(
+                    GoogleClientSecrets.Load(stream).Secrets,
+                    Scopes,
+                    "user",
+                    CancellationToken.None,
+                    new FileDataStore(credPath, true)).Result;
+            }
 
             // Create Google Sheets API service.
             return new SheetsService(new BaseClientService.Initializer()
