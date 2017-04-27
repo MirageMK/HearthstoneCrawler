@@ -9,6 +9,8 @@ namespace HSCore
 {
     public static class HeartstoneDB
     {
+        private static readonly log4net.ILog log = log4net.LogManager.GetLogger
+    (System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         private const string X_MASHAPE_KEY = "97ivM51w5HmshhjJQhVH0MuyOMA2p1ecDlQjsn1mQyqgCor9NN";
         public static List<Card> Cards { get; }
         static HeartstoneDB()
@@ -27,6 +29,7 @@ namespace HSCore
                 if (response != null) toReturn.AddRange(response.Data.Where(x => x.Type != "Hero"));
             }
             Cards = toReturn;
+            log.Info($"Cards in database: {Cards.Count}");
         }
 
         public static Card Get(string name)
@@ -35,9 +38,10 @@ namespace HSCore
             if (newCard != null) return newCard;
 
             newCard = Cards.Find(x => string.Equals(x.Name, Mapper(name), StringComparison.CurrentCultureIgnoreCase));
-            if (newCard != null) return newCard;
+            if (newCard == null) throw new Exception("DB - Cannot find card with name:" + name);
 
-            throw new Exception("DB - Cannot find card with name:" + name);
+            log.Warn($"DB Card: {name} replaced with {newCard.Name}");
+            return newCard;
         }
 
         private static string Mapper(string name)

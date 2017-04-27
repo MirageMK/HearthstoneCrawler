@@ -34,7 +34,7 @@ namespace HSCore
         LoE = 8,
         [Description("Whispers of the Old Gods")]
         WotOG = 9,
-        [Description("Karazhan")]
+        [Description("One Night in Karazhan")]
         Kara = 10,
         [Description("Mean Streets of Gadgetzan")]
         MSoG = 11,

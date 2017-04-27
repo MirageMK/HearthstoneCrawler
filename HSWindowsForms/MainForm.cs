@@ -264,6 +264,11 @@ namespace HSWindowsForms
                     fDescriptor.Value = DeckType.Standard;
                     fDescriptor.IsFilterEditor = true;
                     gridViewDecks.Columns["DeckType"].FilterDescriptor = fDescriptor;
+                    fDescriptor = new FilterDescriptor();
+                    fDescriptor.Operator = FilterOperator.IsLessThanOrEqualTo;
+                    fDescriptor.Value = 1;
+                    fDescriptor.IsFilterEditor = true;
+                    gridViewDecks.Columns["MissingCardNo"].FilterDescriptor = fDescriptor;
                     break;
                 case "rbSource":
                     gDescriptor.GroupNames.Add("Source", ListSortDirection.Ascending);

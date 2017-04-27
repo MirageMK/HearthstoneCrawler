@@ -10,6 +10,8 @@ namespace HSCore
 {
     public static class MyCollection
     {
+        private static readonly log4net.ILog log = log4net.LogManager.GetLogger
+    (System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         //static readonly string[] Scopes = { SheetsService.Scope.Spreadsheets };
         //static readonly string ApplicationName = "Hearthstone Crawler";
         internal static readonly string[] NonColectable = { "Roaring Torch", "Tank Up!", "Kazakus Potion", "The Storm Guardian" };
@@ -48,6 +50,7 @@ namespace HSCore
             }
 
             Cards = toReturn;
+            log.Info($"Cards in collection: {Cards.Count}");
         }
 
         public static Card Get(string name)
@@ -59,11 +62,12 @@ namespace HSCore
 
             Card newCard = Cards.Find(x => string.Equals(x.Name, name, StringComparison.CurrentCultureIgnoreCase));
             if (newCard != null) return newCard;
-
+            
             newCard = Cards.Find(x => string.Equals(x.Name, Mapper(name), StringComparison.CurrentCultureIgnoreCase));
-            if (newCard != null) return newCard;
+            if (newCard == null) throw new Exception("MY - Cannot find card with name:" + name);
 
-            throw new Exception("MY - Cannot find card with name:" + name);
+            log.Warn($"My Card: {name} replaced with {newCard.Name}");
+            return newCard;
         }
 
         public static Card GetByID(string id)
