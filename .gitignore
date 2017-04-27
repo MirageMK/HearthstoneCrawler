@@ -252,4 +252,3 @@ paket-files/
 *.sln.iml
 
 client_secret.json
-HSWebApi/.credentials/Google.Apis.Auth.OAuth2.Responses.TokenResponse-user
