@@ -27,7 +27,7 @@ namespace HSCore
             DateTimeOffset lastChange = _isf.GetLastWriteTime(FILE_NAME);
             _decks = _isf.LoadObject<List<Deck>>(FILE_NAME);
 
-            if(_decks == null || !lastChange.Date.Equals(DateTime.Now.Date))
+            if (_decks == null || !lastChange.Date.Equals(DateTime.Now.Date))
             {
                 return DownloadDecks();
             }
@@ -50,46 +50,40 @@ typeof(System.Security.Policy.Url), typeof(System.Security.Policy.Url));
 
             _decks = new List<Deck>();
 
-            if(IsDownloading) return _decks;
+            if (IsDownloading) return _decks;
             log.Info("START");
             IsDownloading = true;
 
-            try
-            {
-                BaseReader reader = new TempoStormReader();
-                List<Deck> decks = reader.GetDecks();
-                log.Info($"TempoStormReader - Standard:{decks.Count(x => x.DeckType == DeckType.Standard)} - Wild:{decks.Count(x => x.DeckType == DeckType.Wild)} - Total:{decks.Count()}");
-                _decks.AddRange(decks);
-                reader = new HearthstoneTopDecksReader();
-                decks = reader.GetDecks();
-                log.Info($"HearthstoneTopDecksReader - Standard:{decks.Count(x => x.DeckType == DeckType.Standard)} - Wild:{decks.Count(x => x.DeckType == DeckType.Wild)} - Total:{decks.Count()}");
-                _decks.AddRange(decks);
-                reader = new ViciousSyndicateReader();
-                decks = reader.GetDecks();
-                log.Info($"ViciousSyndicateReader - Standard:{decks.Count(x => x.DeckType == DeckType.Standard)} - Wild:{decks.Count(x => x.DeckType == DeckType.Wild)} - Total:{decks.Count()}");
-                _decks.AddRange(decks);
-                reader = new MetabombReader();
-                decks = reader.GetDecks();
-                log.Info($"MetabombReader - Standard:{decks.Count(x => x.DeckType == DeckType.Standard)} - Wild:{decks.Count(x => x.DeckType == DeckType.Wild)} - Total:{decks.Count()}");
-                _decks.AddRange(decks);
-                reader = new DisgusedToastReader();
-                decks = reader.GetDecks();
-                log.Info($"DisgusedToastReader - Standard:{decks.Count(x => x.DeckType == DeckType.Standard)} - Wild:{decks.Count(x => x.DeckType == DeckType.Wild)} - Total:{decks.Count()}");
-                _decks.AddRange(decks);
-                reader = new HSReplayReader();
-                decks = reader.GetDecks();
-                log.Info($"HSReplayReader - Standard:{decks.Count(x => x.DeckType == DeckType.Standard)} - Wild:{decks.Count(x => x.DeckType == DeckType.Wild)} - Total:{decks.Count()}");
-                _decks.AddRange(decks);
+            BaseReader reader = new TempoStormReader();
+            List<Deck> decks = reader.GetDecks();
+            log.Info($"TempoStormReader - Standard:{decks.Count(x => x.DeckType == DeckType.Standard)} - Wild:{decks.Count(x => x.DeckType == DeckType.Wild)} - Total:{decks.Count()}");
+            _decks.AddRange(decks);
+            reader = new HearthstoneTopDecksReader();
+            decks = reader.GetDecks();
+            log.Info($"HearthstoneTopDecksReader - Standard:{decks.Count(x => x.DeckType == DeckType.Standard)} - Wild:{decks.Count(x => x.DeckType == DeckType.Wild)} - Total:{decks.Count()}");
+            _decks.AddRange(decks);
+            reader = new ViciousSyndicateReader();
+            decks = new List<Deck>();
+            log.Info($"ViciousSyndicateReader - Standard:{decks.Count(x => x.DeckType == DeckType.Standard)} - Wild:{decks.Count(x => x.DeckType == DeckType.Wild)} - Total:{decks.Count()}");
+            _decks.AddRange(decks);
+            reader = new MetabombReader();
+            decks = reader.GetDecks();
+            log.Info($"MetabombReader - Standard:{decks.Count(x => x.DeckType == DeckType.Standard)} - Wild:{decks.Count(x => x.DeckType == DeckType.Wild)} - Total:{decks.Count()}");
+            _decks.AddRange(decks);
+            reader = new DisgusedToastReader();
+            decks = reader.GetDecks();
+            log.Info($"DisgusedToastReader - Standard:{decks.Count(x => x.DeckType == DeckType.Standard)} - Wild:{decks.Count(x => x.DeckType == DeckType.Wild)} - Total:{decks.Count()}");
+            _decks.AddRange(decks);
+            reader = new HSReplayReader();
+            decks = reader.GetDecks();
+            log.Info($"HSReplayReader - Standard:{decks.Count(x => x.DeckType == DeckType.Standard)} - Wild:{decks.Count(x => x.DeckType == DeckType.Wild)} - Total:{decks.Count()}");
+            _decks.AddRange(decks);
 
-                _isf.SaveObject(_decks, FILE_NAME);
+            _isf.SaveObject(_decks, FILE_NAME);
 
-                RecalculateValuations();
-                IsDownloading = false;
-            }
-            catch(Exception ex)
-            {
-                log.Error("Problem", ex);
-            }
+            RecalculateValuations();
+            IsDownloading = false;
+
             log.Info("FINISH");
             return _decks;
         }
@@ -102,7 +96,7 @@ typeof(System.Security.Policy.Url), typeof(System.Security.Policy.Url));
         {
             get
             {
-                if(_decks == null)
+                if (_decks == null)
                     LoadDecks();
                 if (_valuations == null)
                     RecalculateValuations();
