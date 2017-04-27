@@ -42,6 +42,8 @@ namespace HSCore.Readers
                     ClientSecret = ConfigurationManager.AppSettings["ClientSecret"],
                     ClientId = ConfigurationManager.AppSettings["ClientId"]
                 };
+
+                log.Info(ConfigurationManager.AppSettings["Environment"]);
                 if (ConfigurationManager.AppSettings["Environment"] == "Debug")
                 {
                     cs = GoogleClientSecrets.Load(stream).Secrets;
