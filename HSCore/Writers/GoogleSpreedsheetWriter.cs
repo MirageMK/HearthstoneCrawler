@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Threading;
@@ -63,13 +64,24 @@ namespace HSCore.Writers
 
             UserCredential credential;
             string root = AppDomain.CurrentDomain.BaseDirectory;
+
             using (var stream =
                 new FileStream(Path.Combine(root, "client_secret.json"), FileMode.Open, FileAccess.Read))
             {
                 string credPath = Path.Combine(root, ".credentials");
 
+                ClientSecrets cs = new ClientSecrets
+                {
+                    ClientSecret = ConfigurationManager.AppSettings["ClientSecret"],
+                    ClientId = ConfigurationManager.AppSettings["ClientId"]
+                };
+                if (ConfigurationManager.AppSettings["Environment"] == "Debug")
+                {
+                    cs = GoogleClientSecrets.Load(stream).Secrets;
+                }
+
                 credential = GoogleWebAuthorizationBroker.AuthorizeAsync(
-                    GoogleClientSecrets.Load(stream).Secrets,
+                    cs,
                     Scopes,
                     "user",
                     CancellationToken.None,

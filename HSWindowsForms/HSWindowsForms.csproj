@@ -152,9 +152,6 @@
     <EmbeddedResource Include="SplashForm.resx">
       <DependentUpon>SplashForm.cs</DependentUpon>
     </EmbeddedResource>
-    <Content Include="client_secret.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <None Include="HSWindowsForms_TemporaryKey.pfx" />
     <None Include="packages.config" />
     <None Include="Properties\DataSources\HSCore.Model.Card.datasource" />
@@ -187,6 +184,9 @@
     <None Include="Resources\Logo.png" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="client_secret.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Logo.ico" />
   </ItemGroup>
   <ItemGroup>

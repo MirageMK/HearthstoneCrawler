@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Threading;
@@ -30,13 +31,24 @@ namespace HSCore.Readers
 
             UserCredential credential;
             string root = AppDomain.CurrentDomain.BaseDirectory;
+
             using (var stream =
                 new FileStream(Path.Combine(root, "client_secret.json"), FileMode.Open, FileAccess.Read))
             {
                 string credPath = Path.Combine(root, ".credentials");
 
+                ClientSecrets cs = new ClientSecrets
+                {
+                    ClientSecret = ConfigurationManager.AppSettings["ClientSecret"],
+                    ClientId = ConfigurationManager.AppSettings["ClientId"]
+                };
+                if (ConfigurationManager.AppSettings["Environment"] == "Debug")
+                {
+                    cs = GoogleClientSecrets.Load(stream).Secrets;
+                }
+
                 credential = GoogleWebAuthorizationBroker.AuthorizeAsync(
-                    GoogleClientSecrets.Load(stream).Secrets,
+                    cs,
                     Scopes,
                     "user",
                     CancellationToken.None,
@@ -119,14 +131,14 @@ namespace HSCore.Readers
 
             try
             {
-                foreach(Deck tempDeck in GetDeckRanks())
+                foreach (Deck tempDeck in GetDeckRanks())
                 {
                     string deckClass = tempDeck.Name.Split(' ').Last();
 
                     string deckUrl = DECK_URL.Replace("{class}", deckClass).Replace("{deckName}", tempDeck.Name);
 
                     Deck deck = GetDeck(deckUrl);
-                    if(deck == null) continue;
+                    if (deck == null) continue;
                     deck.Source = SourceEnum.ViciousSyndicate;
                     deck.Name = tempDeck.Name;
                     deck.Tier = tempDeck.Tier;
@@ -136,7 +148,7 @@ namespace HSCore.Readers
                     toReturn.Add(deck);
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 log.Error("Problem", ex);
             }
