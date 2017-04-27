@@ -32,30 +32,29 @@ namespace HSCore.Readers
             UserCredential credential;
             string root = AppDomain.CurrentDomain.BaseDirectory;
 
-            using (var stream =
-                new FileStream(Path.Combine(root, "client_secret.json"), FileMode.Open, FileAccess.Read))
+            ClientSecrets cs = new ClientSecrets
             {
-                string credPath = Path.Combine(root, ".credentials");
+                ClientSecret = ConfigurationManager.AppSettings["ClientSecret"],
+                ClientId = ConfigurationManager.AppSettings["ClientId"]
+            };
 
-                ClientSecrets cs = new ClientSecrets
-                {
-                    ClientSecret = ConfigurationManager.AppSettings["ClientSecret"],
-                    ClientId = ConfigurationManager.AppSettings["ClientId"]
-                };
+            string credPath = Path.Combine(root, ".credentials");
 
-                log.Info(ConfigurationManager.AppSettings["Environment"]);
-                if (ConfigurationManager.AppSettings["Environment"] == "Debug")
+            if (ConfigurationManager.AppSettings["Environment"] == "Debug")
+            {
+                using (var stream =
+                new FileStream(Path.Combine(root, "client_secret.json"), FileMode.Open, FileAccess.Read))
                 {
                     cs = GoogleClientSecrets.Load(stream).Secrets;
                 }
+            }
 
-                credential = GoogleWebAuthorizationBroker.AuthorizeAsync(
+            credential = GoogleWebAuthorizationBroker.AuthorizeAsync(
                     cs,
                     Scopes,
                     "user",
                     CancellationToken.None,
                     new FileDataStore(credPath, true)).Result;
-            }
 
             // Create Google Sheets API service.
             var service = new SheetsService(new BaseClientService.Initializer()
