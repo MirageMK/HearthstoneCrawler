@@ -63,7 +63,7 @@ typeof(System.Security.Policy.Url), typeof(System.Security.Policy.Url));
             log.Info($"HearthstoneTopDecksReader - Standard:{decks.Count(x => x.DeckType == DeckType.Standard)} - Wild:{decks.Count(x => x.DeckType == DeckType.Wild)} - Total:{decks.Count()}");
             _decks.AddRange(decks);
             reader = new ViciousSyndicateReader();
-            decks = new List<Deck>();
+            decks = reader.GetDecks();
             log.Info($"ViciousSyndicateReader - Standard:{decks.Count(x => x.DeckType == DeckType.Standard)} - Wild:{decks.Count(x => x.DeckType == DeckType.Wild)} - Total:{decks.Count()}");
             _decks.AddRange(decks);
             reader = new MetabombReader();
