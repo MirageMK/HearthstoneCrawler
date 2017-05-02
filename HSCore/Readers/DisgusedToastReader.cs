@@ -57,13 +57,13 @@ namespace HSCore.Readers
             var deckLink = doc.DocumentNode.SelectSingleNode("//*[contains(@class,'dt-col-decklist-name')]/a");
             if (deckLink == null) return null;
             string deckUrl = deckLink.GetAttributeValue("href", string.Empty);
-            toReturn.Name = WebUtility.HtmlDecode(deckLink.InnerText);
-            toReturn.UpdateDateString = doc.DocumentNode.SelectSingleNode("//*[contains(@class,'visible-xs-inline-block')]").InnerText;
 
             doc = web.Load(BASE_URL + deckUrl);
             toReturn.Url = BASE_URL + deckUrl;
-            var nodes = doc.DocumentNode.SelectNodes("//*[contains(@class,'dt-decklist-metadata')]/dt");
-            toReturn.Class = nodes[nodes.Count - 4].SelectSingleNode("a").InnerText;
+            HtmlNodeCollection nodes = doc.DocumentNode.SelectNodes("//*[contains(@class,'dt-decklist-metadata')]/dt");
+            toReturn.Class = nodes[1].SelectSingleNode("a").InnerText;
+            toReturn.Name = nodes[2].SelectSingleNode("a").InnerText;
+            toReturn.UpdateDateString = nodes[nodes.Count - 1].InnerText;
 
             foreach (HtmlNode cardLink in doc.DocumentNode.SelectNodes("//*[contains(@class,'dt-cardlist')]/li"))
             {

@@ -42,17 +42,17 @@ namespace HSCore.Model
         public Dictionary<Card, int> Cards { get; set; }
         public bool Equals(Deck other)
         {
-            return other != null && other.Name == Name;
+            return other != null && other.DuplicateIndicatior == DuplicateIndicatior;
         }
 
         public bool Equals(Deck x, Deck y)
         {
-            return x != null && y != null && x.Name == y.Name;
+            return x != null && y != null && x.DuplicateIndicatior == y.DuplicateIndicatior;
         }
 
         public int GetHashCode(Deck obj)
         {
-            return obj.Name.GetHashCode();
+            return obj.DuplicateIndicatior.GetHashCode();
         }
 
         public List<IList<object>> ToMatrix()

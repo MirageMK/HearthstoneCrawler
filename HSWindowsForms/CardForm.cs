@@ -28,10 +28,13 @@ namespace HSWindowsForms
 
             Valuation valuation = NetDecks.Valuations.FirstOrDefault(x => x.Card == card);
             if (valuation == null) return;
-
             {
-                radGridView1.DataSource = valuation.Decks.OrderBy(x => x.Key.Tier).ThenBy(x => x.Key.MyDust).Select(x=>x.Key).ToList();
-                this.Size = new Size(this.Width, 70 + (valuation.Decks.Count * 25));
+                List<Deck> unique = valuation.Decks.OrderBy(x => x.Key.Tier).ThenBy(x => x.Key.MyDust).Select(x => x.Key).GroupBy(x => x.DuplicateIndicatior, (k, g) => g.First()).ToList();
+
+                radGridView1.DataSource = unique;
+                radGridView1.Size = new Size(this.Width, 30 + (unique.Count * 23));
+                this.Size = new Size(this.Width, 100 + (unique.Count * 23));
+                label1.Text = $"{unique.Count} unique of {valuation.Decks.Count}";
             }
         }
 
