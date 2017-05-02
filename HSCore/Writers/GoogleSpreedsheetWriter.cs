@@ -15,6 +15,9 @@ namespace HSCore.Writers
 {
     public class GoogleSpreedsheetWriter : BaseWriter
     {
+        static readonly string[] Scopes = { SheetsService.Scope.SpreadsheetsReadonly };
+        private const string APPLICATION_NAME = "Hearthstone Crawler";
+
         public override int WriteDecks()
         {
             var service = GetService();
@@ -59,42 +62,40 @@ namespace HSCore.Writers
 
         private SheetsService GetService()
         {
-            string[] Scopes = { SheetsService.Scope.Spreadsheets };
-            string ApplicationName = "Hearthstone Crawler";
-
-            UserCredential credential;
-            string root = AppDomain.CurrentDomain.BaseDirectory;
-
-            ClientSecrets cs = new ClientSecrets
+            SheetsService service = new SheetsService(new BaseClientService.Initializer()
             {
-                ClientSecret = ConfigurationManager.AppSettings["ClientSecret"],
-                ClientId = ConfigurationManager.AppSettings["ClientId"]
-            };
-
-            string credPath = Path.Combine(root, ".credentials");
+                ApiKey = ConfigurationManager.AppSettings["APIKey"]
+            });
 
             if (ConfigurationManager.AppSettings["Environment"] == "Debug")
             {
-                using (var stream =
-                new FileStream(Path.Combine(root, "client_secret.json"), FileMode.Open, FileAccess.Read))
+                UserCredential credential;
+
+                using (FileStream stream =
+                    new FileStream("client_secret.json", FileMode.Open, FileAccess.Read))
                 {
-                    cs = GoogleClientSecrets.Load(stream).Secrets;
+                    string credPath = Environment.GetFolderPath(
+                        Environment.SpecialFolder.Personal);
+                    credPath = Path.Combine(credPath, ".credentials/HSC");
+
+                    credential = GoogleWebAuthorizationBroker.AuthorizeAsync(
+                        GoogleClientSecrets.Load(stream).Secrets,
+                        Scopes,
+                        "user",
+                        CancellationToken.None,
+                        new FileDataStore(credPath, true)).Result;
+                    Console.WriteLine("Credential file saved to: " + credPath);
                 }
+
+                // Create Google Sheets API service.
+                service = new SheetsService(new BaseClientService.Initializer()
+                {
+                    HttpClientInitializer = credential,
+                    ApplicationName = APPLICATION_NAME,
+                });
             }
 
-            credential = GoogleWebAuthorizationBroker.AuthorizeAsync(
-                    cs,
-                    Scopes,
-                    "user",
-                    CancellationToken.None,
-                    new FileDataStore(credPath, true)).Result;
-
-            // Create Google Sheets API service.
-            return new SheetsService(new BaseClientService.Initializer()
-            {
-                HttpClientInitializer = credential,
-                ApplicationName = ApplicationName,
-            });
+            return service;
         }
     }
 }

@@ -29,39 +29,38 @@ namespace HSCore.Readers
         {
             List<Deck> toReturn = new List<Deck>();
 
-            UserCredential credential;
-            string root = AppDomain.CurrentDomain.BaseDirectory;
-
-            ClientSecrets cs = new ClientSecrets
+            SheetsService service = new SheetsService(new BaseClientService.Initializer()
             {
-                ClientSecret = ConfigurationManager.AppSettings["ClientSecret"],
-                ClientId = ConfigurationManager.AppSettings["ClientId"]
-            };
-
-            string credPath = Path.Combine(root, ".credentials");
+                ApiKey = ConfigurationManager.AppSettings["APIKey"]
+            });
 
             if (ConfigurationManager.AppSettings["Environment"] == "Debug")
             {
-                using (var stream =
-                new FileStream(Path.Combine(root, "client_secret.json"), FileMode.Open, FileAccess.Read))
+                UserCredential credential;
+
+                using (FileStream stream =
+                    new FileStream("client_secret.json", FileMode.Open, FileAccess.Read))
                 {
-                    cs = GoogleClientSecrets.Load(stream).Secrets;
+                    string credPath = Environment.GetFolderPath(
+                        Environment.SpecialFolder.Personal);
+                    credPath = Path.Combine(credPath, ".credentials/HSC");
+
+                    credential = GoogleWebAuthorizationBroker.AuthorizeAsync(
+                        GoogleClientSecrets.Load(stream).Secrets,
+                        Scopes,
+                        "user",
+                        CancellationToken.None,
+                        new FileDataStore(credPath, true)).Result;
+                    Console.WriteLine("Credential file saved to: " + credPath);
                 }
+
+                // Create Google Sheets API service.
+                service = new SheetsService(new BaseClientService.Initializer()
+                {
+                    HttpClientInitializer = credential,
+                    ApplicationName = APPLICATION_NAME,
+                });
             }
-
-            credential = GoogleWebAuthorizationBroker.AuthorizeAsync(
-                    cs,
-                    Scopes,
-                    "user",
-                    CancellationToken.None,
-                    new FileDataStore(credPath, true)).Result;
-
-            // Create Google Sheets API service.
-            var service = new SheetsService(new BaseClientService.Initializer()
-            {
-                HttpClientInitializer = credential,
-                ApplicationName = APPLICATION_NAME,
-            });
 
             // Define request parameters.
             string spreadsheetId = "1osCVci8-7ttXp_CjWORzEUYf5VQlGWN_ZsOUrbCX0AI";
