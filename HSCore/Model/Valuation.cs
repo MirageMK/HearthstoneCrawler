@@ -61,9 +61,15 @@ namespace HSCore.Model
 
         public double GetValue(SourceEnum? source = null)
         {
+            int wildCount = source == null
+                                ? Decks.Where(x => x.Key.DeckType != DeckType.Standard).GroupBy(x => x.Key.DuplicateIndicatior).Count()
+                                : Decks.Count(x => x.Key.Source == source.Value && x.Key.DeckType != DeckType.Standard);
+
+            double wildReduceFactor = 1 - (wildCount / (GetInDecks(source) * 2.0));
+
             return source == null
-                       ? Card.ValuationFactor * (6 - GetTier()) * GetApperences()
-                       : GetInDecks(source) != 0 ? Card.ValuationFactor * (6 - GetTier(source)) * GetApperences(source) : 0;
+                       ? Card.ValuationFactor * (6 - GetTier()) * GetApperences()* wildReduceFactor
+                       : GetInDecks(source) != 0 ? Card.ValuationFactor * (6 - GetTier(source)) * GetApperences(source) * wildReduceFactor : 0;
         }
 
         public List<object> ToValuationArray()

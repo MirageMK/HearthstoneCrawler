@@ -45,7 +45,7 @@ namespace HSWindowsForms
         #region Summary
         private void LoadSummary()
         {
-            gridCardValuation.DataSource = NetDecks.Valuations;
+            gridCardValuation.DataSource = NetDecks.Valuations.OrderByDescending(x => x.Value);
             gridCardValuation.MasterTemplate.ShowRowHeaderColumn = false;
 
             foreach (GridViewDataColumn column in gridCardValuation.Columns)

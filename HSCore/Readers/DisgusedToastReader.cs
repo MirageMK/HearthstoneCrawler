@@ -62,7 +62,7 @@ namespace HSCore.Readers
             toReturn.Url = BASE_URL + deckUrl;
             HtmlNodeCollection nodes = doc.DocumentNode.SelectNodes("//*[contains(@class,'dt-decklist-metadata')]/dt");
             toReturn.Class = nodes[1].SelectSingleNode("a").InnerText;
-            toReturn.Name = nodes[2].SelectSingleNode("a").InnerText;
+            toReturn.Name = WebUtility.HtmlDecode(nodes[2].SelectSingleNode("a").InnerText);
             toReturn.UpdateDateString = nodes[nodes.Count - 1].InnerText;
 
             foreach (HtmlNode cardLink in doc.DocumentNode.SelectNodes("//*[contains(@class,'dt-cardlist')]/li"))
