@@ -1,29 +1,30 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reflection;
 using HSCore.Model;
 using HtmlAgilityPack;
+using log4net;
 
 namespace HSCore.Readers
 {
     public class MetabombReader : BaseReader
     {
-        private static readonly log4net.ILog log = log4net.LogManager.GetLogger
- (System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
-
         private const string URL = "http://hearthstone.metabomb.net";
+
+        private static readonly ILog log = LogManager.GetLogger
+            (MethodBase.GetCurrentMethod().DeclaringType);
 
         private string GetUrl()
         {
             HtmlWeb web = new HtmlWeb();
             HtmlDocument doc = web.Load(URL + "/game-guides");
 
-            var xPath = "//main/div[1]/ul/li";
-            var link = "";
-            foreach (HtmlNode selectNode in doc.DocumentNode.SelectNodes(xPath))
+            string xPath = "//main/div[1]/ul/li";
+            string link = "";
+            foreach(HtmlNode selectNode in doc.DocumentNode.SelectNodes(xPath))
             {
-
                 link = selectNode.FirstChild.Attributes["href"].Value;
-                if (link.ToLower().Contains("tier")) break;
+                if(link.ToLower().Contains("tier")) break;
             }
             return URL + link;
         }
@@ -73,36 +74,30 @@ namespace HSCore.Readers
             HtmlDocument doc = web.Load(url);
 
             toReturn.Url = url;
-            if (doc.DocumentNode.SelectNodes("//*[contains(@class,'article-content')]") == null) return null;
+            if(doc.DocumentNode.SelectNodes("//*[contains(@class,'article-content')]") == null) return null;
 
-            toReturn.UpdateDateString = doc.DocumentNode.SelectSingleNode("//*[contains(@itemprop,'datePublished')]").GetAttributeValue("content","");
+            toReturn.UpdateDateString = doc.DocumentNode.SelectSingleNode("//*[contains(@itemprop,'datePublished')]").GetAttributeValue("content", "");
 
-            foreach (HtmlNode cardSection in doc.DocumentNode.SelectNodes("//*[contains(@class,'article-content')]/section"))
+            foreach(HtmlNode cardSection in doc.DocumentNode.SelectNodes("//*[contains(@class,'article-content')]/section"))
             {
                 HtmlNode table = cardSection.SelectSingleNode("table");
-                if (table == null) continue;
+                if(table == null) continue;
 
                 toReturn.Class = table.SelectSingleNode("thead/tr/th[1]").InnerText;
-                
-                foreach (HtmlNode cardNode in table.SelectNodes("tbody/tr/td"))
+
+                foreach(HtmlNode cardNode in table.SelectNodes("tbody/tr/td"))
                 {
                     string cardName = cardNode.InnerText;
-                    if (cardName == "") continue;
+                    if(cardName == "") continue;
                     cardName = cardName.Substring(3).Trim();
 
                     int cardCount;
-                    if (cardNode.InnerText.Contains("2 x"))
-                    {
+                    if(cardNode.InnerText.Contains("2 x"))
                         cardCount = 2;
-                    }
-                    else if (cardNode.InnerText.Contains("1 x"))
-                    {
+                    else if(cardNode.InnerText.Contains("1 x"))
                         cardCount = 1;
-                    }
                     else
-                    {
                         continue;
-                    }
 
                     Card card = MyCollection.Get(cardName);
                     if(card == null) continue;

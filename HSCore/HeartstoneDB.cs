@@ -1,22 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using HSCore.Extensions;
 using HSCore.Model;
+using log4net;
 using RestSharp;
 
 namespace HSCore
 {
     public static class HeartstoneDB
     {
-        private static readonly log4net.ILog log = log4net.LogManager.GetLogger
-    (System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         private const string X_MASHAPE_KEY = "97ivM51w5HmshhjJQhVH0MuyOMA2p1ecDlQjsn1mQyqgCor9NN";
-        public static List<Card> Cards { get; }
+
+        private static readonly ILog log = LogManager.GetLogger
+            (MethodBase.GetCurrentMethod().DeclaringType);
+
         static HeartstoneDB()
         {
             List<Card> toReturn = new List<Card>();
-            foreach (SetEnum sType in Enum.GetValues(typeof(SetEnum)))
+            foreach(SetEnum sType in Enum.GetValues(typeof(SetEnum)))
             {
                 string setDescription = Enums.GetEnumDescription(sType);
 
@@ -26,19 +29,21 @@ namespace HSCore
                 request.AddHeader("X-Mashape-Key", X_MASHAPE_KEY);
 
                 RestResponse<List<Card>> response = client.Execute<List<Card>>(request) as RestResponse<List<Card>>;
-                if (response != null) toReturn.AddRange(response.Data.Where(x => x.Type != "Hero"));
+                if(response != null) toReturn.AddRange(response.Data.Where(x => x.Type != "Hero"));
             }
             Cards = toReturn;
             log.Info($"Cards in database: {Cards.Count}");
         }
 
+        public static List<Card> Cards { get; }
+
         public static Card Get(string name)
         {
             Card newCard = Cards.Find(x => string.Equals(x.Name, name, StringComparison.CurrentCultureIgnoreCase));
-            if (newCard != null) return newCard;
+            if(newCard != null) return newCard;
 
             newCard = Cards.Find(x => string.Equals(x.Name, Mapper(name), StringComparison.CurrentCultureIgnoreCase));
-            if (newCard == null) throw new Exception("DB - Cannot find card with name:" + name);
+            if(newCard == null) throw new Exception("DB - Cannot find card with name:" + name);
 
             log.Warn($"DB Card: {name} replaced with {newCard.Name}");
             return newCard;

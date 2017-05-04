@@ -1,12 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
 using System.Linq;
-using System.Net;
-using System.Text;
-using System.Windows.Forms;
 using HSCore;
 using HSCore.Model;
 using Telerik.WinControls;
@@ -14,9 +9,9 @@ using Telerik.WinControls.UI;
 
 namespace HSWindowsForms
 {
-    public partial class CardForm : Telerik.WinControls.UI.RadForm
+    public partial class CardForm : RadForm
     {
-        private Card card;
+        private readonly Card card;
 
         public CardForm(Card _card)
         {
@@ -31,9 +26,12 @@ namespace HSWindowsForms
 
                 radGridView1.MasterTemplate.ShowRowHeaderColumn = false;
                 radGridView1.DataSource = unique;
-                radGridView1.Size = new Size(this.Width, 30 + (unique.Count * 23));
-                this.Size = new Size(this.Width, 100 + (unique.Count * 23));
+                radGridView1.Size = new Size(Width, 30 + unique.Count * 23);
+                Size = new Size(Width, 100 + unique.Count * 23);
                 label1.Text = $"{unique.Count} unique of {valuation.Decks.Count}";
+                label2.Text = $"{unique.Count(x => x.MyDust == card.Dust)} / " +
+                              $"{unique.Count(x => x.MyDust != card.Dust && x.Cards.First(y => y.Key == card).Value - card.Own > 0)} / " +
+                              $"{unique.Count(x => card.Own >= x.Cards.First(y => y.Key == card).Value)}";
             }
         }
 
@@ -57,7 +55,7 @@ namespace HSWindowsForms
                         if(keyValuePair.Key != card) continue;
                         if(card.Own >= keyValuePair.Value)
                         {
-                            e.CellElement.ResetValue(LightVisualElement.BackColorProperty, ValueResetFlags.Local);
+                            e.CellElement.ResetValue(VisualElement.BackColorProperty, ValueResetFlags.Local);
                             e.CellElement.ResetValue(LightVisualElement.BackColor2Property, ValueResetFlags.Local);
                             e.CellElement.ResetValue(LightVisualElement.GradientStyleProperty, ValueResetFlags.Local);
                             e.CellElement.ResetValue(LightVisualElement.DrawFillProperty, ValueResetFlags.Local);

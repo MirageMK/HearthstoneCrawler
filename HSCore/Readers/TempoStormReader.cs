@@ -1,23 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reflection;
 using System.Web.Helpers;
 using HSCore.Model;
+using log4net;
 using RestSharp;
 
 namespace HSCore.Readers
 {
     public class TempoStormReader : BaseReader
     {
-        private static readonly log4net.ILog log = log4net.LogManager.GetLogger
- (System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
-
         private const string URL = "http://www.tempostorm.com/";
         private const string DECK_URL = @"http://www.tempostorm.com/hearthstone/decks/";
-        
+
         private const string END_POINT_SNAPSHOT =
             "api/snapshots/findOne?filter=%7B%22where%22%3A%7B%22slug%22%3A%22{date}%22%2C%22snapshotType%22%3A%22{type}%22%7D%2C%22include%22%3A%5B%7B%22relation%22%3A%22deckTiers%22%2C%22scope%22%3A%7B%22include%22%3A%5B%7B%22relation%22%3A%22deck%22%2C%22scope%22%3A%7B%22fields%22%3A%5B%22id%22%2C%22name%22%2C%22slug%22%2C%22playerClass%22%5D%2C%22include%22%3A%7B%22relation%22%3A%22slugs%22%2C%22scope%22%3A%7B%22fields%22%3A%5B%22linked%22%2C%22slug%22%5D%7D%7D%7D%7D%5D%7D%7D%5D%7D";
+
         private const string END_POINT_DECK =
             "api/decks/findOne?filter=%7B%22where%22%3A%7B%22slug%22%3A%22{slug}%22%7D%2C%22fields%22%3A%5B%22id%22%2C%22createdDate%22%2C%22name%22%2C%22description%22%2C%22playerClass%22%2C%22heroName%22%2C%22deckType%22%2C%22gameModeType%22%5D%2C%22include%22%3A%5B%7B%22relation%22%3A%22cards%22%2C%22scope%22%3A%7B%22include%22%3A%22card%22%2C%22scope%22%3A%7B%22fields%22%3A%5B%22id%22%2C%22name%22%5D%7D%7D%7D%5D%7D";
+
+        private static readonly ILog log = LogManager.GetLogger
+            (MethodBase.GetCurrentMethod().DeclaringType);
 
 
         private string GetUrl(string mode)
@@ -25,7 +28,7 @@ namespace HSCore.Readers
             string toReturn = "";
             bool found = false;
             DateTime date = DateTime.Now.Date;
-            while (!found)
+            while(!found)
             {
                 string formatedDate = date.ToString("yyyy-MM-dd");
 
@@ -37,7 +40,7 @@ namespace HSCore.Readers
                 IRestResponse response = client.Execute(request);
                 string content = response.Content;
 
-                if (content.IndexOf("Error", StringComparison.Ordinal) == -1 && content.IndexOf("\"snapshotType\":\"" + mode.ToLower() + "\"", StringComparison.Ordinal) != -1)
+                if(content.IndexOf("Error", StringComparison.Ordinal) == -1 && content.IndexOf("\"snapshotType\":\"" + mode.ToLower() + "\"", StringComparison.Ordinal) != -1)
                 {
                     found = true;
                     toReturn = response.ResponseUri.OriginalString;
@@ -49,6 +52,7 @@ namespace HSCore.Readers
             }
             return toReturn;
         }
+
         public override List<Deck> GetDecks()
         {
             List<Deck> toReturn = new List<Deck>();
@@ -101,7 +105,7 @@ namespace HSCore.Readers
             toReturn.UpdateDateString = deck.createdDate;
             toReturn.Url = DECK_URL + url;
 
-            foreach (dynamic cardObj in deck.cards)
+            foreach(dynamic cardObj in deck.cards)
             {
                 Card card = MyCollection.Get(cardObj.card.name);
                 toReturn.Cards.Add(card, cardObj.cardQuantity);

@@ -2,25 +2,26 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using System.Text.RegularExpressions;
+using System.Reflection;
 using System.Web.Helpers;
 using HSCore.Model;
 using HtmlAgilityPack;
+using log4net;
 using RestSharp;
 
 namespace HSCore.Readers
 {
     public class HSReplayReader : BaseReader
     {
-        private static readonly log4net.ILog log = log4net.LogManager.GetLogger
-    (System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
-
         private const string URL = "https://hsreplay.net/";
         //private const string SNAPSHOT_END_POINT = @"analytics/query/list_decks_by_win_rate?GameType=RANKED_{mode}&TimeRange=LAST_30_DAYS";
         private const string SNAPSHOT_END_POINT = @"analytics/query/trending_decks_by_popularity/";
         private const string CARD_END_POINT = @"cards/";
 
-        private readonly Dictionary<string,string> cardMaper = new Dictionary<string, string>();
+        private static readonly ILog log = LogManager.GetLogger
+            (MethodBase.GetCurrentMethod().DeclaringType);
+
+        private readonly Dictionary<string, string> cardMaper = new Dictionary<string, string>();
 
         /*public override List<Deck> GetDecks()
         {
@@ -85,26 +86,16 @@ namespace HSCore.Readers
                     a[0] = char.ToUpper(a[0]);
                     deck.Class = new string(a);
                     deck.Tier = 5;
-                    if (classObj.Value[0].win_rate >= (decimal)55)
-                    {
+                    if(classObj.Value[0].win_rate >= (decimal) 55)
                         deck.Tier = 1;
-                    }
-                    else if (classObj.Value[0].win_rate >= (decimal)50)
-                    {
+                    else if(classObj.Value[0].win_rate >= (decimal) 50)
                         deck.Tier = 2;
-                    }
-                    else if (classObj.Value[0].win_rate >= (decimal)45)
-                    {
+                    else if(classObj.Value[0].win_rate >= (decimal) 45)
                         deck.Tier = 3;
-                    }
-                    else if (classObj.Value[0].win_rate >= (decimal)40)
-                    {
+                    else if(classObj.Value[0].win_rate >= (decimal) 40)
                         deck.Tier = 4;
-                    }
                     else
-                    {
                         deck.Tier = 5;
-                    }
                     deck.Source = SourceEnum.HSReplay;
                     deck.UpdateDateString = snapshot.as_of;
                     deck.Url = $"https://hsreplay.net/decks/{classObj.Value[0].deck_id}/";
@@ -126,7 +117,7 @@ namespace HSCore.Readers
             string[][] res = jsonDeck.Trim('[').Trim(']').Split(new[] { "],[" }, StringSplitOptions.RemoveEmptyEntries).Select(p => p.Split(',')).ToArray();
 
             HtmlWeb web = new HtmlWeb();
-            foreach (string[] strings in res)
+            foreach(string[] strings in res)
             {
                 string cardName;
                 if(cardMaper.ContainsKey(strings[0]))

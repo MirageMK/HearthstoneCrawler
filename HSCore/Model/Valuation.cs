@@ -4,9 +4,13 @@ using System.Linq;
 
 namespace HSCore.Model
 {
-    [Serializable]
+    [ Serializable ]
     public class Valuation
     {
+        private double? _avgValue;
+
+        private double? _value;
+
         public Valuation(Card card)
         {
             Card = card;
@@ -17,15 +21,12 @@ namespace HSCore.Model
         public Card Card { get; }
         public Dictionary<Deck, int> Decks { get; }
 
-        private double? _value;
         public double Value
         {
             get
             {
                 if(_value == null)
-                {
                     _value = GetValue();
-                }
                 return _value.Value;
             }
         }
@@ -42,16 +43,12 @@ namespace HSCore.Model
             }
         }
 
-        private double? _avgValue;
-
         public double AvgValue
         {
             get
             {
                 if(_avgValue == null)
-                {
                     _avgValue = (Value1 + Value2 + Value3 + Value4 + Value5 + Value6) / 6;
-                }
                 return _avgValue.Value;
             }
         }
@@ -90,10 +87,10 @@ namespace HSCore.Model
                                 ? Decks.Where(x => x.Key.DeckType != DeckType.Standard).GroupBy(x => x.Key.DuplicateIndicatior).Count()
                                 : Decks.Count(x => x.Key.Source == source.Value && x.Key.DeckType != DeckType.Standard);
 
-            double wildReduceFactor = 1 - (wildCount / (GetInDecks(source) * 2.0));
+            double wildReduceFactor = 1 - wildCount / (GetInDecks(source) * 2.0);
 
             return source == null
-                       ? Card.ValuationFactor * (6 - GetTier()) * GetApperences()* wildReduceFactor
+                       ? Card.ValuationFactor * (6 - GetTier()) * GetApperences() * wildReduceFactor
                        : GetInDecks(source) != 0 ? Card.ValuationFactor * (6 - GetTier(source)) * GetApperences(source) * wildReduceFactor : 0;
         }
 

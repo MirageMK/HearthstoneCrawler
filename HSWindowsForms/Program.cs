@@ -4,26 +4,27 @@ using System.Windows.Forms;
 
 namespace HSWindowsForms
 {
-    static class Program
+    internal static class Program
     {
         public static SplashForm splashForm;
+
         /// <summary>
-        /// The main entry point for the application.
+        ///     The main entry point for the application.
         /// </summary>
-        [STAThread]
-        static void Main()
+        [ STAThread ]
+        private static void Main()
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
             //show splash
             Thread splashThread = new Thread(new ThreadStart(
-                delegate
-                {
-                    splashForm = new SplashForm();
-                    Application.Run(splashForm);
-                }
-                ));
+                                                             delegate
+                                                             {
+                                                                 splashForm = new SplashForm();
+                                                                 Application.Run(splashForm);
+                                                             }
+                                                            ));
 
             splashThread.SetApartmentState(ApartmentState.STA);
             splashThread.Start();
@@ -33,13 +34,11 @@ namespace HSWindowsForms
             Application.Run(mainForm);
         }
 
-        static void mainForm_Load(object sender, EventArgs e)
+        private static void mainForm_Load(object sender, EventArgs e)
         {
             //close splash
-            if (splashForm == null)
-            {
+            if(splashForm == null)
                 return;
-            }
 
             splashForm.Invoke(new Action(splashForm.Close));
             splashForm.Dispose();

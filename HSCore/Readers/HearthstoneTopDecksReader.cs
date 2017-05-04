@@ -1,17 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net;
+using System.Reflection;
 using HSCore.Model;
 using HtmlAgilityPack;
+using log4net;
 
 namespace HSCore.Readers
 {
     public class HearthstoneTopDecksReader : BaseReader
     {
-        private static readonly log4net.ILog log = log4net.LogManager.GetLogger
- (System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
-
         private const string URL = @"http://www.hearthstonetopdecks.com/";
+
+        private static readonly ILog log = LogManager.GetLogger
+            (MethodBase.GetCurrentMethod().DeclaringType);
+
         //private const string URL = @"http://www.hearthstonetopdecks.com/hearthstones-best-standard-ladder-decks/";
 
         private string GetUrl()
@@ -121,7 +124,7 @@ namespace HSCore.Readers
             toReturn.Class = doc.DocumentNode.SelectNodes("//*[contains(@class,'deck-info')]/a")[0].InnerText;
             toReturn.UpdateDateString = doc.DocumentNode.SelectSingleNode("//*[contains(@class,'updated')]").GetAttributeValue("datetime", DateTime.Now.ToString());
 
-            foreach (HtmlNode cardLink in doc.DocumentNode.SelectNodes("//*[contains(@class,'card-frame')]"))
+            foreach(HtmlNode cardLink in doc.DocumentNode.SelectNodes("//*[contains(@class,'card-frame')]"))
             {
                 string cardName = WebUtility.HtmlDecode(cardLink.SelectSingleNode("a/*[contains(@class,'card-name')]").InnerText).Replace('’', '\'');
                 string cardCount = cardLink.SelectSingleNode("*[contains(@class,'card-count')]").InnerText;

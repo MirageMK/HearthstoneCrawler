@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace HSCore.Model
 {
-    [Serializable]
+    [ Serializable ]
     public class Card : IEquatable<Card>, IEqualityComparer<Card>
     {
         public string CardId { get; set; }
@@ -31,11 +31,12 @@ namespace HSCore.Model
         public string ImgGold { get; set; }
         public string Locale { get; set; }
         public List<Mechanic> Mechanics { get; set; }
+
         public int Dust
         {
             get
             {
-                switch (Rarity)
+                switch(Rarity)
                 {
                     case "Free":
                         return 0;
@@ -52,13 +53,15 @@ namespace HSCore.Model
                 }
             }
         }
+
         public int Own { get; set; }
+
         public double OwnW
         {
             get
             {
                 Valuation firstOrDefault = NetDecks.Valuations.FirstOrDefault(x => x.Card.Name == Name);
-                if (firstOrDefault != null) return Own + Missing * (1 - firstOrDefault.NormalizedValueAdjusted);
+                if(firstOrDefault != null) return Own + Missing * (1 - firstOrDefault.NormalizedValueAdjusted);
                 return MaxInDeck;
             }
         }
@@ -75,15 +78,13 @@ namespace HSCore.Model
             {
                 double factor = 1;
 
-                if (!IsStandard) factor -= 0.5;
-                if (CardSetEnum > SetEnum.LoE && CardSetEnum < SetEnum.JtU)
-                {
-                    factor -= (((DateTime.Now.Month + 8) % 12) + 1) * 0.5 / 12;
-                }
+                if(!IsStandard) factor -= 0.5;
+                if(CardSetEnum > SetEnum.LoE && CardSetEnum < SetEnum.JtU)
+                    factor -= ((DateTime.Now.Month + 8) % 12 + 1) * 0.5 / 12;
 
-                if (IsLegendary) factor += 0.25;
+                if(IsLegendary) factor += 0.25;
 
-                switch (Rarity)
+                switch(Rarity)
                 {
                     case "Epic":
                         factor -= 0.1;
@@ -103,11 +104,6 @@ namespace HSCore.Model
             }
         }
 
-        public bool Equals(Card other)
-        {
-            return other != null && other.Name == Name;
-        }
-
         public bool Equals(Card x, Card y)
         {
             return x != null && y != null && x.Name == y.Name;
@@ -116,6 +112,11 @@ namespace HSCore.Model
         public int GetHashCode(Card obj)
         {
             return obj.Name.GetHashCode();
+        }
+
+        public bool Equals(Card other)
+        {
+            return other != null && other.Name == Name;
         }
 
         public override string ToString()
@@ -129,7 +130,7 @@ namespace HSCore.Model
         }
     }
 
-    [Serializable]
+    [ Serializable ]
     public class Mechanic
     {
         public string Name { get; set; }

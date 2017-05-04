@@ -3,15 +3,12 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.IO;
-using System.IO.IsolatedStorage;
 using System.Linq;
 using System.Net;
 using System.Text;
 using System.Windows.Forms;
 using HSCore;
-using HSCore.Extensions;
 using HSCore.Model;
-using HSCore.Readers;
 using HSWindowsForms.Helper;
 using Telerik.WinControls;
 using Telerik.WinControls.Data;
@@ -22,10 +19,10 @@ namespace HSWindowsForms
 {
     public partial class MainForm : RadForm
     {
-        private readonly WebClient _wc;
         private readonly RadOffice2007ScreenTipElement _screenTip = new RadOffice2007ScreenTipElement();
-        Random randomGen = new Random();
-        List<KnownColor> names = Enum.GetValues(typeof(KnownColor)).Cast<KnownColor>().ToList();
+        private readonly WebClient _wc;
+        private readonly List<KnownColor> names = Enum.GetValues(typeof(KnownColor)).Cast<KnownColor>().ToList();
+        private readonly Random randomGen = new Random();
 
         public MainForm()
         {
@@ -39,43 +36,86 @@ namespace HSWindowsForms
             LoadMyCollection();
 
             UnselectGrids();
+        }
 
+        private void UnselectGrids()
+        {
+            if(gridCardValuation.SelectedRows.Count > 0)
+                gridCardValuation.SelectedRows[0].IsCurrent = false;
+            if(gridViewDecks.SelectedRows.Count > 0)
+                gridViewDecks.SelectedRows[0].IsCurrent = false;
+            if(gridMyCollection.SelectedRows.Count > 0)
+                gridMyCollection.SelectedRows[0].IsCurrent = false;
+        }
+
+        private RadOffice2007ScreenTipElement GetScreenTip(Card card)
+        {
+            byte[] bytes = _wc.DownloadData(card.Img);
+            MemoryStream ms = new MemoryStream(bytes);
+            _screenTip.MainTextLabel.Image = Image.FromStream(ms);
+            _screenTip.MainTextLabel.Text = "";
+            _screenTip.CaptionVisible = false;
+            _screenTip.FooterVisible = false;
+            _screenTip.MainTextLabel.Margin = new Padding(-5, -35, -15, -20);
+
+            _screenTip.AutoSize = true;
+
+            return _screenTip;
+        }
+
+        private void btnWFeed_Click(object sender, EventArgs e)
+        {
+            Clipboard.SetText(NetDecks.GetWeightedFeed());
         }
 
         #region Summary
+
         private void LoadSummary()
         {
             gridCardValuation.DataSource = NetDecks.Valuations.OrderByDescending(x => x.Value);
             gridCardValuation.MasterTemplate.ShowRowHeaderColumn = false;
 
-            foreach (GridViewDataColumn column in gridCardValuation.Columns)
-            {
-                if (column.DataType == typeof(double))
-                {
+            foreach(GridViewDataColumn column in gridCardValuation.Columns)
+                if(column.DataType == typeof(double))
                     column.FormatString = @"{0:N2}";
-                }
-            }
 
             gridPack.DataSource = (from SetEnum sType in Enum.GetValues(typeof(SetEnum)) select new Pack(sType)).Where(x => x.CanBuy).ToList();
-            foreach (GridViewDataColumn column in gridPack.Columns)
-            {
-                if (column.DataType == typeof(double))
-                {
+            foreach(GridViewDataColumn column in gridPack.Columns)
+                if(column.DataType == typeof(double))
                     column.FormatString = @"{0:N2}";
-                }
-            }
 
             StringBuilder sbLabelText = new StringBuilder();
             sbLabelText.AppendLine($@"{MyCollection.Cards.Sum(x => x.Own)}/ {MyCollection.Cards.Sum(x => x.MaxInDeck)}");
             sbLabelText.AppendLine();
             sbLabelText.AppendLine(
-                                   $@"Common: {MyCollection.Cards.Where(x => x.CardSetEnum == SetEnum.JtU && x.Rarity == "Common").Sum(x => x.Own)}/ {MyCollection.Cards.Where(x => x.CardSetEnum == SetEnum.JtU && x.Rarity == "Common").Sum(x => x.MaxInDeck)}");
+                                   $@"Common: {MyCollection.Cards.Where(x => x.CardSetEnum == SetEnum.JtU && x.Rarity == "Common").Sum(x => x.Own)}/ {MyCollection.Cards.Where(
+                                                                                                                                                                               x =>
+                                                                                                                                                                                   x.CardSetEnum ==
+                                                                                                                                                                                   SetEnum.JtU &&
+                                                                                                                                                                                   x.Rarity == "Common").
+                                                                                                                                                                   Sum(x => x.MaxInDeck)}");
             sbLabelText.AppendLine(
-                                   $@"Rare: {MyCollection.Cards.Where(x => x.CardSetEnum == SetEnum.JtU && x.Rarity == "Rare").Sum(x => x.Own)}/ {MyCollection.Cards.Where(x => x.CardSetEnum == SetEnum.JtU && x.Rarity == "Rare").Sum(x => x.MaxInDeck)}");
+                                   $@"Rare: {MyCollection.Cards.Where(x => x.CardSetEnum == SetEnum.JtU && x.Rarity == "Rare").Sum(x => x.Own)}/ {MyCollection.Cards.Where(
+                                                                                                                                                                           x =>
+                                                                                                                                                                               x.CardSetEnum ==
+                                                                                                                                                                               SetEnum.JtU &&
+                                                                                                                                                                               x.Rarity == "Rare").
+                                                                                                                                                               Sum(x => x.MaxInDeck)}");
             sbLabelText.AppendLine(
-                                   $@"Epic: {MyCollection.Cards.Where(x => x.CardSetEnum == SetEnum.JtU && x.Rarity == "Epic").Sum(x => x.Own)}/ {MyCollection.Cards.Where(x => x.CardSetEnum == SetEnum.JtU && x.Rarity == "Epic").Sum(x => x.MaxInDeck)}");
+                                   $@"Epic: {MyCollection.Cards.Where(x => x.CardSetEnum == SetEnum.JtU && x.Rarity == "Epic").Sum(x => x.Own)}/ {MyCollection.Cards.Where(
+                                                                                                                                                                           x =>
+                                                                                                                                                                               x.CardSetEnum ==
+                                                                                                                                                                               SetEnum.JtU &&
+                                                                                                                                                                               x.Rarity == "Epic").
+                                                                                                                                                               Sum(x => x.MaxInDeck)}");
             sbLabelText.AppendLine(
-                                   $@"Legendary: {MyCollection.Cards.Where(x => x.CardSetEnum == SetEnum.JtU && x.Rarity == "Legendary").Sum(x => x.Own)}/ {MyCollection.Cards.Where(x => x.CardSetEnum == SetEnum.JtU && x.Rarity == "Legendary").Sum(x => x.MaxInDeck)}");
+                                   $@"Legendary: {MyCollection.Cards.Where(x => x.CardSetEnum == SetEnum.JtU && x.Rarity == "Legendary").Sum(x => x.Own)}/ {MyCollection.Cards.Where(
+                                                                                                                                                                                     x =>
+                                                                                                                                                                                         x.CardSetEnum ==
+                                                                                                                                                                                         SetEnum.JtU &&
+                                                                                                                                                                                         x.Rarity ==
+                                                                                                                                                                                         "Legendary").
+                                                                                                                                                                         Sum(x => x.MaxInDeck)}");
             sbLabelText.AppendLine(
                                    $@"All: {MyCollection.Cards.Where(x => x.CardSetEnum == SetEnum.JtU).Sum(x => x.Own)}/ {MyCollection.Cards.Where(x => x.CardSetEnum == SetEnum.JtU).
                                                                                                                                         Sum(x => x.MaxInDeck)}");
@@ -92,18 +132,18 @@ namespace HSWindowsForms
             e.Delay = 1;
             GridDataCellElement cell = e.Item as GridDataCellElement;
 
-            Valuation valuation = (Valuation)cell?.RowInfo.DataBoundItem;
+            Valuation valuation = (Valuation) cell?.RowInfo.DataBoundItem;
 
-            if (valuation?.Card.Img == null) return;
+            if(valuation?.Card.Img == null) return;
 
             cell.ScreenTip = GetScreenTip(valuation.Card);
         }
 
         private void gridCardValuation_CellFormatting(object sender, CellFormattingEventArgs e)
         {
-            Valuation valuation = (Valuation)e.CellElement.RowInfo.DataBoundItem;
+            Valuation valuation = (Valuation) e.CellElement.RowInfo.DataBoundItem;
 
-            if (e.Column.Name == "color" || e.Column.Name == "Card")
+            if(e.Column.Name == "color" || e.Column.Name == "Card")
             {
                 e.CellElement.DrawFill = true;
                 e.CellElement.GradientStyle = GradientStyles.Linear;
@@ -113,16 +153,16 @@ namespace HSWindowsForms
             else
             {
                 e.CellElement.DrawFill = false;
-                e.CellElement.ResetValue(LightVisualElement.BackColorProperty, ValueResetFlags.Local);
+                e.CellElement.ResetValue(VisualElement.BackColorProperty, ValueResetFlags.Local);
                 e.CellElement.ResetValue(LightVisualElement.BackColor2Property, ValueResetFlags.Local);
                 e.CellElement.ResetValue(LightVisualElement.GradientStyleProperty, ValueResetFlags.Local);
                 e.CellElement.ResetValue(LightVisualElement.DrawFillProperty, ValueResetFlags.Local);
             }
 
-            switch (e.Column.Name)
+            switch(e.Column.Name)
             {
                 case "color":
-                    switch (valuation.Card.Missing)
+                    switch(valuation.Card.Missing)
                     {
                         case 2:
                             e.CellElement.BackColor2 = Color.Red;
@@ -132,7 +172,7 @@ namespace HSWindowsForms
                             break;
                         default:
                             e.CellElement.DrawFill = false;
-                            e.CellElement.ResetValue(LightVisualElement.BackColorProperty, ValueResetFlags.Local);
+                            e.CellElement.ResetValue(VisualElement.BackColorProperty, ValueResetFlags.Local);
                             e.CellElement.ResetValue(LightVisualElement.BackColor2Property, ValueResetFlags.Local);
                             e.CellElement.ResetValue(LightVisualElement.GradientStyleProperty, ValueResetFlags.Local);
                             e.CellElement.ResetValue(LightVisualElement.DrawFillProperty, ValueResetFlags.Local);
@@ -140,7 +180,7 @@ namespace HSWindowsForms
                     }
                     break;
                 case "Card":
-                    switch (valuation.Card.Rarity)
+                    switch(valuation.Card.Rarity)
                     {
                         case "Legendary":
                             e.CellElement.BackColor2 = Color.Orange;
@@ -153,7 +193,7 @@ namespace HSWindowsForms
                             break;
                         default:
                             e.CellElement.DrawFill = false;
-                            e.CellElement.ResetValue(LightVisualElement.BackColorProperty, ValueResetFlags.Local);
+                            e.CellElement.ResetValue(VisualElement.BackColorProperty, ValueResetFlags.Local);
                             e.CellElement.ResetValue(LightVisualElement.BackColor2Property, ValueResetFlags.Local);
                             e.CellElement.ResetValue(LightVisualElement.GradientStyleProperty, ValueResetFlags.Local);
                             e.CellElement.ResetValue(LightVisualElement.DrawFillProperty, ValueResetFlags.Local);
@@ -165,30 +205,28 @@ namespace HSWindowsForms
 
         private void gridCardValuation_ViewCellFormatting(object sender, CellFormattingEventArgs e)
         {
-            if (e.CellElement is GridFilterCellElement)
-            {
-                // sample condition
-                if (e.CellElement.ColumnInfo.Name != "Card")
-                {
+            if(e.CellElement is GridFilterCellElement)
+                if(e.CellElement.ColumnInfo.Name != "Card")
                     e.CellElement.Visibility = ElementVisibility.Collapsed;
-                }
-            }
         }
+
         private void gridCardValuation_CellDoubleClick(object sender, GridViewCellEventArgs e)
         {
-            if (gridCardValuation.CurrentRow?.DataBoundItem == null) return;
+            if(gridCardValuation.CurrentRow?.DataBoundItem == null) return;
 
             CardForm cardForm = new CardForm((gridCardValuation.CurrentRow.DataBoundItem as Valuation).Card);
             cardForm.Show();
         }
+
         #endregion
 
         #region Decks
+
         private void LoadDecks(bool force = false)
         {
             gridViewDecks.DataSource = force ? NetDecks.DownloadDecks() : NetDecks.Decks;
 
-            if (!force) return;
+            if(!force) return;
 
             gridCardValuation.DataSource = NetDecks.Valuations;
             gridPack.DataSource = (from SetEnum sType in Enum.GetValues(typeof(SetEnum)) select new Pack(sType)).Where(x => x.CanBuy).ToList();
@@ -196,7 +234,7 @@ namespace HSWindowsForms
 
         private void gridViewDecks_CellDoubleClick(object sender, GridViewCellEventArgs e)
         {
-            if (gridViewDecks.CurrentRow?.DataBoundItem == null) return;
+            if(gridViewDecks.CurrentRow?.DataBoundItem == null) return;
 
             DeckForm deckForm = new DeckForm(gridViewDecks.CurrentRow.DataBoundItem as Deck);
             deckForm.Show();
@@ -218,9 +256,9 @@ namespace HSWindowsForms
             RadRadioButton radioButton = sender as RadRadioButton;
 
             RadRadioButton button = radioButton?.Parent.Controls.OfType<RadRadioButton>()
-                                                 .FirstOrDefault(n => n.IsChecked);
+                                               .FirstOrDefault(n => n.IsChecked);
 
-            if (button == null) return;
+            if(button == null) return;
 
             gridViewDecks.GroupDescriptors.Clear();
             gridViewDecks.FilterDescriptors.Clear();
@@ -228,7 +266,7 @@ namespace HSWindowsForms
             FilterDescriptor fDescriptor = new FilterDescriptor();
             GroupDescriptor gDescriptor = new GroupDescriptor();
             SortDescriptor sDescriptor = new SortDescriptor();
-            switch (button.Name)
+            switch(button.Name)
             {
                 case "rbFree":
                     fDescriptor.Operator = FilterOperator.IsEqualTo;
@@ -284,28 +322,26 @@ namespace HSWindowsForms
                     break;
             }
 
-            if (gridViewDecks.SelectedRows.Count > 0)
-            {
+            if(gridViewDecks.SelectedRows.Count > 0)
                 gridViewDecks.SelectedRows[0].IsCurrent = false;
-            }
 
             gridViewDecks.MasterTemplate.ExpandAllGroups();
         }
 
         private void gridViewDecks_CellFormatting(object sender, CellFormattingEventArgs e)
         {
-            Deck currentDeck = (Deck)e.CellElement.RowInfo.DataBoundItem;
+            Deck currentDeck = (Deck) e.CellElement.RowInfo.DataBoundItem;
             // Reset the color of the cell.  
             e.CellElement.DrawFill = false;
 
-            if (e.Column.Name != "Name") return;
+            if(e.Column.Name != "Name") return;
 
             List<string> usedColours = new List<string>();
-            foreach (GridViewRowInfo t in gridViewDecks.Rows)
+            foreach(GridViewRowInfo t in gridViewDecks.Rows)
             {
-                Deck parDeck = (Deck)t.DataBoundItem;
+                Deck parDeck = (Deck) t.DataBoundItem;
 
-                if (currentDeck.DuplicateIndicatior != parDeck.DuplicateIndicatior || currentDeck.Source == parDeck.Source) continue;
+                if(currentDeck.DuplicateIndicatior != parDeck.DuplicateIndicatior || currentDeck.Source == parDeck.Source) continue;
 
                 e.CellElement.DrawFill = true;
                 e.CellElement.GradientStyle = GradientStyles.Linear;
@@ -313,7 +349,7 @@ namespace HSWindowsForms
                 e.CellElement.GradientAngle = 225;
 
                 Color parBackColor = t.Cells["Name"].Style.BackColor;
-                if (parBackColor.ToArgb().Equals(Color.FromArgb(105, 105, 105).ToArgb()))
+                if(parBackColor.ToArgb().Equals(Color.FromArgb(105, 105, 105).ToArgb()))
                 {
                     KnownColor randomColorName = names.ElementAt(randomGen.Next(names.Count));
                     Color randomColor = Color.FromKnownColor(randomColorName);
@@ -333,9 +369,11 @@ namespace HSWindowsForms
                 t.Cells["Name"].Style.BackColor = parBackColor;
             }
         }
+
         #endregion
 
         #region My Collection
+
         private void LoadMyCollection()
         {
             gridMyCollection.Columns["Cost"].SortOrder = RadSortOrder.Ascending;
@@ -368,11 +406,8 @@ namespace HSWindowsForms
 
         private void gridMyCollection_GroupSummaryEvaluate(object sender, GroupSummaryEvaluationEventArgs e)
         {
-            if (e.Parent != gridMyCollection.MasterTemplate && e.SummaryItem.AggregateExpression == null)
-            {
+            if(e.Parent != gridMyCollection.MasterTemplate && e.SummaryItem.AggregateExpression == null)
                 e.FormatString = $"{e.Value} / {e.Group.ItemCount} cards.";
-            }
-
         }
 
         private void gridMyCollection_ScreenTipNeeded(object sender, ScreenTipNeededEventArgs e)
@@ -380,48 +415,13 @@ namespace HSWindowsForms
             e.Delay = 1;
             GridDataCellElement cell = e.Item as GridDataCellElement;
 
-            Card card = (Card)cell?.RowInfo.DataBoundItem;
+            Card card = (Card) cell?.RowInfo.DataBoundItem;
 
-            if (card?.Img == null) return;
+            if(card?.Img == null) return;
 
             cell.ScreenTip = GetScreenTip(card);
         }
+
         #endregion
-
-        private void UnselectGrids()
-        {
-            if (gridCardValuation.SelectedRows.Count > 0)
-            {
-                gridCardValuation.SelectedRows[0].IsCurrent = false;
-            }
-            if (gridViewDecks.SelectedRows.Count > 0)
-            {
-                gridViewDecks.SelectedRows[0].IsCurrent = false;
-            }
-            if (gridMyCollection.SelectedRows.Count > 0)
-            {
-                gridMyCollection.SelectedRows[0].IsCurrent = false;
-            }
-        }
-
-        private RadOffice2007ScreenTipElement GetScreenTip(Card card)
-        {
-            byte[] bytes = _wc.DownloadData(card.Img);
-            MemoryStream ms = new MemoryStream(bytes);
-            _screenTip.MainTextLabel.Image = Image.FromStream(ms);
-            _screenTip.MainTextLabel.Text = "";
-            _screenTip.CaptionVisible = false;
-            _screenTip.FooterVisible = false;
-            _screenTip.MainTextLabel.Margin = new Padding(-5, -35, -15, -20);
-
-            _screenTip.AutoSize = true;
-
-            return _screenTip;
-        }
-
-        private void btnWFeed_Click(object sender, EventArgs e)
-        {
-            Clipboard.SetText(NetDecks.GetWeightedFeed());
-        }
     }
 }

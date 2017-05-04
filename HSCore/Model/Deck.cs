@@ -4,9 +4,11 @@ using System.Linq;
 
 namespace HSCore.Model
 {
-    [Serializable]
+    [ Serializable ]
     public class Deck : IEquatable<Deck>, IEqualityComparer<Deck>
     {
+        private DateTime _updateDate;
+
         public Deck()
         {
             Cards = new Dictionary<Card, int>();
@@ -19,17 +21,14 @@ namespace HSCore.Model
 
         public SourceEnum Source { get; set; }
         public string Url { get; set; }
-
-        private DateTime _updateDate;
         public DateTime UpdateDate => _updateDate;
+
         public string UpdateDateString
         {
             set
             {
-                if (!DateTime.TryParse(value, out _updateDate))
-                {
+                if(!DateTime.TryParse(value, out _updateDate))
                     _updateDate = DateTime.Now;
-                }
             }
         }
 
@@ -40,10 +39,6 @@ namespace HSCore.Model
         public string DuplicateIndicatior => $"{Class};D{Dust};C{Cards.Count};L{Cards.Count(x => x.Key.IsLegendary)};MD{MyDust}";
 
         public Dictionary<Card, int> Cards { get; set; }
-        public bool Equals(Deck other)
-        {
-            return other != null && other.DuplicateIndicatior == DuplicateIndicatior;
-        }
 
         public bool Equals(Deck x, Deck y)
         {
@@ -55,11 +50,16 @@ namespace HSCore.Model
             return obj.DuplicateIndicatior.GetHashCode();
         }
 
+        public bool Equals(Deck other)
+        {
+            return other != null && other.DuplicateIndicatior == DuplicateIndicatior;
+        }
+
         public List<IList<object>> ToMatrix()
         {
             List<IList<object>> toReturn = new List<IList<object>>();
 
-            foreach (KeyValuePair<Card, int> keyValuePair in Cards)
+            foreach(KeyValuePair<Card, int> keyValuePair in Cards)
             {
                 IList<object> row = keyValuePair.Key.ToList();
                 row.Add(keyValuePair.Value);
