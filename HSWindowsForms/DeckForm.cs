@@ -30,6 +30,7 @@ namespace HSWindowsForms
             radGridView1.MasterTemplate.ShowRowHeaderColumn = false;
 
             this.Size = new Size(this.Width, 100 + (deck.Cards.Count * 23));
+            Clipboard.SetText(deck.Url);
         }
 
         private void radGridView1_CellFormatting(object sender, CellFormattingEventArgs e)

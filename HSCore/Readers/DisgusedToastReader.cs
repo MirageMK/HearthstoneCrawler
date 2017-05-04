@@ -59,7 +59,7 @@ namespace HSCore.Readers
             string deckUrl = deckLink.GetAttributeValue("href", string.Empty);
 
             doc = web.Load(BASE_URL + deckUrl);
-            toReturn.Url = BASE_URL + deckUrl;
+            toReturn.Url = BASE_URL + url;
             HtmlNodeCollection nodes = doc.DocumentNode.SelectNodes("//*[contains(@class,'dt-decklist-metadata')]/dt");
             toReturn.Class = nodes[1].SelectSingleNode("a").InnerText;
             toReturn.Name = WebUtility.HtmlDecode(nodes[2].SelectSingleNode("a").InnerText);
