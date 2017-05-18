@@ -9,7 +9,7 @@ namespace HSCore.Readers
 {
     public class MetabombReader : BaseReader
     {
-        private const string URL = "http://hearthstone.metabomb.net";
+        private const string URL = "http://www.metabomb.net";
 
         private static readonly ILog log = LogManager.GetLogger
             (MethodBase.GetCurrentMethod().DeclaringType);
@@ -17,13 +17,12 @@ namespace HSCore.Readers
         private string GetUrl()
         {
             HtmlWeb web = new HtmlWeb();
-            HtmlDocument doc = web.Load(URL + "/game-guides");
+            HtmlDocument doc = web.Load(URL + "/hearthstone/game-guides");
 
-            string xPath = "//main/div[1]/ul/li";
             string link = "";
-            foreach(HtmlNode selectNode in doc.DocumentNode.SelectNodes(xPath))
+            foreach(HtmlNode selectNode in doc.DocumentNode.SelectNodes("//*[contains(@class,'spotlight')]/div/div"))
             {
-                link = selectNode.FirstChild.Attributes["href"].Value;
+                link = selectNode.SelectSingleNode("div/a").Attributes["href"].Value;
                 if(link.ToLower().Contains("tier")) break;
             }
             return URL + link;
