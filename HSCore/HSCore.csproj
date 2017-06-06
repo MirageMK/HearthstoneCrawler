@@ -124,6 +124,7 @@
     <Compile Include="Extensions\GoogleSheetsWraper.cs" />
     <Compile Include="Extensions\IsolatedStorageExtensions.cs" />
     <Compile Include="Extensions\Algorithms.cs" />
+    <Compile Include="Extensions\VarBitConverter.cs" />
     <Compile Include="Model\Pack.cs" />
     <Compile Include="Model\Valuation.cs" />
     <Compile Include="MyCollection.cs" />

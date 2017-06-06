@@ -8,6 +8,7 @@ namespace HSCore.Model
     public class Card : IEquatable<Card>, IEqualityComparer<Card>
     {
         public string CardId { get; set; }
+        public int DBId { get; set; }
 
         public string Name { get; set; }
         public string CardSet { get; set; }
