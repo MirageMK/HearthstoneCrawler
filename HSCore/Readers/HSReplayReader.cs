@@ -98,7 +98,7 @@ namespace HSCore.Readers
                         deck.Tier = 5;
                     deck.Source = SourceEnum.HSReplay;
                     deck.UpdateDateString = snapshot.as_of;
-                    deck.Url = $"https://hsreplay.net/decks/{classObj.Value[0].deck_id}/";
+                    deck.Url = $"https://hsreplay.net/decks/{classObj.Value[0].shortid}/";
                     toReturn.Add(deck);
                 }
             }

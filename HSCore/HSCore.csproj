@@ -121,6 +121,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Extensions\GoogleSheetsWraper.cs" />
     <Compile Include="Extensions\IsolatedStorageExtensions.cs" />
     <Compile Include="Extensions\Algorithms.cs" />
     <Compile Include="Model\Pack.cs" />

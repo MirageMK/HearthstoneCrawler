@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using HSCore;
 using HSCore.Model;
+using HSCore.Readers;
 using HSCore.Writers;
 
 namespace HSConsole
@@ -10,10 +11,8 @@ namespace HSConsole
     {
         private static void Main(string[] args)
         {
-            List<Card> tempa = MyCollection.Cards;
-            NetDecks.DownloadDecks();
-            GoogleSpreedsheetWriter temp = new GoogleSpreedsheetWriter();
-            temp.WriteDecks();
+            var temp = new HSReplayReader();
+            var x = temp.GetDecks();
 
             Console.WriteLine("DONE");
             Console.ReadLine();

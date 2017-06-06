@@ -10,6 +10,7 @@ using Google.Apis.Services;
 using Google.Apis.Sheets.v4;
 using Google.Apis.Sheets.v4.Data;
 using Google.Apis.Util.Store;
+using HSCore.Extensions;
 using HSCore.Model;
 using HtmlAgilityPack;
 using log4net;
@@ -18,55 +19,19 @@ namespace HSCore.Readers
 {
     public class ViciousSyndicateReader : BaseReader
     {
-        private const string APPLICATION_NAME = "Hearthstone Crawler";
-
         private const string DECK_URL = "http://www.vicioussyndicate.com/deck-library/{class}-decks/{deckName}/";
+        private const string spreadsheetId = "1osCVci8-7ttXp_CjWORzEUYf5VQlGWN_ZsOUrbCX0AI";
 
         private static readonly ILog log = LogManager.GetLogger
             (MethodBase.GetCurrentMethod().DeclaringType);
-
-        private static readonly string[] Scopes = { SheetsService.Scope.SpreadsheetsReadonly };
-
 
         private List<Deck> GetDeckRanks()
         {
             List<Deck> toReturn = new List<Deck>();
 
-            SheetsService service = new SheetsService(new BaseClientService.Initializer
-                                                      {
-                                                          ApiKey = ConfigurationManager.AppSettings["APIKey"]
-                                                      });
-
-            if(ConfigurationManager.AppSettings["Environment"] == "Debug")
-            {
-                UserCredential credential;
-
-                using(FileStream stream =
-                    new FileStream("client_secret.json", FileMode.Open, FileAccess.Read))
-                {
-                    string credPath = Environment.GetFolderPath(
-                                                                Environment.SpecialFolder.Personal);
-                    credPath = Path.Combine(credPath, ".credentials/HSC");
-
-                    credential = GoogleWebAuthorizationBroker.AuthorizeAsync(
-                                                                             GoogleClientSecrets.Load(stream).Secrets,
-                                                                             Scopes,
-                                                                             "user",
-                                                                             CancellationToken.None,
-                                                                             new FileDataStore(credPath, true)).Result;
-                    Console.WriteLine("Credential file saved to: " + credPath);
-                }
-
-                // Create Google Sheets API service.
-                service = new SheetsService(new BaseClientService.Initializer
-                                            {
-                                                HttpClientInitializer = credential,
-                                                ApplicationName = APPLICATION_NAME
-                                            });
-            }
+            SheetsService service = GoogleSheetsWraper.GetSheetsService();
 
             // Define request parameters.
-            string spreadsheetId = "1osCVci8-7ttXp_CjWORzEUYf5VQlGWN_ZsOUrbCX0AI";
             string range = "Top Archetype Matchups!A1:AZ";
             SpreadsheetsResource.ValuesResource.GetRequest request =
                 service.Spreadsheets.Values.Get(spreadsheetId, range);
@@ -174,6 +139,20 @@ namespace HSCore.Readers
             }
 
             return toReturn;
+        }
+
+        public Object GetBestDeck()
+        {
+            SheetsService service = GoogleSheetsWraper.GetSheetsService();
+
+            // Define request parameters.
+            string range = "'Classes/Rank Overview'!N1:X22";
+            SpreadsheetsResource.ValuesResource.GetRequest request =
+                service.Spreadsheets.Values.Get(spreadsheetId, range);
+
+            ValueRange response = request.Execute();
+            IList<IList<object>> values = response.Values;
+            return values;
         }
     }
 }

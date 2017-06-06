@@ -37,6 +37,7 @@ namespace HSCore.Model
         public int MyDust => Cards.Sum(x => (x.Value - x.Key.Own < 0 ? 0 : x.Value - x.Key.Own) * x.Key.Dust);
         public int MissingCardNo => Cards.Sum(x => x.Value - x.Key.Own < 0 ? 0 : x.Value - x.Key.Own);
         public string DuplicateIndicatior => $"{Class};D{Dust};C{Cards.Count};L{Cards.Count(x => x.Key.IsLegendary)};MD{MyDust}";
+        public string DeckCode { get; set; }
 
         public Dictionary<Card, int> Cards { get; set; }
 

@@ -20,10 +20,24 @@ namespace HSCore.Readers
             HtmlDocument doc = web.Load(URL + "/hearthstone/game-guides");
 
             string link = "";
+            bool found = false;
             foreach(HtmlNode selectNode in doc.DocumentNode.SelectNodes("//*[contains(@class,'spotlight')]/div/div"))
             {
                 link = selectNode.SelectSingleNode("div/a").Attributes["href"].Value;
-                if(link.ToLower().Contains("tier")) break;
+                if(link.ToLower().Contains("tier"))
+                {
+                    found = true;
+                    break;
+                }
+            }
+
+            if(!found)
+            {
+                foreach(HtmlNode selectNode in doc.DocumentNode.SelectNodes("//*[contains(@class,'latest')]/ul/li"))
+                {
+                    link = selectNode.SelectSingleNode("div/a").Attributes["href"].Value;
+                    if(link.ToLower().Contains("tier")) break;
+                }
             }
             return URL + link;
         }
