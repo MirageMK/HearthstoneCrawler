@@ -75,6 +75,7 @@
             this.radGridView1.Text = "radGridView1";
             this.radGridView1.CellFormatting += new Telerik.WinControls.UI.CellFormattingEventHandler(this.radGridView1_CellFormatting);
             this.radGridView1.CurrentRowChanging += new Telerik.WinControls.UI.CurrentRowChangingEventHandler(this.radGridView1_CurrentRowChanging);
+            this.radGridView1.CellClick += new Telerik.WinControls.UI.GridViewCellEventHandler(this.radGridView1_CellClick);
             this.radGridView1.ScreenTipNeeded += new Telerik.WinControls.ScreenTipNeededEventHandler(this.radGridView1_ScreenTipNeeded);
             // 
             // DeckForm

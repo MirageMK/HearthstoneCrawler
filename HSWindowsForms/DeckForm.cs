@@ -14,13 +14,14 @@ namespace HSWindowsForms
     {
         private readonly RadOffice2007ScreenTipElement _screenTip = new RadOffice2007ScreenTipElement();
         private readonly WebClient _wc;
+        private readonly Deck deck;
 
         public DeckForm(Deck _deck)
         {
             _wc = new WebClient();
 
             InitializeComponent();
-            Deck deck = _deck;
+            deck = _deck;
             Text = _deck.Name;
             radGridView1.DataSource = deck.Cards.OrderBy(x => x.Key.PlayerClass == "Neutral").ThenBy(x => x.Key.PlayerClass).ThenBy(x => x.Key.Cost).ThenBy(x => x.Key.Name);
             radGridView1.MasterTemplate.ShowRowHeaderColumn = false;
@@ -107,6 +108,14 @@ namespace HSWindowsForms
 
             _screenTip.AutoSize = true;
             cell.ScreenTip = _screenTip;
+        }
+
+        private void radGridView1_CellClick(object sender, GridViewCellEventArgs e)
+        {
+            if (e.Row is GridViewTableHeaderRowInfo)
+            {
+                Clipboard.SetText(deck.Url);
+            }
         }
     }
 }
