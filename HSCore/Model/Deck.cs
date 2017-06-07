@@ -6,7 +6,7 @@ using System.Text;
 
 namespace HSCore.Model
 {
-    [ Serializable ]
+    [Serializable]
     public class Deck : IEquatable<Deck>, IEqualityComparer<Deck>
     {
         private DateTime _updateDate;
@@ -29,7 +29,7 @@ namespace HSCore.Model
         {
             set
             {
-                if(!DateTime.TryParse(value, out _updateDate))
+                if (!DateTime.TryParse(value, out _updateDate))
                     _updateDate = DateTime.Now;
             }
         }
@@ -45,7 +45,7 @@ namespace HSCore.Model
         {
             get
             {
-                switch(Class)
+                switch (Class)
                 {
                     case "Priest":
                         return 817;
@@ -92,7 +92,7 @@ namespace HSCore.Model
         {
             List<IList<object>> toReturn = new List<IList<object>>();
 
-            foreach(KeyValuePair<Card, int> keyValuePair in Cards)
+            foreach (KeyValuePair<Card, int> keyValuePair in Cards)
             {
                 IList<object> row = keyValuePair.Key.ToList();
                 row.Add(keyValuePair.Value);
@@ -104,53 +104,53 @@ namespace HSCore.Model
 
         public string ToDeckCode()
         {
-            var sb = new StringBuilder();
-            sb.AppendLine("### " + (string.IsNullOrEmpty(Name) ? Class + " Deck" : Name));
-            using (var ms = new MemoryStream())
+            StringBuilder sb = new StringBuilder();
+            sb.AppendLine("### " + Name);
+            using (MemoryStream ms = new MemoryStream())
             {
-                ms.WriteByte(0);
-                var bytes = VarintBitConverter.GetVarintBytes(1);
-                ms.Write(bytes, 0, bytes.Length);
-                bytes = VarintBitConverter.GetVarintBytes(DeckType == DeckType.Standard ? 2 : 1);
-                ms.Write(bytes, 0, bytes.Length);
-                bytes = VarintBitConverter.GetVarintBytes(1);
-                ms.Write(bytes, 0, bytes.Length);
-                bytes = VarintBitConverter.GetVarintBytes(ClassID);
-                ms.Write(bytes, 0, bytes.Length);
+                Write(ms, 0);
+                Write(ms, 1);
+                Write(ms, DeckType == DeckType.Standard ? 2 : 1);
+                Write(ms, 1);
+                Write(ms, ClassID);
 
                 List<KeyValuePair<Card, int>> cards = Cards.OrderBy(x => x.Value).ToList();
                 List<KeyValuePair<Card, int>> singleCopy = cards.Where(x => x.Value == 1).ToList();
                 List<KeyValuePair<Card, int>> doubleCopy = cards.Where(x => x.Value == 2).ToList();
                 List<KeyValuePair<Card, int>> nCopy = cards.Where(x => x.Value > 2).ToList();
 
-                bytes = VarintBitConverter.GetVarintBytes(singleCopy.Count);
-                ms.Write(bytes, 0, bytes.Length);
-                foreach(var card in singleCopy)
+                Write(ms, singleCopy.Count);
+                foreach (KeyValuePair<Card, int> card in singleCopy)
                 {
-                    bytes = VarintBitConverter.GetVarintBytes(card.Key.DBId);
-                    ms.Write(bytes, 0, bytes.Length);
+                    Write(ms, card.Key.DBId);
                 }
 
-                bytes = VarintBitConverter.GetVarintBytes(doubleCopy.Count);
-                ms.Write(bytes, 0, bytes.Length);
-                foreach (var card in doubleCopy)
+                Write(ms, doubleCopy.Count);
+                foreach (KeyValuePair<Card, int> card in doubleCopy)
                 {
-                    bytes = VarintBitConverter.GetVarintBytes(card.Key.DBId);
-                    ms.Write(bytes, 0, bytes.Length);
+                    Write(ms, card.Key.DBId);
                 }
 
-                bytes = VarintBitConverter.GetVarintBytes(nCopy.Count);
-                ms.Write(bytes, 0, bytes.Length);
-                foreach (var card in nCopy)
+                Write(ms, nCopy.Count);
+                foreach (KeyValuePair<Card, int> card in nCopy)
                 {
-                    bytes = VarintBitConverter.GetVarintBytes(card.Key.DBId);
-                    ms.Write(bytes, 0, bytes.Length);
-                    bytes = VarintBitConverter.GetVarintBytes(card.Value);
-                    ms.Write(bytes, 0, bytes.Length);
+                    Write(ms, card.Key.DBId);
+                    Write(ms, card.Value);
                 }
 
                 sb.AppendLine(Convert.ToBase64String(ms.ToArray()));
                 return sb.ToString();
+            }
+        }
+
+        private static void Write(MemoryStream ms, int value)
+        {
+            if (value == 0)
+                ms.WriteByte(0);
+            else
+            {
+                byte[] bytes = VarintBitConverter.GetVarintBytes((ulong)value);
+                ms.Write(bytes, 0, bytes.Length);
             }
         }
 
