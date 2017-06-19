@@ -128,7 +128,7 @@ namespace HSCore.Readers
                 {
                     HtmlDocument doc = web.Load(URL + CARD_END_POINT + strings[0]);
                     cardName = doc.DocumentNode.SelectSingleNode("//title").InnerText;
-                    cardName = WebUtility.HtmlDecode(cardName.Split(new[] { " - HSReplay.net" }, StringSplitOptions.RemoveEmptyEntries)[0]);
+                    cardName = WebUtility.HtmlDecode(cardName.Split(new[] { " - Hearthstone Card Statistics - HSReplay.net" }, StringSplitOptions.RemoveEmptyEntries)[0]);
                     cardMaper.Add(strings[0], cardName);
                 }
 

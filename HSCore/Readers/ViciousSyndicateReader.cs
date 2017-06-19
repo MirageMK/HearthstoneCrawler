@@ -122,11 +122,20 @@ namespace HSCore.Readers
             toReturn.Url = url;
             HtmlNode deckLink = doc.DocumentNode.SelectSingleNode("//*[contains(@class,'article-content')]/p/a/img");
             if(deckLink == null) deckLink = doc.DocumentNode.SelectSingleNode("//*[contains(@class,'entry-content')]/p/a/img");
-            if(deckLink == null) return null;
+            if(deckLink == null)
+            {
+                log.Warn($"Cannot find deck on {url}");
+                return null;
+            }
             string temp = deckLink.ParentNode.GetAttributeValue("href", string.Empty);
             doc = web.Load(temp);
 
             HtmlNode cardsMeta = doc.DocumentNode.SelectSingleNode("//meta[@property='x-hearthstone:deck:cards']");
+            if(cardsMeta == null)
+            {
+                log.Warn($"Cannot find cards on {temp}");
+                return null;
+            }
             string cardsString = cardsMeta.GetAttributeValue("content", string.Empty);
 
             foreach(string cardID in cardsString.Split(','))
