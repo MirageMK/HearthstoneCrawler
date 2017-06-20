@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.Design;
 using System.Linq;
 using System.Net;
 using System.Reflection;
@@ -56,7 +55,7 @@ namespace HSCore
             }
             
             Cards = toReturn.Where(x => x.Type != "Hero").ToList();
-            var temp = toReturn.Where(x => x.Type == "Hero").ToList();
+
             log.Info($"Cards in database: {Cards.Count}");
         }
 

@@ -33,7 +33,11 @@ namespace HSCore.Readers
                     foreach(HtmlNode deckLink in tierNode.SelectNodes("*/*/div[contains(@class,'dt-meta-deck-well')]/a"))
                     {
                         string deckUrl = deckLink.GetAttributeValue("href", string.Empty);
-                        if(deckUrl == "") continue;
+                        if(deckUrl == "")
+                        {
+                            log.Warn($"Cannot find deckUrl on {deckLink.OuterHtml}");
+                            continue;
+                        }
                         Deck deck = GetDeck(deckUrl);
                         if(deck == null) continue;
                         deck.Source = SourceEnum.DisguisedToast;
@@ -57,15 +61,21 @@ namespace HSCore.Readers
             HtmlDocument doc = web.Load(BASE_URL + url);
 
             HtmlNode deckLink = doc.DocumentNode.SelectSingleNode("//*[contains(@class,'dt-col-decklist-name')]/a");
-            if(deckLink == null) return null;
+            if(deckLink == null)
+            {
+
+                log.Warn($"Cannot find deck on {BASE_URL + url}");
+                return null;
+            }
+
             string deckUrl = deckLink.GetAttributeValue("href", string.Empty);
             toReturn.UpdateDateString = doc.DocumentNode.SelectSingleNode("//*[contains(@class,'dt-tight')]/*[contains(@class,'visible-xs-inline-block')]").InnerText;
 
             doc = web.Load(BASE_URL + deckUrl);
             toReturn.Url = BASE_URL + url;
             HtmlNodeCollection nodes = doc.DocumentNode.SelectNodes("//*[contains(@class,'dt-decklist-metadata')]/dt");
-            toReturn.Class = nodes[1].SelectSingleNode("a").InnerText;
-            toReturn.Name = WebUtility.HtmlDecode(nodes[2].SelectSingleNode("a").InnerText);
+            toReturn.Class = nodes[2].SelectSingleNode("a").InnerText;
+            toReturn.Name = WebUtility.HtmlDecode(nodes[3].SelectSingleNode("a").InnerText);
 
             foreach(HtmlNode cardLink in doc.DocumentNode.SelectNodes("//*[contains(@class,'dt-cardlist')]/li"))
             {

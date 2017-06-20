@@ -187,9 +187,9 @@
             int shift = 0;
             ulong result = 0;
 
-            foreach (ulong byteValue in bytes)
+            foreach (byte byteValue in bytes)
             {
-                ulong tmp = byteValue & 0x7f;
+                ulong tmp = (ulong) byteValue & 0x7f;
                 result |= tmp << shift;
 
                 if (shift > sizeBites)

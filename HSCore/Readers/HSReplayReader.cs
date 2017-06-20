@@ -23,48 +23,6 @@ namespace HSCore.Readers
 
         private readonly Dictionary<string, string> cardMaper = new Dictionary<string, string>();
 
-        /*public override List<Deck> GetDecks()
-        {
-            List<Deck> toReturn = new List<Deck>();
-
-            try
-            {
-                foreach (DeckType dType in Enum.GetValues(typeof(DeckType)))
-                {
-                    if (dType == DeckType.Undefined) continue;
-
-                    string deckTypeDescription = Enums.GetEnumDescription(dType);
-
-                    RestClient client = new RestClient(URL);
-                    RestRequest request = new RestRequest(SNAPSHOT_END_POINT, Method.GET);
-                    request.AddUrlSegment("mode", deckTypeDescription.ToUpper());
-
-                    IRestResponse response = client.Execute(request);
-                    dynamic snapshot = Json.Decode(response.Content);
-
-                    foreach (dynamic classObj in snapshot.series.data)
-                    {
-                        Deck deck = GetDeck(classObj.Value[0].deck_list.ToString());
-                        deck.Name = classObj.Key;
-                        string playerClass = classObj.Key.ToLower();
-                        char[] a = playerClass.ToCharArray();
-                        a[0] = char.ToUpper(a[0]);
-                        deck.Class = new string(a);
-                        deck.Tier = 1;
-                        deck.Source = SourceEnum.HSReplay;
-                        deck.UpdateDateString = snapshot.as_of;
-                        toReturn.Add(deck);
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                log.Error("Problem", ex);
-            }
-
-            return toReturn;
-        }*/
-
         public override List<Deck> GetDecks()
         {
             List<Deck> toReturn = new List<Deck>();

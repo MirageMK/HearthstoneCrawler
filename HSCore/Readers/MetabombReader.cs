@@ -63,7 +63,11 @@ namespace HSCore.Readers
 
                         if(deckLink.SelectSingleNode("td/a") == null) continue;
                         string deckUrl = deckLink.SelectSingleNode("td/a").GetAttributeValue("href", string.Empty);
-                        if(deckUrl == "") continue;
+                        if(deckUrl == "")
+                        {
+                            log.Warn($"Cannot find deckUrl on {deckLink.OuterHtml}");
+                            continue;
+                        };
                         Deck deck = GetDeck(deckUrl);
                         if(deck == null) continue;
                         deck.Tier = tier;
@@ -87,7 +91,11 @@ namespace HSCore.Readers
             HtmlDocument doc = web.Load(url);
 
             toReturn.Url = url;
-            if(doc.DocumentNode.SelectNodes("//*[contains(@class,'article-content')]") == null) return null;
+            if(doc.DocumentNode.SelectNodes("//*[contains(@class,'article-content')]") == null)
+            {
+                log.Warn($"Cannot find decks on {url}");
+                return null;
+            }
 
             toReturn.UpdateDateString = doc.DocumentNode.SelectSingleNode("//*[contains(@itemprop,'datePublished')]").GetAttributeValue("content", "");
 
