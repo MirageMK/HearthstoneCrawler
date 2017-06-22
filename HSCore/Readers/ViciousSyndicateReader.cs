@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Reflection;
 using Google.Apis.Sheets.v4;
 using Google.Apis.Sheets.v4.Data;
@@ -114,31 +115,44 @@ namespace HSCore.Readers
             HtmlDocument doc = web.Load(url);
 
             toReturn.Url = url;
-            HtmlNode deckLink = doc.DocumentNode.SelectSingleNode("//*[contains(@class,'article-content')]/p/a/img");
-            if(deckLink == null) deckLink = doc.DocumentNode.SelectSingleNode("//*[contains(@class,'entry-content')]/p/a/img");
-            if(deckLink == null)
+            HtmlNode deckLink = doc.DocumentNode.SelectSingleNode("//*[contains(@class,'article-content')]/*/a/img") ??
+                                doc.DocumentNode.SelectSingleNode("//*[contains(@class,'entry-content')]/*/a/img") ??
+                                doc.DocumentNode.SelectSingleNode("//*[contains(@class,'entry-content')]/*/*/a/img");
+            
+            if (deckLink == null)
             {
                 log.Warn($"Cannot find deck on {url}");
                 return null;
             }
-            string temp = deckLink.ParentNode.GetAttributeValue("href", string.Empty);
-            doc = web.Load(temp);
+            string deckUrl = deckLink.ParentNode.GetAttributeValue("href", string.Empty);
+            doc = web.Load(deckUrl);
 
             HtmlNode cardsMeta = doc.DocumentNode.SelectSingleNode("//meta[@property='x-hearthstone:deck:cards']");
-            if(cardsMeta == null)
-            {
-                log.Warn($"Cannot find cards on {temp}");
-                return null;
-            }
-            string cardsString = cardsMeta.GetAttributeValue("content", string.Empty);
 
-            foreach(string cardID in cardsString.Split(','))
+            if (cardsMeta != null)
             {
-                Card card = MyCollection.GetByID(cardID);
-                if(toReturn.Cards.ContainsKey(card))
-                    toReturn.Cards[card]++;
-                else
-                    toReturn.Cards.Add(card, 1);
+                string cardsString = cardsMeta.GetAttributeValue("content", string.Empty);
+                string[] cardArray = cardsString.Split(',');
+                foreach (string cardID in cardArray)
+                {
+                    Card card = MyCollection.GetByID(cardID);
+                    if (toReturn.Cards.ContainsKey(card))
+                        toReturn.Cards[card]++;
+                    else
+                        toReturn.Cards.Add(card, 1);
+                }
+            }
+            else
+            {
+                string cardsString = doc.DocumentNode.SelectSingleNode("//*[contains(@class,'entry-content')]/p").InnerHtml;
+                string[] cardArray = cardsString.Split(new[] { "<br>\n" }, StringSplitOptions.RemoveEmptyEntries);
+                for(int i = 4;; i++)
+                {
+                    if (cardArray[i] == "#") break;
+                    string[] cardData = cardArray[i].Split(new[] { "x (" }, StringSplitOptions.RemoveEmptyEntries);
+                    Card card = MyCollection.Get(WebUtility.HtmlDecode(cardData[1].Substring(3)));
+                    toReturn.Cards.Add(card, int.Parse(cardData[0].Substring(2)));
+                }
             }
 
             return toReturn;

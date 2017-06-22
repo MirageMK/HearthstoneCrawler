@@ -48,7 +48,7 @@ namespace HSCore.Model
                 switch (Class)
                 {
                     case "Priest":
-                        return 817;
+                        return 41887;
                     case "Warior":
                         return 7;
                     case "Warlock":
@@ -60,11 +60,11 @@ namespace HSCore.Model
                     case "Hunter":
                         return 31;
                     case "Shaman":
-                        return 1066;
+                        return 40183;
                     case "Paladin":
-                        return 671;
+                        return 2827;
                     case "Rogue":
-                        return 930;
+                        return 40195;
                     default:
                         return 0;
                 }

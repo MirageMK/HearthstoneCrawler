@@ -61,7 +61,8 @@ namespace HSCore.Readers
                     {
                         if(deckLink.ChildNodes[0].InnerHtml != "" && tier < 5) tier++;
 
-                        if(deckLink.SelectSingleNode("td/a") == null) continue;
+                        if(deckLink.SelectSingleNode("td/a") == null)
+                            continue;
                         string deckUrl = deckLink.SelectSingleNode("td/a").GetAttributeValue("href", string.Empty);
                         if(deckUrl == "")
                         {
