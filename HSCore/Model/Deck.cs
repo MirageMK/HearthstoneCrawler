@@ -49,7 +49,7 @@ namespace HSCore.Model
                 {
                     case "Priest":
                         return 41887;
-                    case "Warior":
+                    case "Warrior":
                         return 7;
                     case "Warlock":
                         return 893;
