@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using HSCore;
-using HSCore.Model;
 using HSCore.Readers;
-using HSCore.Writers;
 
 namespace HSConsole
 {

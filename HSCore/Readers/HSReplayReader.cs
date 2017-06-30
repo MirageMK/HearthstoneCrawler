@@ -14,8 +14,10 @@ namespace HSCore.Readers
     public class HSReplayReader : BaseReader
     {
         private const string URL = "https://hsreplay.net/";
+
         //private const string SNAPSHOT_END_POINT = @"analytics/query/list_decks_by_win_rate?GameType=RANKED_{mode}&TimeRange=LAST_30_DAYS";
         private const string SNAPSHOT_END_POINT = @"analytics/query/trending_decks_by_popularity/";
+
         private const string CARD_END_POINT = @"cards/";
 
         private static readonly ILog log = LogManager.GetLogger

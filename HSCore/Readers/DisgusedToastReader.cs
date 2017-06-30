@@ -63,7 +63,6 @@ namespace HSCore.Readers
             HtmlNode deckLink = doc.DocumentNode.SelectSingleNode("//*[contains(@class,'dt-col-decklist-name')]/a");
             if(deckLink == null)
             {
-
                 log.Warn($"Cannot find deck on {BASE_URL + url}");
                 return null;
             }

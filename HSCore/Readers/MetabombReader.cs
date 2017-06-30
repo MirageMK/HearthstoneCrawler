@@ -68,7 +68,8 @@ namespace HSCore.Readers
                         {
                             log.Warn($"Cannot find deckUrl on {deckLink.OuterHtml}");
                             continue;
-                        };
+                        }
+                        ;
                         Deck deck = GetDeck(deckUrl);
                         if(deck == null) continue;
                         deck.Tier = tier;

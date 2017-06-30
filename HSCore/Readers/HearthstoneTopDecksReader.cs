@@ -37,7 +37,8 @@ namespace HSCore.Readers
                         {
                             log.Warn($"Cannot find deckUrl on {deckLink.OuterHtml}");
                             continue;
-                        };
+                        }
+                        ;
 
                         Deck deck = GetDeck(deckUrl);
                         deck.Name = WebUtility.HtmlDecode(deckLink.InnerText);
@@ -63,7 +64,7 @@ namespace HSCore.Readers
             HtmlDocument doc = web.Load(url);
 
             toReturn.Url = url;
-            
+
             toReturn.Class = doc.DocumentNode.SelectNodes("//*[contains(@class,'deck-info')]/a")[0].InnerText;
             toReturn.UpdateDateString = doc.DocumentNode.SelectSingleNode("//*[contains(@class,'updated')]").GetAttributeValue("datetime", DateTime.Now.ToString());
 

@@ -118,8 +118,8 @@ namespace HSCore.Readers
             HtmlNode deckLink = doc.DocumentNode.SelectSingleNode("//*[contains(@class,'article-content')]/*/a/img") ??
                                 doc.DocumentNode.SelectSingleNode("//*[contains(@class,'entry-content')]/*/a/img") ??
                                 doc.DocumentNode.SelectSingleNode("//*[contains(@class,'entry-content')]/*/*/a/img");
-            
-            if (deckLink == null)
+
+            if(deckLink == null)
             {
                 log.Warn($"Cannot find deck on {url}");
                 return null;
@@ -129,14 +129,14 @@ namespace HSCore.Readers
 
             HtmlNode cardsMeta = doc.DocumentNode.SelectSingleNode("//meta[@property='x-hearthstone:deck:cards']");
 
-            if (cardsMeta != null)
+            if(cardsMeta != null)
             {
                 string cardsString = cardsMeta.GetAttributeValue("content", string.Empty);
                 string[] cardArray = cardsString.Split(',');
-                foreach (string cardID in cardArray)
+                foreach(string cardID in cardArray)
                 {
                     Card card = MyCollection.GetByID(cardID);
-                    if (toReturn.Cards.ContainsKey(card))
+                    if(toReturn.Cards.ContainsKey(card))
                         toReturn.Cards[card]++;
                     else
                         toReturn.Cards.Add(card, 1);
@@ -148,7 +148,7 @@ namespace HSCore.Readers
                 string[] cardArray = cardsString.Split(new[] { "<br>\n" }, StringSplitOptions.RemoveEmptyEntries);
                 for(int i = 4;; i++)
                 {
-                    if (cardArray[i] == "#") break;
+                    if(cardArray[i] == "#") break;
                     string[] cardData = cardArray[i].Split(new[] { "x (" }, StringSplitOptions.RemoveEmptyEntries);
                     Card card = MyCollection.Get(WebUtility.HtmlDecode(cardData[1].Substring(3)));
                     toReturn.Cards.Add(card, int.Parse(cardData[0].Substring(2)));

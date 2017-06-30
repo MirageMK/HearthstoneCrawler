@@ -91,7 +91,9 @@ namespace HSCore.Model
 
             return source == null
                        ? Card.ValuationFactor * (6 - GetTier()) * GetApperences() * wildReduceFactor
-                       : GetInDecks(source) != 0 ? Card.ValuationFactor * (6 - GetTier(source)) * GetApperences(source) * wildReduceFactor : 0;
+                       : GetInDecks(source) != 0
+                           ? Card.ValuationFactor * (6 - GetTier(source)) * GetApperences(source) * wildReduceFactor
+                           : 0;
         }
 
         public List<object> ToValuationArray()

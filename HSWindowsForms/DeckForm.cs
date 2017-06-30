@@ -112,7 +112,7 @@ namespace HSWindowsForms
 
         private void radGridView1_CellClick(object sender, GridViewCellEventArgs e)
         {
-            if (e.Row is GridViewTableHeaderRowInfo)
+            if(e.Row is GridViewTableHeaderRowInfo)
             {
                 Clipboard.SetText(deck.Url);
             }

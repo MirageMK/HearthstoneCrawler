@@ -9,7 +9,7 @@
         /// <returns>Varint array of bytes.</returns>
         public static byte[] GetVarintBytes(byte value)
         {
-            return GetVarintBytes((ulong)value);
+            return GetVarintBytes((ulong) value);
         }
 
         /// <summary>
@@ -20,7 +20,7 @@
         public static byte[] GetVarintBytes(short value)
         {
             var zigzag = EncodeZigZag(value, 16);
-            return GetVarintBytes((ulong)zigzag);
+            return GetVarintBytes((ulong) zigzag);
         }
 
         /// <summary>
@@ -30,7 +30,7 @@
         /// <returns>Varint array of bytes.</returns>
         public static byte[] GetVarintBytes(ushort value)
         {
-            return GetVarintBytes((ulong)value);
+            return GetVarintBytes((ulong) value);
         }
 
         /// <summary>
@@ -41,7 +41,7 @@
         public static byte[] GetVarintBytes(int value)
         {
             var zigzag = EncodeZigZag(value, 32);
-            return GetVarintBytes((ulong)zigzag);
+            return GetVarintBytes((ulong) zigzag);
         }
 
         /// <summary>
@@ -51,7 +51,7 @@
         /// <returns>Varint array of bytes.</returns>
         public static byte[] GetVarintBytes(uint value)
         {
-            return GetVarintBytes((ulong)value);
+            return GetVarintBytes((ulong) value);
         }
 
         /// <summary>
@@ -62,7 +62,7 @@
         public static byte[] GetVarintBytes(long value)
         {
             var zigzag = EncodeZigZag(value, 64);
-            return GetVarintBytes((ulong)zigzag);
+            return GetVarintBytes((ulong) zigzag);
         }
 
         /// <summary>
@@ -72,23 +72,23 @@
         /// <returns>Varint array of bytes.</returns>
         public static byte[] GetVarintBytes(ulong value)
         {
-            var buffer = new byte[10];
+            var buffer = new byte[ 10 ];
             var pos = 0;
             do
             {
                 var byteVal = value & 0x7f;
                 value >>= 7;
 
-                if (value != 0)
+                if(value != 0)
                 {
                     byteVal |= 0x80;
                 }
 
-                buffer[pos++] = (byte)byteVal;
+                buffer[pos++] = (byte) byteVal;
+            }
+            while(value != 0);
 
-            } while (value != 0);
-
-            var result = new byte[pos];
+            var result = new byte[ pos ];
             Buffer.BlockCopy(buffer, 0, result, 0, pos);
 
             return result;
@@ -101,7 +101,7 @@
         /// <returns>Byte value</returns>
         public static byte ToByte(byte[] bytes)
         {
-            return (byte)ToTarget(bytes, 8);
+            return (byte) ToTarget(bytes, 8);
         }
 
         /// <summary>
@@ -112,7 +112,7 @@
         public static short ToInt16(byte[] bytes)
         {
             var zigzag = ToTarget(bytes, 16);
-            return (short)DecodeZigZag(zigzag);
+            return (short) DecodeZigZag(zigzag);
         }
 
         /// <summary>
@@ -122,7 +122,7 @@
         /// <returns>16-bit usigned value</returns>
         public static ushort ToUInt16(byte[] bytes)
         {
-            return (ushort)ToTarget(bytes, 16);
+            return (ushort) ToTarget(bytes, 16);
         }
 
         /// <summary>
@@ -133,7 +133,7 @@
         public static int ToInt32(byte[] bytes)
         {
             var zigzag = ToTarget(bytes, 32);
-            return (int)DecodeZigZag(zigzag);
+            return (int) DecodeZigZag(zigzag);
         }
 
         /// <summary>
@@ -143,7 +143,7 @@
         /// <returns>32-bit unsigned value</returns>
         public static uint ToUInt32(byte[] bytes)
         {
-            return (uint)ToTarget(bytes, 32);
+            return (uint) ToTarget(bytes, 32);
         }
 
         /// <summary>
@@ -174,12 +174,12 @@
 
         private static long DecodeZigZag(ulong value)
         {
-            if ((value & 0x1) == 0x1)
+            if((value & 0x1) == 0x1)
             {
-                return (-1 * ((long)(value >> 1) + 1));
+                return (-1 * ((long) (value >> 1) + 1));
             }
 
-            return (long)(value >> 1);
+            return (long) (value >> 1);
         }
 
         private static ulong ToTarget(byte[] bytes, int sizeBites)
@@ -187,17 +187,17 @@
             int shift = 0;
             ulong result = 0;
 
-            foreach (byte byteValue in bytes)
+            foreach(byte byteValue in bytes)
             {
                 ulong tmp = (ulong) byteValue & 0x7f;
                 result |= tmp << shift;
 
-                if (shift > sizeBites)
+                if(shift > sizeBites)
                 {
                     throw new ArgumentOutOfRangeException("bytes", "Byte array is too large.");
                 }
 
-                if ((byteValue & 0x80) != 0x80)
+                if((byteValue & 0x80) != 0x80)
                 {
                     return result;
                 }

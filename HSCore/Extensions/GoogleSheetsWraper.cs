@@ -17,15 +17,15 @@ namespace HSCore.Extensions
         public static SheetsService GetSheetsService()
         {
             SheetsService service = new SheetsService(new BaseClientService.Initializer
-            {
-                ApiKey = ConfigurationManager.AppSettings["APIKey"]
-            });
+                                                      {
+                                                          ApiKey = ConfigurationManager.AppSettings["APIKey"]
+                                                      });
 
-            if (ConfigurationManager.AppSettings["Environment"] == "Debug")
+            if(ConfigurationManager.AppSettings["Environment"] == "Debug")
             {
                 UserCredential credential;
 
-                using (FileStream stream =
+                using(FileStream stream =
                     new FileStream("client_secret.json", FileMode.Open, FileAccess.Read))
                 {
                     string credPath = Environment.GetFolderPath(
@@ -43,10 +43,10 @@ namespace HSCore.Extensions
 
                 // Create Google Sheets API service.
                 service = new SheetsService(new BaseClientService.Initializer
-                {
-                    HttpClientInitializer = credential,
-                    ApplicationName = APPLICATION_NAME
-                });
+                                            {
+                                                HttpClientInitializer = credential,
+                                                ApplicationName = APPLICATION_NAME
+                                            });
             }
             return service;
         }

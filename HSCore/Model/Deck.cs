@@ -6,7 +6,7 @@ using System.Text;
 
 namespace HSCore.Model
 {
-    [Serializable]
+    [ Serializable ]
     public class Deck : IEquatable<Deck>, IEqualityComparer<Deck>
     {
         private DateTime _updateDate;
@@ -29,7 +29,7 @@ namespace HSCore.Model
         {
             set
             {
-                if (!DateTime.TryParse(value, out _updateDate))
+                if(!DateTime.TryParse(value, out _updateDate))
                     _updateDate = DateTime.Now;
             }
         }
@@ -45,7 +45,7 @@ namespace HSCore.Model
         {
             get
             {
-                switch (Class)
+                switch(Class)
                 {
                     case "Priest":
                         return 41887;
@@ -92,7 +92,7 @@ namespace HSCore.Model
         {
             List<IList<object>> toReturn = new List<IList<object>>();
 
-            foreach (KeyValuePair<Card, int> keyValuePair in Cards)
+            foreach(KeyValuePair<Card, int> keyValuePair in Cards)
             {
                 IList<object> row = keyValuePair.Key.ToList();
                 row.Add(keyValuePair.Value);
@@ -106,7 +106,7 @@ namespace HSCore.Model
         {
             StringBuilder sb = new StringBuilder();
             sb.AppendLine("### " + Name);
-            using (MemoryStream ms = new MemoryStream())
+            using(MemoryStream ms = new MemoryStream())
             {
                 Write(ms, 0);
                 Write(ms, 1);
@@ -120,19 +120,19 @@ namespace HSCore.Model
                 List<KeyValuePair<Card, int>> nCopy = cards.Where(x => x.Value > 2).ToList();
 
                 Write(ms, singleCopy.Count);
-                foreach (KeyValuePair<Card, int> card in singleCopy)
+                foreach(KeyValuePair<Card, int> card in singleCopy)
                 {
                     Write(ms, card.Key.DBId);
                 }
 
                 Write(ms, doubleCopy.Count);
-                foreach (KeyValuePair<Card, int> card in doubleCopy)
+                foreach(KeyValuePair<Card, int> card in doubleCopy)
                 {
                     Write(ms, card.Key.DBId);
                 }
 
                 Write(ms, nCopy.Count);
-                foreach (KeyValuePair<Card, int> card in nCopy)
+                foreach(KeyValuePair<Card, int> card in nCopy)
                 {
                     Write(ms, card.Key.DBId);
                     Write(ms, card.Value);
@@ -145,11 +145,11 @@ namespace HSCore.Model
 
         private static void Write(MemoryStream ms, int value)
         {
-            if (value == 0)
+            if(value == 0)
                 ms.WriteByte(0);
             else
             {
-                byte[] bytes = VarintBitConverter.GetVarintBytes((ulong)value);
+                byte[] bytes = VarintBitConverter.GetVarintBytes((ulong) value);
                 ms.Write(bytes, 0, bytes.Length);
             }
         }

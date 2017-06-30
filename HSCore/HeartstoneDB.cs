@@ -23,12 +23,12 @@ namespace HSCore
         {
             List<Card> toReturn = new List<Card>();
             Dictionary<string, int> dbfMaper = new Dictionary<string, int>();
-            
-            using (WebClient wc = new WebClient())
+
+            using(WebClient wc = new WebClient())
             {
                 string json = wc.DownloadString(DB_URL);
                 dynamic cards = Json.Decode(json);
-                foreach (dynamic card in cards)
+                foreach(dynamic card in cards)
                 {
                     if(!dbfMaper.ContainsKey(card.id))
                     {
@@ -36,8 +36,8 @@ namespace HSCore
                     }
                 }
             }
-            
-            foreach (SetEnum sType in Enum.GetValues(typeof(SetEnum)))
+
+            foreach(SetEnum sType in Enum.GetValues(typeof(SetEnum)))
             {
                 string setDescription = Enums.GetEnumDescription(sType);
 
@@ -53,7 +53,7 @@ namespace HSCore
 
                 toReturn.AddRange(response.Data);
             }
-            
+
             Cards = toReturn.Where(x => x.Type != "Hero").ToList();
 
             log.Info($"Cards in database: {Cards.Count}");
@@ -64,10 +64,10 @@ namespace HSCore
         public static Card Get(string name)
         {
             Card newCard = Cards.Find(x => string.Equals(x.Name, name, StringComparison.CurrentCultureIgnoreCase));
-            if (newCard != null) return newCard;
+            if(newCard != null) return newCard;
 
             newCard = Cards.Find(x => string.Equals(x.Name, Mapper(name), StringComparison.CurrentCultureIgnoreCase));
-            if (newCard == null) throw new Exception("DB - Cannot find card with name:" + name);
+            if(newCard == null) throw new Exception("DB - Cannot find card with name:" + name);
 
             log.Warn($"DB Card: {name} replaced with {newCard.Name}");
             return newCard;
