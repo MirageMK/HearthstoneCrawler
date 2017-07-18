@@ -56,7 +56,14 @@ namespace HSCore.Readers
                 foreach(HtmlNode deckSection in doc.DocumentNode.SelectNodes("//*[contains(@class,'article-content')]/section"))
                 {
                     HtmlNodeCollection deckNode = deckSection.SelectNodes("table/tbody/tr");
-                    if(deckNode == null) continue;
+                    if(deckNode == null)
+                    {
+                        deckNode = deckSection.SelectNodes("*//table/tbody/tr");
+                        if (deckNode == null)
+                        {
+                            continue;
+                        }
+                    }
                     foreach(HtmlNode deckLink in deckNode)
                     {
                         if(deckLink.ChildNodes[0].InnerHtml != "" && tier < 5) tier++;

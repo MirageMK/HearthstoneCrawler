@@ -41,7 +41,7 @@ namespace HSCore.Readers
                         ;
 
                         Deck deck = GetDeck(deckUrl);
-                        deck.Name = WebUtility.HtmlDecode(deckLink.InnerText);
+                        deck.Name = WebUtility.HtmlDecode(deckLink.InnerText).Trim();
                         deck.Source = SourceEnum.HearthstoneTopDecks;
                         deck.Tier = tier;
                         toReturn.Add(deck);
@@ -65,7 +65,7 @@ namespace HSCore.Readers
 
             toReturn.Url = url;
 
-            toReturn.Class = doc.DocumentNode.SelectNodes("//*[contains(@class,'deck-info')]/a")[0].InnerText;
+            toReturn.Class = doc.DocumentNode.SelectSingleNode("//*[contains(@class,'deck-list-sidebar')]/ul/li[1]/a").InnerText;
             toReturn.UpdateDateString = doc.DocumentNode.SelectSingleNode("//*[contains(@class,'updated')]").GetAttributeValue("datetime", DateTime.Now.ToString());
 
             foreach(HtmlNode cardLink in doc.DocumentNode.SelectNodes("//*[contains(@class,'card-frame')]"))
@@ -74,7 +74,15 @@ namespace HSCore.Readers
                 string cardCount = cardLink.SelectSingleNode("*[contains(@class,'card-count')]").InnerText;
 
                 Card card = MyCollection.Get(cardName);
-                toReturn.Cards.Add(card, int.Parse(cardCount));
+                int cardCountInt;
+                if(int.TryParse(cardCount, out cardCountInt))
+                {
+                    toReturn.Cards.Add(card, cardCountInt);
+                }
+                else
+                {
+                    log.Warn($"Wrong card count on {cardName} ({url})"); ;
+                }
             }
 
             return toReturn;

@@ -150,7 +150,7 @@ namespace HSCore.Readers
                 {
                     if(cardArray[i] == "#") break;
                     string[] cardData = cardArray[i].Split(new[] { "x (" }, StringSplitOptions.RemoveEmptyEntries);
-                    Card card = MyCollection.Get(WebUtility.HtmlDecode(cardData[1].Substring(3)));
+                    Card card = MyCollection.Get(WebUtility.HtmlDecode(cardData[1].Substring(3).Trim()));
                     toReturn.Cards.Add(card, int.Parse(cardData[0].Substring(2)));
                 }
             }

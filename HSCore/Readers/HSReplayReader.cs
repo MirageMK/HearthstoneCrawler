@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Reflection;
+using System.Threading;
 using System.Web.Helpers;
 using HSCore.Model;
 using HtmlAgilityPack;
@@ -18,12 +19,8 @@ namespace HSCore.Readers
         //private const string SNAPSHOT_END_POINT = @"analytics/query/list_decks_by_win_rate?GameType=RANKED_{mode}&TimeRange=LAST_30_DAYS";
         private const string SNAPSHOT_END_POINT = @"analytics/query/trending_decks_by_popularity/";
 
-        private const string CARD_END_POINT = @"cards/";
-
         private static readonly ILog log = LogManager.GetLogger
             (MethodBase.GetCurrentMethod().DeclaringType);
-
-        private readonly Dictionary<string, string> cardMaper = new Dictionary<string, string>();
 
         public override List<Deck> GetDecks()
         {
@@ -76,23 +73,9 @@ namespace HSCore.Readers
 
             string[][] res = jsonDeck.Trim('[').Trim(']').Split(new[] { "],[" }, StringSplitOptions.RemoveEmptyEntries).Select(p => p.Split(',')).ToArray();
 
-            HtmlWeb web = new HtmlWeb();
             foreach(string[] strings in res)
             {
-                string cardName;
-                if(cardMaper.ContainsKey(strings[0]))
-                {
-                    cardName = cardMaper[strings[0]];
-                }
-                else
-                {
-                    HtmlDocument doc = web.Load(URL + CARD_END_POINT + strings[0]);
-                    cardName = doc.DocumentNode.SelectSingleNode("//title").InnerText;
-                    cardName = WebUtility.HtmlDecode(cardName.Split(new[] { " - Hearthstone Card Statistics - HSReplay.net" }, StringSplitOptions.RemoveEmptyEntries)[0]);
-                    cardMaper.Add(strings[0], cardName);
-                }
-
-                Card card = MyCollection.Get(cardName);
+                Card card = MyCollection.GetByID(Int32.Parse(strings[0]));
                 toReturn.Cards.Add(card, int.Parse(strings[1]));
             }
 
