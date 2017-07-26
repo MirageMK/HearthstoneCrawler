@@ -120,6 +120,15 @@ namespace HSCore.Model
 
         private double GetProbabilityForNewCard(string rarity, bool isW)
         {
+            if(rarity == "Legendary") //cannot open duplicate legendary
+            {
+                int missingCards = Cards.Where(x => x.Rarity == rarity && x.Missing > 0).Sum(x => x.MaxInDeck);
+                if(missingCards != 0)
+                {
+                    return (isW ? SplitedValueW[rarity] : SplitedValueN[rarity]) / missingCards;
+                }
+                return (isW ? SplitedValueW[rarity] : SplitedValueN[rarity]) / Cards.Where(x => x.Rarity == rarity).Sum(x => x.MaxInDeck);
+            }
             return (isW ? SplitedValueW[rarity] : SplitedValueN[rarity]) / Cards.Where(x => x.Rarity == rarity).Sum(x => x.MaxInDeck);
         }
 

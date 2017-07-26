@@ -26,6 +26,8 @@ namespace HSWindowsForms
 
         public MainForm()
         {
+            NetDecks.ProgressChanged += SplashScreen.SetStatus;
+            SplashScreen.ShowSplashScreen();
             _wc = new WebClient();
 
             InitializeComponent();
@@ -36,6 +38,8 @@ namespace HSWindowsForms
             LoadMyCollection();
 
             UnselectGrids();
+            SplashScreen.CloseForm();
+            NetDecks.ProgressChanged -= SplashScreen.SetStatus;
         }
 
         private void UnselectGrids()
