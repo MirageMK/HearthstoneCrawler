@@ -23,6 +23,7 @@ namespace HSCore.Model
 
         public SourceEnum Source { get; set; }
         public string Url { get; set; }
+        public bool IsError { get; set; }
         public DateTime UpdateDate => _updateDate;
 
         public string UpdateDateString

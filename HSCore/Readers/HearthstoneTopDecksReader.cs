@@ -74,6 +74,11 @@ namespace HSCore.Readers
                 string cardCount = cardLink.SelectSingleNode("*[contains(@class,'card-count')]").InnerText;
 
                 Card card = MyCollection.Get(cardName);
+                if (card == null)
+                {
+                    toReturn.IsError = true;
+                    continue;
+                }
                 int cardCountInt;
                 if(int.TryParse(cardCount, out cardCountInt))
                 {

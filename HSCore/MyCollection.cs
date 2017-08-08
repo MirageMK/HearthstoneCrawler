@@ -13,13 +13,11 @@ namespace HSCore
     public static class MyCollection
     {
         private const string USER_NAME = "Miragemk";
+        //private const string USER_NAME = "GlAdIaToR_kanga";
+        //private const string USER_NAME = "NikoRuso";
 
         private static readonly ILog log = LogManager.GetLogger
             (MethodBase.GetCurrentMethod().DeclaringType);
-
-        //static readonly string[] Scopes = { SheetsService.Scope.Spreadsheets };
-        //static readonly string ApplicationName = "Hearthstone Crawler";
-        internal static readonly string[] NonColectable = { "Roaring Torch", "Tank Up!", "Kazakus Potion", "The Storm Guardian" };
 
         static MyCollection()
         {
@@ -38,6 +36,10 @@ namespace HSCore
                 if(tempCard == null)
                 {
                     Card card = HeartstoneDB.Get(cardName);
+                    if(card == null)
+                    {
+                        continue;
+                    }
                     card.Own = cardCount > 2 ? 2 : cardCount;
                     toReturn.Add(card);
                 }
@@ -52,23 +54,22 @@ namespace HSCore
             log.Info($"Cards in collection: {Cards.Count}");
         }
 
-        //private const string USER_NAME = "GlAdIaToR_kanga";
-        //private const string USER_NAME = "NikoRuso";
-
         public static List<Card> Cards { get; }
         public static int CardCount => Cards.Sum(card => card.Own);
 
         public static Card Get(string name)
         {
-            if(NonColectable.Contains(name))
-                return null;
-
             Card newCard = Cards.Find(x => string.Equals(x.Name, name, StringComparison.CurrentCultureIgnoreCase));
             if(newCard != null) return newCard;
 
-            newCard = Cards.Find(x => string.Equals(x.Name, Mapper(name), StringComparison.CurrentCultureIgnoreCase));
-            if(newCard == null) throw new Exception("MY - Cannot find card with name:" + name);
+            string newCardName = Mapper(name);
+            if(Algorithms.LevenshteinDistance(name, newCardName) > 3)
+            {
+                log.Error($"MY - Cannot find card with name: {name}");
+                return null;
+            }
 
+            newCard = Cards.Find(x => string.Equals(x.Name, newCardName, StringComparison.CurrentCultureIgnoreCase));
             log.Warn($"My Card: {name} replaced with {newCard.Name}");
             return newCard;
         }

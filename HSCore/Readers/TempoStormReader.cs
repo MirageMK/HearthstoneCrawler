@@ -110,6 +110,11 @@ namespace HSCore.Readers
             foreach(dynamic cardObj in deck.cards)
             {
                 Card card = MyCollection.Get(cardObj.card.name);
+                if (card == null)
+                {
+                    toReturn.IsError = true;
+                    continue;
+                }
                 toReturn.Cards.Add(card, cardObj.cardQuantity);
             }
 

@@ -130,7 +130,11 @@ namespace HSCore.Readers
                         continue;
 
                     Card card = MyCollection.Get(cardName);
-                    if(card == null) continue;
+                    if (card == null)
+                    {
+                        toReturn.IsError = true;
+                        continue;
+                    }
                     toReturn.Cards.Add(card, cardCount);
                 }
 

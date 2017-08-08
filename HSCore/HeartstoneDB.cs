@@ -14,7 +14,7 @@ namespace HSCore
     public static class HeartstoneDB
     {
         private const string X_MASHAPE_KEY = "97ivM51w5HmshhjJQhVH0MuyOMA2p1ecDlQjsn1mQyqgCor9NN";
-        //private const string DB_URL = "https://api.hearthstonejson.com/v1/latest/enUS/cards.collectible.json";
+        private const string DB_URL = "https://api.hearthstonejson.com/v1/latest/enUS/cards.collectible.json";
 
         private static readonly ILog log = LogManager.GetLogger
             (MethodBase.GetCurrentMethod().DeclaringType);
@@ -22,8 +22,8 @@ namespace HSCore
         static HeartstoneDB()
         {
             List<Card> toReturn = new List<Card>();
-            
-            foreach(SetEnum sType in Enum.GetValues(typeof(SetEnum)))
+
+            foreach (SetEnum sType in Enum.GetValues(typeof(SetEnum)))
             {
                 string setDescription = Enums.GetEnumDescription(sType);
 
