@@ -83,10 +83,10 @@ namespace HSCore
 
         public static Card GetByID(int id)
         {
-            Card newCard = Cards.Find(x => x.DBId == id);
+            Card newCard = Cards.Find(x => x.DbfId == id);
             if (newCard != null) return newCard;
 
-            throw new Exception("MY - Cannot find card with DbId:" + id);
+            throw new Exception("MY - Cannot find card with DbfId:" + id);
         }
 
         private static string Mapper(string name)

@@ -14,7 +14,7 @@ namespace HSCore
     public static class HeartstoneDB
     {
         private const string X_MASHAPE_KEY = "97ivM51w5HmshhjJQhVH0MuyOMA2p1ecDlQjsn1mQyqgCor9NN";
-        private const string DB_URL = "https://api.hearthstonejson.com/v1/19506/enUS/cards.collectible.json";
+        //private const string DB_URL = "https://api.hearthstonejson.com/v1/latest/enUS/cards.collectible.json";
 
         private static readonly ILog log = LogManager.GetLogger
             (MethodBase.GetCurrentMethod().DeclaringType);
@@ -22,21 +22,7 @@ namespace HSCore
         static HeartstoneDB()
         {
             List<Card> toReturn = new List<Card>();
-            Dictionary<string, int> dbfMaper = new Dictionary<string, int>();
-
-            using(WebClient wc = new WebClient())
-            {
-                string json = wc.DownloadString(DB_URL);
-                dynamic cards = Json.Decode(json);
-                foreach(dynamic card in cards)
-                {
-                    if(!dbfMaper.ContainsKey(card.id))
-                    {
-                        dbfMaper.Add(card.id, card.dbfId);
-                    }
-                }
-            }
-
+            
             foreach(SetEnum sType in Enum.GetValues(typeof(SetEnum)))
             {
                 string setDescription = Enums.GetEnumDescription(sType);
@@ -48,8 +34,6 @@ namespace HSCore
 
                 RestResponse<List<Card>> response = client.Execute<List<Card>>(request) as RestResponse<List<Card>>;
                 if(response == null) continue;
-
-                response.Data.ForEach(x => x.DBId = dbfMaper[x.CardId]);
 
                 toReturn.AddRange(response.Data);
             }

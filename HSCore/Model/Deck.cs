@@ -122,19 +122,19 @@ namespace HSCore.Model
                 Write(ms, singleCopy.Count);
                 foreach(KeyValuePair<Card, int> card in singleCopy)
                 {
-                    Write(ms, card.Key.DBId);
+                    Write(ms, card.Key.DbfId);
                 }
 
                 Write(ms, doubleCopy.Count);
                 foreach(KeyValuePair<Card, int> card in doubleCopy)
                 {
-                    Write(ms, card.Key.DBId);
+                    Write(ms, card.Key.DbfId);
                 }
 
                 Write(ms, nCopy.Count);
                 foreach(KeyValuePair<Card, int> card in nCopy)
                 {
-                    Write(ms, card.Key.DBId);
+                    Write(ms, card.Key.DbfId);
                     Write(ms, card.Value);
                 }
 
