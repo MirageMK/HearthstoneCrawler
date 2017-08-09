@@ -83,7 +83,9 @@ namespace HSWindowsForms
                 if(column.DataType == typeof(double))
                     column.FormatString = @"{0:N2}";
 
-            gridPack.DataSource = (from SetEnum sType in Enum.GetValues(typeof(SetEnum)) select new Pack(sType)).Where(x => x.CanBuy).ToList();
+            List<Pack> deckValue = (from SetEnum sType in Enum.GetValues(typeof(SetEnum)) select new Pack(sType)).Where(x => x.CanBuy).ToList();
+            gridPack.DataSource = deckValue;
+            gridPack.Height = 48 + deckValue.Count * 23;
             foreach(GridViewDataColumn column in gridPack.Columns)
                 if(column.DataType == typeof(double))
                     column.FormatString = @"{0:N2}";

@@ -80,7 +80,7 @@ namespace HSCore.Model
                 double factor = 1;
 
                 if(!IsStandard) factor -= 0.5;
-                if(CardSetEnum > SetEnum.LoE && CardSetEnum < SetEnum.JtU)
+                if(CardSetEnum > SetEnum.LoE)
                     factor -= ((DateTime.Now.Month + 8) % 12 + 1) * 0.5 / 12;
 
                 if(IsLegendary) factor += 0.25;

@@ -21,7 +21,7 @@ namespace HSCore.Model
 
         public SetEnum Set { get; }
         private List<Card> Cards { get; }
-        public bool CanBuy => Set == SetEnum.Classic || Set == SetEnum.WotOG || Set == SetEnum.MSoG || Set == SetEnum.JtU;
+        public bool CanBuy => Set != SetEnum.Naxx && Set != SetEnum.BRM && Set != SetEnum.LoE && Set != SetEnum.Kara && Set != SetEnum.Basic && Set != SetEnum.HoF;
 
         private Dictionary<string, double> SplitedValueW
         {
@@ -120,6 +120,15 @@ namespace HSCore.Model
 
         private double GetProbabilityForNewCard(string rarity, bool isW)
         {
+            if(isW)
+            {
+                if(!SplitedValueW.ContainsKey(rarity)) return 0;
+            }
+            else
+            {
+                if (!SplitedValueN.ContainsKey(rarity)) return 0;
+            }
+
             if(rarity == "Legendary") //cannot open duplicate legendary
             {
                 int missingCards = Cards.Where(x => x.Rarity == rarity && x.Missing > 0).Sum(x => x.MaxInDeck);

@@ -596,7 +596,7 @@
             this.gridPack.ReadOnly = true;
             this.gridPack.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.gridPack.ShowGroupPanel = false;
-            this.gridPack.Size = new System.Drawing.Size(526, 139);
+            this.gridPack.Size = new System.Drawing.Size(526, 182);
             this.gridPack.TabIndex = 3;
             this.gridPack.Text = "radGridView1";
             // 
@@ -606,7 +606,7 @@
             // 
             // radLabel1
             // 
-            this.radLabel1.Location = new System.Drawing.Point(3, 195);
+            this.radLabel1.Location = new System.Drawing.Point(3, 277);
             this.radLabel1.Name = "radLabel1";
             this.radLabel1.Size = new System.Drawing.Size(55, 18);
             this.radLabel1.TabIndex = 2;
@@ -901,7 +901,6 @@
             gridViewTextBoxColumn25.Width = 36;
             gridViewDateTimeColumn1.EnableExpressionEditor = false;
             gridViewDateTimeColumn1.FieldName = "UpdateDate";
-            gridViewDateTimeColumn1.Format = System.Windows.Forms.DateTimePickerFormat.Long;
             gridViewDateTimeColumn1.HeaderText = "Update Date";
             gridViewDateTimeColumn1.MinWidth = 100;
             gridViewDateTimeColumn1.Name = "Update Date";

@@ -50,9 +50,14 @@ namespace HSCore
             Card newCard = Cards.Find(x => string.Equals(x.Name, name, StringComparison.CurrentCultureIgnoreCase));
             if(newCard != null) return newCard;
 
-            newCard = Cards.Find(x => string.Equals(x.Name, Mapper(name), StringComparison.CurrentCultureIgnoreCase));
-            if(newCard == null) throw new Exception("DB - Cannot find card with name:" + name);
+            string newCardName = Mapper(name);
+            if (Algorithms.LevenshteinDistance(name, newCardName) > 3)
+            {
+                log.Error($"DB - Cannot find card with name: {name}");
+                return null;
+            }
 
+            newCard = Cards.Find(x => string.Equals(x.Name, newCardName, StringComparison.CurrentCultureIgnoreCase));
             log.Warn($"DB Card: {name} replaced with {newCard.Name}");
             return newCard;
         }
