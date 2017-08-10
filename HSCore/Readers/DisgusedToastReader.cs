@@ -87,6 +87,11 @@ namespace HSCore.Readers
                     toReturn.IsError = true;
                     continue;
                 }
+                if (toReturn.Cards.ContainsKey(card))
+                {
+                    log.Warn($"{card} already exist in the deck.");
+                    continue;
+                }
                 toReturn.Cards.Add(card, int.Parse(cardCount));
             }
 

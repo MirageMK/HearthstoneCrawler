@@ -23,7 +23,14 @@ namespace HSCore.Model
 
         public SourceEnum Source { get; set; }
         public string Url { get; set; }
-        public bool IsError { get; set; }
+
+        private bool _isError;
+        public bool IsError
+        {
+            get { return _isError || Cards.Sum(x => x.Value) != 30; }
+            set { _isError = value; }
+        }
+
         public DateTime UpdateDate => _updateDate;
 
         public string UpdateDateString

@@ -76,6 +76,11 @@ namespace HSCore.Readers
             foreach(string[] strings in res)
             {
                 Card card = MyCollection.GetByID(Int32.Parse(strings[0]));
+                if (toReturn.Cards.ContainsKey(card))
+                {
+                    log.Warn($"{card} already exist in the deck.");
+                    continue;
+                }
                 toReturn.Cards.Add(card, int.Parse(strings[1]));
             }
 
