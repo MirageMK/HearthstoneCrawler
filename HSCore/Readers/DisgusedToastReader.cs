@@ -30,6 +30,8 @@ namespace HSCore.Readers
                 foreach(HtmlNode tierNode in tierSection.SelectNodes("section"))
                 {
                     tier++;
+                    if (tierNode.SelectNodes("*/*/div[contains(@class,'dt-meta-deck-well')]/a") == null) continue;
+
                     foreach(HtmlNode deckLink in tierNode.SelectNodes("*/*/div[contains(@class,'dt-meta-deck-well')]/a"))
                     {
                         string deckUrl = deckLink.GetAttributeValue("href", string.Empty);

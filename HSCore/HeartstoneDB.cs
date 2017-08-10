@@ -38,7 +38,7 @@ namespace HSCore
                 toReturn.AddRange(response.Data);
             }
 
-            Cards = toReturn.Where(x => x.Type != "Hero").ToList();
+            Cards = toReturn;
 
             log.Info($"Cards in database: {Cards.Count}");
         }

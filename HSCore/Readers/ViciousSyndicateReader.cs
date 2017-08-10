@@ -146,12 +146,12 @@ namespace HSCore.Readers
             {
                 string cardsString = doc.DocumentNode.SelectSingleNode("//*[contains(@class,'entry-content')]/p").InnerHtml;
                 string[] cardArray = cardsString.Split(new[] { "<br>\n" }, StringSplitOptions.RemoveEmptyEntries);
-                for(int i = 4;; i++)
+                for(int i = Array.IndexOf(cardArray, "#") + 1;; i++)
                 {
                     if(cardArray[i] == "#") break;
                     string[] cardData = cardArray[i].Split(new[] { "x (" }, StringSplitOptions.RemoveEmptyEntries);
                     Card card = MyCollection.Get(WebUtility.HtmlDecode(cardData[1].Substring(3).Trim()));
-                    if (card == null)
+                    if(card == null)
                     {
                         toReturn.IsError = true;
                         continue;
