@@ -36,6 +36,7 @@ namespace HSCore.Readers
 
                 foreach(dynamic classObj in snapshot.series.data)
                 {
+                    if (classObj.Value.Length == 0) continue;
                     Deck deck = GetDeck(classObj.Value[0].deck_list.ToString());
                     deck.Name = classObj.Key;
                     string playerClass = classObj.Key.ToLower();

@@ -94,45 +94,45 @@ namespace HSWindowsForms
             sbLabelText.AppendLine($@"{MyCollection.Cards.Sum(x => x.Own)}/ {MyCollection.Cards.Sum(x => x.MaxInDeck)}");
             sbLabelText.AppendLine();
             sbLabelText.AppendLine(
-                                   $@"Common: {MyCollection.Cards.Where(x => x.CardSetEnum == SetEnum.JtU && x.Rarity == "Common").Sum(x => x.Own)}/ {
+                                   $@"Common: {MyCollection.Cards.Where(x => x.CardSetEnum == SetEnum.KotFT && x.Rarity == "Common").Sum(x => x.Own)}/ {
                                            MyCollection.Cards.Where(
                                                                     x =>
                                                                         x.CardSetEnum ==
-                                                                        SetEnum.JtU &&
+                                                                        SetEnum.KotFT &&
                                                                         x.Rarity == "Common").
                                                         Sum(x => x.MaxInDeck)
                                        }");
             sbLabelText.AppendLine(
-                                   $@"Rare: {MyCollection.Cards.Where(x => x.CardSetEnum == SetEnum.JtU && x.Rarity == "Rare").Sum(x => x.Own)}/ {
+                                   $@"Rare: {MyCollection.Cards.Where(x => x.CardSetEnum == SetEnum.KotFT && x.Rarity == "Rare").Sum(x => x.Own)}/ {
                                            MyCollection.Cards.Where(
                                                                     x =>
                                                                         x.CardSetEnum ==
-                                                                        SetEnum.JtU &&
+                                                                        SetEnum.KotFT &&
                                                                         x.Rarity == "Rare").
                                                         Sum(x => x.MaxInDeck)
                                        }");
             sbLabelText.AppendLine(
-                                   $@"Epic: {MyCollection.Cards.Where(x => x.CardSetEnum == SetEnum.JtU && x.Rarity == "Epic").Sum(x => x.Own)}/ {
+                                   $@"Epic: {MyCollection.Cards.Where(x => x.CardSetEnum == SetEnum.KotFT && x.Rarity == "Epic").Sum(x => x.Own)}/ {
                                            MyCollection.Cards.Where(
                                                                     x =>
                                                                         x.CardSetEnum ==
-                                                                        SetEnum.JtU &&
+                                                                        SetEnum.KotFT &&
                                                                         x.Rarity == "Epic").
                                                         Sum(x => x.MaxInDeck)
                                        }");
             sbLabelText.AppendLine(
-                                   $@"Legendary: {MyCollection.Cards.Where(x => x.CardSetEnum == SetEnum.JtU && x.Rarity == "Legendary").Sum(x => x.Own)}/ {
+                                   $@"Legendary: {MyCollection.Cards.Where(x => x.CardSetEnum == SetEnum.KotFT && x.Rarity == "Legendary").Sum(x => x.Own)}/ {
                                            MyCollection.Cards.Where(
                                                                     x =>
                                                                         x.CardSetEnum ==
-                                                                        SetEnum.JtU &&
+                                                                        SetEnum.KotFT &&
                                                                         x.Rarity ==
                                                                         "Legendary").
                                                         Sum(x => x.MaxInDeck)
                                        }");
             sbLabelText.AppendLine(
-                                   $@"All: {MyCollection.Cards.Where(x => x.CardSetEnum == SetEnum.JtU).Sum(x => x.Own)}/ {
-                                           MyCollection.Cards.Where(x => x.CardSetEnum == SetEnum.JtU).
+                                   $@"All: {MyCollection.Cards.Where(x => x.CardSetEnum == SetEnum.KotFT).Sum(x => x.Own)}/ {
+                                           MyCollection.Cards.Where(x => x.CardSetEnum == SetEnum.KotFT).
                                                         Sum(x => x.MaxInDeck)
                                        }");
             sbLabelText.AppendLine();
