@@ -7,7 +7,7 @@ namespace HSConsole
     {
         private static void Main(string[] args)
         {
-            var temp = new DisgusedToastReader();
+            var temp = new ViciousSyndicateReader();
             var x = temp.GetDecks();
 
             Console.WriteLine("DONE");

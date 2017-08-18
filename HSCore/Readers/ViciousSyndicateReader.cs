@@ -112,7 +112,17 @@ namespace HSCore.Readers
             Deck toReturn = new Deck();
 
             HtmlWeb web = new HtmlWeb();
-            HtmlDocument doc = web.Load(url);
+            HtmlDocument doc;
+
+            try
+            {
+                doc = web.Load(url);
+            }
+            catch(Exception)
+            {
+                log.Warn($"Cannot pull deck from url: {url}");
+                return null;
+            }
 
             toReturn.Url = url;
             HtmlNode deckLink = doc.DocumentNode.SelectSingleNode("//*[contains(@class,'article-content')]/*/a/img") ??
