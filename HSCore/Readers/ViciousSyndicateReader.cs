@@ -135,7 +135,7 @@ namespace HSCore.Readers
                 return null;
             }
             string deckUrl = deckLink.ParentNode.GetAttributeValue("href", string.Empty);
-            doc = web.Load($"http:{deckUrl}");
+            doc = web.Load(deckUrl);
 
             HtmlNode cardsMeta = doc.DocumentNode.SelectSingleNode("//meta[@property='x-hearthstone:deck:cards']");
 
