@@ -78,6 +78,7 @@ namespace HSCore.Readers
                         string deckurl = deckObj.deck.slugs[0].slug;
 
                         Deck deck = GetDeck(deckurl);
+                        if(deck == null) continue;
                         deck.Name = $"{deckObj.name} - T{deckObj.tier}";
                         deck.Class = deckObj.deck.playerClass;
                         deck.Tier = deckObj.tier;
@@ -102,7 +103,16 @@ namespace HSCore.Readers
             request.AddUrlSegment("slug", url);
 
             IRestResponse response = client.Execute(request);
-            dynamic deck = Json.Decode(response.Content);
+            dynamic deck;
+            try
+            {
+                deck = Json.Decode(response.Content);
+            }
+            catch (Exception)
+            {
+                log.Warn($"Cannot pull deck from url: {DECK_URL + url}");
+                return null;
+            }
 
             toReturn.UpdateDateString = deck.createdDate;
             toReturn.Url = DECK_URL + url;

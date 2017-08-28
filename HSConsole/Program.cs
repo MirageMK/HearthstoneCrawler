@@ -7,7 +7,7 @@ namespace HSConsole
     {
         private static void Main(string[] args)
         {
-            var temp = new ViciousSyndicateReader();
+            var temp = new TempoStormReader();
             var x = temp.GetDecks();
 
             Console.WriteLine("DONE");
