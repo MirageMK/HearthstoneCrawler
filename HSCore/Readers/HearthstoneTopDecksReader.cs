@@ -68,7 +68,7 @@ namespace HSCore.Readers
             toReturn.Class = doc.DocumentNode.SelectSingleNode("//*[contains(@class,'deck-list-sidebar')]/ul/li[1]/a").InnerText;
             toReturn.UpdateDateString = doc.DocumentNode.SelectSingleNode("//*[contains(@class,'updated')]").GetAttributeValue("datetime", DateTime.Now.ToString());
 
-            foreach(HtmlNode cardLink in doc.DocumentNode.SelectNodes("//*[contains(@class,'card-frame')]"))
+            foreach (HtmlNode cardLink in doc.DocumentNode.SelectSingleNode("//*[@id = 'deck-master']").SelectNodes("div/ul/li"))
             {
                 string cardName = WebUtility.HtmlDecode(cardLink.SelectSingleNode("a/*[contains(@class,'card-name')]").InnerText).Replace('’', '\'');
                 string cardCount = cardLink.SelectSingleNode("*[contains(@class,'card-count')]").InnerText;
@@ -84,14 +84,14 @@ namespace HSCore.Readers
                 {
                     if (toReturn.Cards.ContainsKey(card))
                     {
-                        log.Warn($"{card} already exist in the deck.");
+                        log.Warn($"{card} already exist in the deck. ( {toReturn.Url} )");
                         continue;
                     }
                     toReturn.Cards.Add(card, cardCountInt);
                 }
                 else
                 {
-                    log.Warn($"Wrong card count on {cardName} ({url})"); ;
+                    log.Warn($"Wrong card count on {cardName} ( {url} )"); ;
                 }
             }
 

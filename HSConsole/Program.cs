@@ -7,7 +7,7 @@ namespace HSConsole
     {
         private static void Main(string[] args)
         {
-            var temp = new TempoStormReader();
+            var temp = new HearthstoneTopDecksReader();
             var x = temp.GetDecks();
 
             Console.WriteLine("DONE");

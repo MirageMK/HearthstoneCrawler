@@ -79,7 +79,7 @@ namespace HSCore.Readers
                 Card card = MyCollection.GetByID(Int32.Parse(strings[0]));
                 if (toReturn.Cards.ContainsKey(card))
                 {
-                    log.Warn($"{card} already exist in the deck.");
+                    log.Warn($"{card} already exist in the deck. ( {toReturn.Url} )");
                     continue;
                 }
                 toReturn.Cards.Add(card, int.Parse(strings[1]));

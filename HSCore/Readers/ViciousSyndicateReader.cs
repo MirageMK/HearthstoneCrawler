@@ -160,7 +160,10 @@ namespace HSCore.Readers
                 {
                     if(cardArray[i] == "#") break;
                     string[] cardData = cardArray[i].Split(new[] { "x (" }, StringSplitOptions.RemoveEmptyEntries);
-                    Card card = MyCollection.Get(WebUtility.HtmlDecode(cardData[1].Substring(3).Trim()));
+                    string cardName = cardData[1].Substring(3).Trim();
+                    cardName = WebUtility.HtmlDecode(cardName);
+                    cardName = cardName.Replace('’', '\'');
+                    Card card = MyCollection.Get(cardName);
                     if(card == null)
                     {
                         toReturn.IsError = true;
