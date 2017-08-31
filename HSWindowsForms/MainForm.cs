@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -234,6 +235,11 @@ namespace HSWindowsForms
             cardForm.Show();
         }
 
+        private void btnLog_Click(object sender, EventArgs e)
+        {
+            Process.Start(Directory.GetCurrentDirectory());
+        }
+
         #endregion
 
         #region Decks
@@ -438,5 +444,6 @@ namespace HSWindowsForms
         }
 
         #endregion
+
     }
 }

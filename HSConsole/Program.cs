@@ -1,4 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using HSCore;
+using HSCore.Model;
 using HSCore.Readers;
 
 namespace HSConsole
@@ -7,8 +11,21 @@ namespace HSConsole
     {
         private static void Main(string[] args)
         {
-            var temp = new HearthstoneTopDecksReader();
-            var x = temp.GetDecks();
+            var decks = NetDecks.DownloadDecks();
+
+            var t1Decks = decks.Where(x => x.Tier == 1);
+
+            List<Card> cards = new List<Card>();
+            foreach(Deck t1Deck in t1Decks)
+            {
+                cards.AddRange(t1Deck.Cards.Keys.Where(x => x.Missing > 0));
+            }
+
+            var uniqueCards = cards.Distinct();
+
+
+            /*var temp = new HearthstoneTopDecksReader();
+            var x = temp.GetDecks();*/
 
             Console.WriteLine("DONE");
             Console.ReadLine();

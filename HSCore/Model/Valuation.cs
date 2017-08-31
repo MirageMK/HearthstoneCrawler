@@ -19,7 +19,10 @@ namespace HSCore.Model
         }
 
         public Card Card { get; }
+
         public Dictionary<Deck, int> Decks { get; }
+
+        public int ApperanceInT1Decks => Decks.Where(x => x.Key.Tier == 1).GroupBy(x => x.Key.DuplicateIndicatior).Count();
 
         public double Value
         {
