@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace HSCore.Model
 {
-    [ Serializable ]
+    [Serializable]
     public class Card : IEquatable<Card>, IEqualityComparer<Card>
     {
         public string CardId { get; set; }
@@ -37,7 +37,7 @@ namespace HSCore.Model
         {
             get
             {
-                switch(Rarity)
+                switch (Rarity)
                 {
                     case "Free":
                         return 0;
@@ -62,7 +62,7 @@ namespace HSCore.Model
             get
             {
                 Valuation firstOrDefault = NetDecks.Valuations.FirstOrDefault(x => x.Card.Name == Name);
-                if(firstOrDefault != null) return Own + Missing * (1 - firstOrDefault.NormalizedValueAdjusted);
+                if (firstOrDefault != null) return Own + Missing * (1 - firstOrDefault.NormalizedValueAdjusted);
                 return MaxInDeck;
             }
         }
@@ -71,7 +71,8 @@ namespace HSCore.Model
         public double MissingW => MaxInDeck - OwnW;
         public int MaxInDeck => IsLegendary ? 1 : 2;
         public bool IsLegendary => Rarity == "Legendary";
-        public bool IsStandard => CardSetEnum < SetEnum.HoF || CardSetEnum > SetEnum.LoE;
+        public bool IsCore => CardSetEnum < SetEnum.HoF;
+        public bool IsStandard => IsCore || CardSetEnum > SetEnum.LoE;
 
         public double ValuationFactor
         {
@@ -79,13 +80,13 @@ namespace HSCore.Model
             {
                 double factor = 1;
 
-                if(!IsStandard) factor -= 0.5;
-                if(CardSetEnum > SetEnum.LoE)
-                    factor -= ((DateTime.Now.Month + 8) % 12 + 1) * 0.5 / 12;
+                if (!IsStandard) factor -= 0.5;
+                else if (CardSetEnum <= SetEnum.LoE + 3 && !IsCore)
+                    factor -= ((DateTime.Now.Month + 8) % 12 + 1) * 0.5 / 12; //In March this set will be worth same as wild
 
-                if(IsLegendary) factor += 0.25;
+                if (IsLegendary) factor += 0.25;
 
-                switch(Rarity)
+                switch (Rarity)
                 {
                     case "Epic":
                         factor -= 0.1;
@@ -131,7 +132,7 @@ namespace HSCore.Model
         }
     }
 
-    [ Serializable ]
+    [Serializable]
     public class Mechanic
     {
         public string Name { get; set; }

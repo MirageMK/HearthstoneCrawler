@@ -28,7 +28,8 @@ namespace HSCore
         [ Description("One Night in Karazhan") ] Kara = 10,
         [ Description("Mean Streets of Gadgetzan") ] MSoG = 11,
         [ Description("Journey to Un\'Goro") ] JtU = 12,
-        [ Description("Knights of the Frozen Throne") ] KotFT = 13
+        [ Description("Knights of the Frozen Throne") ] KotFT = 13,
+        [ Description("Kobolds & Catacombs") ] KnC = 14
     }
 
     public enum DeckType
