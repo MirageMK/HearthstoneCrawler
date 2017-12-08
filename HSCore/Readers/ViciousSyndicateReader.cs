@@ -79,8 +79,8 @@ namespace HSCore.Readers
         public override List<Deck> GetDecks()
         {
             List<Deck> toReturn = new List<Deck>();
-
-            try
+            return toReturn;
+            /*try
             {
                 foreach(Deck tempDeck in GetDeckRanks())
                 {
@@ -104,7 +104,7 @@ namespace HSCore.Readers
                 log.Error("Problem", ex);
             }
 
-            return toReturn;
+            return toReturn;*/
         }
 
         private Deck GetDeck(string url)

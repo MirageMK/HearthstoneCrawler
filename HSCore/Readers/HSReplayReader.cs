@@ -16,8 +16,10 @@ namespace HSCore.Readers
     {
         private const string URL = "https://hsreplay.net/";
 
-        //private const string SNAPSHOT_END_POINT = @"analytics/query/list_decks_by_win_rate?GameType=RANKED_{mode}&TimeRange=LAST_30_DAYS";
         private const string SNAPSHOT_END_POINT = @"analytics/query/trending_decks_by_popularity/";
+        //private const string SNAPSHOT_END_POINT = @"analytics/query/list_decks_by_win_rate/?GameType=RANKED_STANDARD";
+
+        private const string ARCHETYPE_END_POINT = @"api/v1/archetypes/";
 
         private static readonly ILog log = LogManager.GetLogger
             (MethodBase.GetCurrentMethod().DeclaringType);
@@ -29,35 +31,49 @@ namespace HSCore.Readers
             try
             {
                 RestClient client = new RestClient(URL);
-                RestRequest request = new RestRequest(SNAPSHOT_END_POINT, Method.GET);
+                RestRequest archetypeRequest = new RestRequest(ARCHETYPE_END_POINT, Method.GET);
+                IRestResponse archtypeResponse = client.Execute(archetypeRequest);
+                dynamic archtype = Json.Decode(archtypeResponse.Content);
 
-                IRestResponse response = client.Execute(request);
+                Dictionary<int, string> archtypeMapper = new Dictionary<int, string>();
+                for(int i = 0; i < archtype.Length; i++)
+                {
+                    archtypeMapper.Add(archtype[i].id, archtype[i].name);
+                }
+
+                RestRequest deckRequest = new RestRequest(SNAPSHOT_END_POINT, Method.GET);
+
+                IRestResponse response = client.Execute(deckRequest);
                 dynamic snapshot = Json.Decode(response.Content);
 
                 foreach(dynamic classObj in snapshot.series.data)
                 {
                     if (classObj.Value.Length == 0) continue;
-                    Deck deck = GetDeck(classObj.Value[0].deck_list.ToString());
-                    deck.Name = classObj.Key;
-                    string playerClass = classObj.Key.ToLower();
-                    char[] a = playerClass.ToCharArray();
-                    a[0] = char.ToUpper(a[0]);
-                    deck.Class = new string(a);
-                    deck.Tier = 5;
-                    if(classObj.Value[0].win_rate >= (decimal) 55)
-                        deck.Tier = 1;
-                    else if(classObj.Value[0].win_rate >= (decimal) 50)
-                        deck.Tier = 2;
-                    else if(classObj.Value[0].win_rate >= (decimal) 45)
-                        deck.Tier = 3;
-                    else if(classObj.Value[0].win_rate >= (decimal) 40)
-                        deck.Tier = 4;
-                    else
+                    for(int i = 0; i < classObj.Value.Length; i++)
+                    {
+                        var deckObj = classObj.Value[i];
+                        Deck deck = GetDeck(deckObj.deck_list.ToString());
+                        deck.Name = archtypeMapper[deckObj.archetype_id];
+                        string playerClass = classObj.Key.ToLower();
+                        char[] a = playerClass.ToCharArray();
+                        a[0] = char.ToUpper(a[0]);
+                        deck.Class = new string(a);
                         deck.Tier = 5;
-                    deck.Source = SourceEnum.HSReplay;
-                    deck.UpdateDateString = snapshot.as_of;
-                    deck.Url = $"https://hsreplay.net/decks/{classObj.Value[0].shortid}/";
-                    toReturn.Add(deck);
+                        if(deckObj.win_rate >= (decimal) 54)
+                            deck.Tier = 1;
+                        else if(deckObj.win_rate >= (decimal) 50)
+                            deck.Tier = 2;
+                        else if(deckObj.win_rate >= (decimal) 46)
+                            deck.Tier = 3;
+                        else if(deckObj.win_rate >= (decimal) 40)
+                            deck.Tier = 4;
+                        else
+                            deck.Tier = 5;
+                        deck.Source = SourceEnum.HSReplay;
+                        deck.UpdateDateString = snapshot.as_of;
+                        deck.Url = $"https://hsreplay.net/decks/{deckObj.shortid}/";
+                        toReturn.Add(deck);
+                    }
                 }
             }
             catch(Exception ex)
