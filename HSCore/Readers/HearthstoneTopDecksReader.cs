@@ -63,8 +63,16 @@ namespace HSCore.Readers
             HtmlWeb web = new HtmlWeb();
             HtmlDocument doc = web.Load(url);
 
-            toReturn.Url = url;
+            var isDirectUrl = doc.DocumentNode.SelectSingleNode(@"//*[@id='deck-list']/tbody/tr[1]/td[2]/h4/a");
+            if(isDirectUrl != null)
+            {
+                var newURL = isDirectUrl.GetAttributeValue("href", string.Empty);
+                if(String.IsNullOrEmpty(newURL)) log.Warn($"No deck was found on {url}");
+                doc = web.Load(newURL);
+            }
 
+            toReturn.Url = url;
+            
             toReturn.Class = doc.DocumentNode.SelectSingleNode("//*[contains(@class,'deck-list-sidebar')]/ul/li[1]/a").InnerText;
             toReturn.UpdateDateString = doc.DocumentNode.SelectSingleNode("//*[contains(@class,'updated')]").GetAttributeValue("datetime", DateTime.Now.ToString());
 

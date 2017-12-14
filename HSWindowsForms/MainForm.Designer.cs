@@ -618,7 +618,7 @@
             // 
             // radLabel1
             // 
-            this.radLabel1.Location = new System.Drawing.Point(3, 277);
+            this.radLabel1.Location = new System.Drawing.Point(3, 313);
             this.radLabel1.Name = "radLabel1";
             this.radLabel1.Size = new System.Drawing.Size(55, 18);
             this.radLabel1.TabIndex = 2;
