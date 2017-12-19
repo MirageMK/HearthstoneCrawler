@@ -46,19 +46,30 @@ namespace HSCore.Model
         public int Dust => Cards.Sum(x => x.Value * x.Key.Dust);
         public int MyDust => Cards.Sum(x => (x.Value - x.Key.Own < 0 ? 0 : x.Value - x.Key.Own) * x.Key.Dust);
         public int MissingCardNo => Cards.Sum(x => x.Value - x.Key.Own < 0 ? 0 : x.Value - x.Key.Own);
+
         public string DuplicateIndicatior => DeckCode;
 
         private string _deckCode;
-
         public string DeckCode
         {
             get
             {
-                if(String.IsNullOrEmpty(_deckCode))
+                if (String.IsNullOrEmpty(_deckCode))
                 {
                     _deckCode = ToDeckCode();
                 }
                 return _deckCode;
+            }
+        }
+
+        public string DeckCodeFull
+        {
+            get
+            {
+                StringBuilder sb = new StringBuilder();
+                sb.AppendLine("### " + Name);
+                sb.AppendLine(DeckCode);
+                return sb.ToString();
             }
         }
 
@@ -125,8 +136,6 @@ namespace HSCore.Model
 
         public string ToDeckCode()
         {
-            StringBuilder sb = new StringBuilder();
-            sb.AppendLine("### " + Name);
             using(MemoryStream ms = new MemoryStream())
             {
                 Write(ms, 0);
@@ -135,7 +144,7 @@ namespace HSCore.Model
                 Write(ms, 1);
                 Write(ms, ClassID);
 
-                List<KeyValuePair<Card, int>> cards = Cards.OrderBy(x => x.Value).ToList();
+                List<KeyValuePair<Card, int>> cards = Cards.OrderBy(x => x.Value).ThenBy(x => x.Key.CardId).ToList();
                 List<KeyValuePair<Card, int>> singleCopy = cards.Where(x => x.Value == 1).ToList();
                 List<KeyValuePair<Card, int>> doubleCopy = cards.Where(x => x.Value == 2).ToList();
                 List<KeyValuePair<Card, int>> nCopy = cards.Where(x => x.Value > 2).ToList();
@@ -159,8 +168,7 @@ namespace HSCore.Model
                     Write(ms, card.Value);
                 }
 
-                sb.AppendLine(Convert.ToBase64String(ms.ToArray()));
-                return sb.ToString();
+                return Convert.ToBase64String(ms.ToArray());
             }
         }
 

@@ -12,7 +12,7 @@ namespace HSWebApi.Controllers
         // GET api/cards
         public IEnumerable<String> Get()
         {
-            return NetDecks.Decks.Where(x => x.MyDust == 0).GroupBy(x => x.Class).Select(x => x.OrderBy(y => y.Tier).ThenByDescending(y => y.Dust).First().DeckCode).ToList();
+            return NetDecks.Decks.Where(x => x.MyDust == 0).GroupBy(x => x.Class).Select(x => x.OrderBy(y => y.Tier).ThenByDescending(y => y.Dust).First().DeckCodeFull).ToList();
         }
 
         // GET api/values/5
