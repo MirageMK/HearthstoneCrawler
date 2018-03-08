@@ -91,57 +91,6 @@ namespace HSWindowsForms
                 if(column.DataType == typeof(double))
                     column.FormatString = @"{0:N2}";
 
-            StringBuilder sbLabelText = new StringBuilder();
-            sbLabelText.AppendLine($@"{MyCollection.Cards.Sum(x => x.Own)}/ {MyCollection.Cards.Sum(x => x.MaxInDeck)}");
-            sbLabelText.AppendLine();
-            sbLabelText.AppendLine(
-                                   $@"Common: {MyCollection.Cards.Where(x => x.CardSetEnum == Enum.GetValues(typeof(SetEnum)).Cast<SetEnum>().Max() && x.Rarity == "Common").Sum(x => x.Own)}/ {
-                                           MyCollection.Cards.Where(
-                                                                    x =>
-                                                                        x.CardSetEnum ==
-                                                                        Enum.GetValues(typeof(SetEnum)).Cast<SetEnum>().Max() &&
-                                                                        x.Rarity == "Common").
-                                                        Sum(x => x.MaxInDeck)
-                                       }");
-            sbLabelText.AppendLine(
-                                   $@"Rare: {MyCollection.Cards.Where(x => x.CardSetEnum == Enum.GetValues(typeof(SetEnum)).Cast<SetEnum>().Max() && x.Rarity == "Rare").Sum(x => x.Own)}/ {
-                                           MyCollection.Cards.Where(
-                                                                    x =>
-                                                                        x.CardSetEnum ==
-                                                                        Enum.GetValues(typeof(SetEnum)).Cast<SetEnum>().Max() &&
-                                                                        x.Rarity == "Rare").
-                                                        Sum(x => x.MaxInDeck)
-                                       }");
-            sbLabelText.AppendLine(
-                                   $@"Epic: {MyCollection.Cards.Where(x => x.CardSetEnum == Enum.GetValues(typeof(SetEnum)).Cast<SetEnum>().Max() && x.Rarity == "Epic").Sum(x => x.Own)}/ {
-                                           MyCollection.Cards.Where(
-                                                                    x =>
-                                                                        x.CardSetEnum ==
-                                                                        Enum.GetValues(typeof(SetEnum)).Cast<SetEnum>().Max() &&
-                                                                        x.Rarity == "Epic").
-                                                        Sum(x => x.MaxInDeck)
-                                       }");
-            sbLabelText.AppendLine(
-                                   $@"Legendary: {MyCollection.Cards.Where(x => x.CardSetEnum == Enum.GetValues(typeof(SetEnum)).Cast<SetEnum>().Max() && x.Rarity == "Legendary").Sum(x => x.Own)}/ {
-                                           MyCollection.Cards.Where(
-                                                                    x =>
-                                                                        x.CardSetEnum ==
-                                                                        Enum.GetValues(typeof(SetEnum)).Cast<SetEnum>().Max() &&
-                                                                        x.Rarity ==
-                                                                        "Legendary").
-                                                        Sum(x => x.MaxInDeck)
-                                       }");
-            sbLabelText.AppendLine(
-                                   $@"All: {MyCollection.Cards.Where(x => x.CardSetEnum == Enum.GetValues(typeof(SetEnum)).Cast<SetEnum>().Max()).Sum(x => x.Own)}/ {
-                                           MyCollection.Cards.Where(x => x.CardSetEnum == Enum.GetValues(typeof(SetEnum)).Cast<SetEnum>().Max()).
-                                                        Sum(x => x.MaxInDeck)
-                                       }");
-            sbLabelText.AppendLine();
-            sbLabelText.AppendLine($@"{MyCollection.Cards.Count(x => x.IsLegendary && x.Missing == 0)} legendaries");
-
-            sbLabelText.AppendLine();
-
-            radLabel1.Text = sbLabelText.ToString();
         }
 
         private void gridCardValuation_ScreenTipNeeded(object sender, ScreenTipNeededEventArgs e)
@@ -238,6 +187,43 @@ namespace HSWindowsForms
         private void btnLog_Click(object sender, EventArgs e)
         {
             Process.Start(Directory.GetCurrentDirectory());
+        }
+
+        private void gridPack_SelectionChanged(object sender, EventArgs e)
+        {
+            if (gridPack.CurrentRow?.DataBoundItem == null) return;
+
+            Pack pack = gridPack.CurrentRow?.DataBoundItem as Pack;
+            if(pack == null) return;
+
+            StringBuilder sbLabelText = new StringBuilder();
+            sbLabelText.AppendLine($@"{MyCollection.Cards.Sum(x => x.Own)}/ {MyCollection.Cards.Sum(x => x.MaxInDeck)}");
+            sbLabelText.AppendLine($@"{MyCollection.Cards.Count(x => x.IsLegendary && x.Missing == 0)} legendaries");
+            sbLabelText.AppendLine();
+            sbLabelText.AppendLine(
+                                   $@"Common: {MyCollection.Cards.Where(x => x.CardSetEnum == pack.Set && x.Rarity == "Common").Sum(x => x.Own)}/ {
+                                           MyCollection.Cards.Where(x => x.CardSetEnum == pack.Set && x.Rarity == "Common").Sum(x => x.MaxInDeck)}"
+                                   );
+            sbLabelText.AppendLine(
+                                   $@"Rare: {MyCollection.Cards.Where(x => x.CardSetEnum == pack.Set && x.Rarity == "Rare").Sum(x => x.Own)}/ {
+                                           MyCollection.Cards.Where(x => x.CardSetEnum == pack.Set && x.Rarity == "Rare").Sum(x => x.MaxInDeck)}"
+                                   );
+            sbLabelText.AppendLine(
+                                   $@"Epic: {MyCollection.Cards.Where(x => x.CardSetEnum == pack.Set && x.Rarity == "Epic").Sum(x => x.Own)}/ {
+                                           MyCollection.Cards.Where(x => x.CardSetEnum == pack.Set && x.Rarity == "Epic"). Sum(x => x.MaxInDeck)}"
+                                   );
+            sbLabelText.AppendLine(
+                                   $@"Legendary: {MyCollection.Cards.Where(x => x.CardSetEnum == pack.Set && x.Rarity == "Legendary").Sum(x => x.Own)}/ {
+                                           MyCollection.Cards.Where(x => x.CardSetEnum == pack.Set && x.Rarity == "Legendary").Sum(x => x.MaxInDeck)}"
+                                   );
+            sbLabelText.AppendLine(
+                                   $@"All: {MyCollection.Cards.Where(x => x.CardSetEnum == pack.Set).Sum(x => x.Own)}/ {
+                                           MyCollection.Cards.Where(x => x.CardSetEnum == pack.Set).Sum(x => x.MaxInDeck)}"
+                                   );
+            sbLabelText.AppendLine();
+
+            radLabel1.Text = sbLabelText.ToString();
+
         }
 
         #endregion
@@ -444,6 +430,5 @@ namespace HSWindowsForms
         }
 
         #endregion
-
     }
 }

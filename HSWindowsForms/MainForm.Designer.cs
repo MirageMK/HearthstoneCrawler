@@ -611,6 +611,7 @@
             this.gridPack.Size = new System.Drawing.Size(526, 182);
             this.gridPack.TabIndex = 3;
             this.gridPack.Text = "radGridView1";
+            this.gridPack.SelectionChanged += new System.EventHandler(this.gridPack_SelectionChanged);
             // 
             // packBindingSource
             // 

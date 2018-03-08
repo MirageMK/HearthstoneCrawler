@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Reflection;
 using HSCore.Model;
 using HtmlAgilityPack;
@@ -9,15 +10,16 @@ namespace HSCore.Readers
 {
     public class MetabombReader : BaseReader
     {
-        private const string URL = "http://www.metabomb.net";
+        private const string URL = "https://www.metabomb.net";
 
         private static readonly ILog log = LogManager.GetLogger
             (MethodBase.GetCurrentMethod().DeclaringType);
 
         private string GetUrl()
         {
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls11;
             HtmlWeb web = new HtmlWeb();
-            HtmlDocument doc = web.Load(URL + "/hearthstone/game-guides");
+            HtmlDocument doc = web.Load(URL + "/hearthstone/gameplay-guides");
 
             string link = "";
             bool found = false;

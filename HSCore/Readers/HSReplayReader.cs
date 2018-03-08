@@ -52,6 +52,11 @@ namespace HSCore.Readers
                     for(int i = 0; i < classObj.Value.Length; i++)
                     {
                         var deckObj = classObj.Value[i];
+                        if(deckObj.archetype_id == null)
+                        {
+                            log.Warn($"No archetype for class {classObj.Key} deck {i}");
+                            continue;
+                        }
                         Deck deck = GetDeck(deckObj.deck_list.ToString());
                         deck.Name = archtypeMapper[deckObj.archetype_id];
                         string playerClass = classObj.Key.ToLower();

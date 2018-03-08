@@ -11,9 +11,9 @@ namespace HSConsole
     {
         private static void Main(string[] args)
         {
-            var decks = NetDecks.DownloadDecks();
+            var decks = new HSReplayReader();
 
-            var t1Decks = decks.Where(x => x.Tier == 1);
+            var t1Decks = decks.GetDecks();
 
             List<Card> cards = new List<Card>();
             foreach(Deck t1Deck in t1Decks)
