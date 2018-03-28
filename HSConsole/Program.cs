@@ -11,7 +11,7 @@ namespace HSConsole
     {
         private static void Main(string[] args)
         {
-            var decks = new HSReplayReader();
+            var decks = new HearthstoneTopDecksReader();
 
             var t1Decks = decks.GetDecks();
 
