@@ -29,7 +29,8 @@ namespace HSCore
         [ Description("Mean Streets of Gadgetzan") ] MSoG = 11,
         [ Description("Journey to Un\'Goro") ] JtU = 12,
         [ Description("Knights of the Frozen Throne") ] KotFT = 13,
-        [ Description("Kobolds & Catacombs") ] KnC = 14
+        [ Description("Kobolds & Catacombs") ] KnC = 14,
+        [ Description("The Witchwood")] TW = 15
     }
 
     public enum DeckType

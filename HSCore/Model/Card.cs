@@ -72,7 +72,7 @@ namespace HSCore.Model
         public int MaxInDeck => IsLegendary ? 1 : 2;
         public bool IsLegendary => Rarity == "Legendary";
         public bool IsCore => CardSetEnum < SetEnum.HoF;
-        public bool IsStandard => IsCore || CardSetEnum > SetEnum.LoE;
+        public bool IsStandard => IsCore || CardSetEnum > SetEnum.MSoG;
 
         public double ValuationFactor
         {
@@ -81,7 +81,7 @@ namespace HSCore.Model
                 double factor = 1;
 
                 if (!IsStandard) factor -= 0.5;
-                else if (CardSetEnum <= SetEnum.LoE + 3 && !IsCore)
+                else if (CardSetEnum <= SetEnum.MSoG + 3 && !IsCore)
                     factor -= ((DateTime.Now.Month + 8) % 12 + 1) * 0.5 / 12; //In March this set will be worth same as wild
 
                 if (IsLegendary) factor += 0.25;
