@@ -72,8 +72,8 @@ namespace HSCore.Readers
             }
 
             toReturn.Url = url;
-            
-            toReturn.Class = doc.DocumentNode.SelectSingleNode("//*[contains(@class,'deck-meta')]/a").InnerText;
+
+            toReturn.Class = doc.DocumentNode.SelectSingleNode("//*[contains(@class,'single-deck-header')]").GetAttributeValue("class", "single-deck-header").Split(' ')[1];
             toReturn.UpdateDateString = doc.DocumentNode.SelectSingleNode("//*[contains(@class,'updated')]").GetAttributeValue("datetime", DateTime.Now.ToString());
 
             foreach (HtmlNode cardLink in doc.DocumentNode.SelectSingleNode("//*[@id = 'deck-master']").SelectNodes("div/ul/li"))

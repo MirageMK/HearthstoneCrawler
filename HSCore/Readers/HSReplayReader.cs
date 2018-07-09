@@ -30,6 +30,9 @@ namespace HSCore.Readers
 
             try
             {
+                ServicePointManager.Expect100Continue = true;
+                ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+
                 RestClient client = new RestClient(URL);
                 RestRequest archetypeRequest = new RestRequest(ARCHETYPE_END_POINT, Method.GET);
                 IRestResponse archtypeResponse = client.Execute(archetypeRequest);
