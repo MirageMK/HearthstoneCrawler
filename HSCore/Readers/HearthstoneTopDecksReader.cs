@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Net;
 using System.Reflection;
+using HSCore.Helper;
 using HSCore.Model;
 using HtmlAgilityPack;
 using log4net;
@@ -32,13 +33,19 @@ namespace HSCore.Readers
                         tier++;
                     foreach(HtmlNode deckLink in tierBox.Descendants("a"))
                     {
-                        string deckUrl = deckLink.GetAttributeValue("href", string.Empty);
-                        if(deckUrl == "")
+                        string deckTypeUrl = deckLink.GetAttributeValue("href", string.Empty);
+                        if(deckTypeUrl == "")
                         {
-                            log.Warn($"Cannot find deckUrl on {deckLink.OuterHtml}");
+                            log.Warn($"Cannot find deckTypeUrl on {deckLink.OuterHtml}");
                             continue;
                         }
-                        ;
+
+                        string deckUrl = GetDeckUrl(deckTypeUrl);
+                        if(String.IsNullOrEmpty(deckUrl))
+                        {
+                            log.Warn($"Cannot find deckUrl on {deckTypeUrl}");
+                            continue;
+                        }
 
                         Deck deck = GetDeck(deckUrl);
                         deck.Name = WebUtility.HtmlDecode(deckLink.InnerText).Trim();
@@ -56,6 +63,16 @@ namespace HSCore.Readers
             return toReturn;
         }
 
+        private string GetDeckUrl(string deckTypeUrl)
+        {
+            HtmlWeb web = new HtmlWeb();
+            HtmlDocument doc = web.Load(deckTypeUrl + "?sort=top-week");
+
+            HtmlNode topDeckOfTheWeek = doc.DocumentNode.SelectSingleNode(@"//*[@id='deck-list']/tbody/tr[1]/td[2]/h4/a");
+
+            return topDeckOfTheWeek != null ? topDeckOfTheWeek.GetAttributeValue("href", string.Empty) : null;
+        }
+
         private Deck GetDeck(string url)
         {
             Deck toReturn = new Deck();
@@ -63,17 +80,9 @@ namespace HSCore.Readers
             HtmlWeb web = new HtmlWeb();
             HtmlDocument doc = web.Load(url);
 
-            var isDirectUrl = doc.DocumentNode.SelectSingleNode(@"//*[@id='deck-list']/tbody/tr[1]/td[2]/h4/a");
-            if(isDirectUrl != null)
-            {
-                var newURL = isDirectUrl.GetAttributeValue("href", string.Empty);
-                if(String.IsNullOrEmpty(newURL)) log.Warn($"No deck was found on {url}");
-                doc = web.Load(newURL);
-            }
-
             toReturn.Url = url;
 
-            toReturn.Class = doc.DocumentNode.SelectSingleNode("//*[contains(@class,'single-deck-header')]").GetAttributeValue("class", "single-deck-header").Split(' ')[1];
+            toReturn.Class = doc.DocumentNode.SelectSingleNode("//*[contains(@class,'single-deck-header')]").GetAttributeValue("class", "single-deck-header").Split(' ')[1].FirstCharToUpper();
             toReturn.UpdateDateString = doc.DocumentNode.SelectSingleNode("//*[contains(@class,'updated')]").GetAttributeValue("datetime", DateTime.Now.ToString());
 
             foreach (HtmlNode cardLink in doc.DocumentNode.SelectSingleNode("//*[@id = 'deck-master']").SelectNodes("div/ul/li"))

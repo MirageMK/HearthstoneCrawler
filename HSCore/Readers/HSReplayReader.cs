@@ -5,6 +5,7 @@ using System.Net;
 using System.Reflection;
 using System.Threading;
 using System.Web.Helpers;
+using HSCore.Helper;
 using HSCore.Model;
 using HtmlAgilityPack;
 using log4net;
@@ -63,9 +64,7 @@ namespace HSCore.Readers
                         Deck deck = GetDeck(deckObj.deck_list.ToString());
                         deck.Name = archtypeMapper[deckObj.archetype_id];
                         string playerClass = classObj.Key.ToLower();
-                        char[] a = playerClass.ToCharArray();
-                        a[0] = char.ToUpper(a[0]);
-                        deck.Class = new string(a);
+                        deck.Class = playerClass.FirstCharToUpper();
                         deck.Tier = 5;
                         if(deckObj.win_rate >= (decimal) 54)
                             deck.Tier = 1;

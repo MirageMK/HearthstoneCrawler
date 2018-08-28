@@ -30,7 +30,8 @@ namespace HSCore
         [ Description("Journey to Un\'Goro") ] JtU = 12,
         [ Description("Knights of the Frozen Throne") ] KotFT = 13,
         [ Description("Kobolds & Catacombs") ] KnC = 14,
-        [ Description("The Witchwood")] TW = 15
+        [ Description("The Witchwood")] TW = 15,
+        [ Description("The Boomsday Project")] TBP = 16
     }
 
     public enum DeckType
