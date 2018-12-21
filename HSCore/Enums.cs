@@ -31,7 +31,8 @@ namespace HSCore
         [ Description("Knights of the Frozen Throne") ] KotFT = 13,
         [ Description("Kobolds & Catacombs") ] KnC = 14,
         [ Description("The Witchwood")] TW = 15,
-        [ Description("The Boomsday Project")] TBP = 16
+        [ Description("The Boomsday Project")] TBP = 16,
+        [Description("Rastakhan's Rumble")] RR = 17,
     }
 
     public enum DeckType

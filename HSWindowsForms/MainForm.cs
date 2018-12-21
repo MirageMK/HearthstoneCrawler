@@ -56,6 +56,8 @@ namespace HSWindowsForms
         private RadOffice2007ScreenTipElement GetScreenTip(Card card)
         {
             byte[] bytes = _wc.DownloadData(card.Img);
+            if(bytes.Length == 0) return null;
+
             MemoryStream ms = new MemoryStream(bytes);
             _screenTip.MainTextLabel.Image = Image.FromStream(ms);
             _screenTip.MainTextLabel.Text = "";
@@ -102,7 +104,10 @@ namespace HSWindowsForms
 
             if(valuation?.Card.Img == null) return;
 
-            cell.ScreenTip = GetScreenTip(valuation.Card);
+            RadOffice2007ScreenTipElement screenTip = GetScreenTip(valuation.Card);
+            if(screenTip == null) return;
+
+            cell.ScreenTip = screenTip;
         }
 
         private void gridCardValuation_CellFormatting(object sender, CellFormattingEventArgs e)
@@ -426,7 +431,9 @@ namespace HSWindowsForms
 
             if(card?.Img == null) return;
 
-            cell.ScreenTip = GetScreenTip(card);
+            RadOffice2007ScreenTipElement screenTip = GetScreenTip(card);
+            if (screenTip == null) return;
+            cell.ScreenTip = screenTip;
         }
 
         #endregion

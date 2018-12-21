@@ -99,6 +99,7 @@ namespace HSWindowsForms
             if(card?.Key.Img == null) return;
 
             byte[] bytes = _wc.DownloadData(card.Value.Key.Img);
+            if(bytes.Length == 0) return;
             MemoryStream ms = new MemoryStream(bytes);
             _screenTip.MainTextLabel.Image = Image.FromStream(ms);
             _screenTip.MainTextLabel.Text = "";

@@ -12,6 +12,7 @@ namespace HSCore.Readers
     public class HearthstoneTopDecksReader : BaseReader
     {
         private const string URL = @"http://www.hearthstonetopdecks.com/";
+        public static readonly string[] SORT_PARAMS = { "top-week", "top-month", "modified", "new"};
 
         private static readonly ILog log = LogManager.GetLogger
             (MethodBase.GetCurrentMethod().DeclaringType);
@@ -40,7 +41,7 @@ namespace HSCore.Readers
                             continue;
                         }
 
-                        string deckUrl = GetDeckUrl(deckTypeUrl);
+                        string deckUrl = GetDeckUrl(deckTypeUrl, 0);
                         if(String.IsNullOrEmpty(deckUrl))
                         {
                             log.Warn($"Cannot find deckUrl on {deckTypeUrl}");
@@ -63,14 +64,16 @@ namespace HSCore.Readers
             return toReturn;
         }
 
-        private string GetDeckUrl(string deckTypeUrl)
+        private string GetDeckUrl(string deckTypeUrl, int i)
         {
+            if(i >= 4) return null;
+
             HtmlWeb web = new HtmlWeb();
-            HtmlDocument doc = web.Load(deckTypeUrl + "?sort=top-week");
+            HtmlDocument doc = web.Load(deckTypeUrl +"?sort="+ SORT_PARAMS[i]);
 
             HtmlNode topDeckOfTheWeek = doc.DocumentNode.SelectSingleNode(@"//*[@id='deck-list']/tbody/tr[1]/td[2]/h4/a");
 
-            return topDeckOfTheWeek != null ? topDeckOfTheWeek.GetAttributeValue("href", string.Empty) : null;
+            return topDeckOfTheWeek != null ? topDeckOfTheWeek.GetAttributeValue("href", string.Empty) : GetDeckUrl(deckTypeUrl, ++i);
         }
 
         private Deck GetDeck(string url)
