@@ -32,7 +32,8 @@ namespace HSCore
         [ Description("Kobolds & Catacombs") ] KnC = 14,
         [ Description("The Witchwood")] TW = 15,
         [ Description("The Boomsday Project")] TBP = 16,
-        [Description("Rastakhan's Rumble")] RR = 17,
+        [ Description("Rastakhan's Rumble")] RR = 17,
+        [ Description("Rise of Shadows")] RoS = 18,
     }
 
     public enum DeckType
