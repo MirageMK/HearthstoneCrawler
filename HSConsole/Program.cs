@@ -11,7 +11,8 @@ namespace HSConsole
     {
         private static void Main(string[] args)
         {
-            var decks = new HearthstoneTopDecksReader();
+            var xxx  = MyCollection.Cards;
+            var decks = new ViciousSyndicateReader();
 
             var t1Decks = decks.GetDecks();
 

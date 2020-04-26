@@ -21,16 +21,19 @@ namespace HSCore
 
         static HeartstoneDB()
         {
+            ServicePointManager.Expect100Continue = true;
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+
             List<Card> toReturn = new List<Card>();
 
             foreach (SetEnum sType in Enum.GetValues(typeof(SetEnum)))
             {
                 string setDescription = Enums.GetEnumDescription(sType);
 
-                RestClient client = new RestClient { BaseUrl = new Uri("https://omgvamp-hearthstone-v1.p.mashape.com/cards/sets/" + setDescription + "?collectible=1") };
+                RestClient client = new RestClient { BaseUrl = new Uri("https://omgvamp-hearthstone-v1.p.rapidapi.com/cards/sets/" + Uri.EscapeDataString(setDescription) + "?collectible=1") };
 
                 RestRequest request = new RestRequest();
-                request.AddHeader("X-Mashape-Key", X_MASHAPE_KEY);
+                request.AddHeader("x-rapidapi-key", X_MASHAPE_KEY);
 
                 RestResponse<List<Card>> response = client.Execute<List<Card>>(request) as RestResponse<List<Card>>;
                 if(response == null) continue;

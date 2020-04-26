@@ -22,9 +22,10 @@ namespace HSCore
         static MyCollection()
         {
             List<Card> toReturn = new List<Card>();
-
+            ServicePointManager.Expect100Continue = true;
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
             HtmlWeb web = new HtmlWeb();
-            HtmlDocument doc = web.Load($"http://www.hearthpwn.com/members/{USER_NAME}/collection");
+            HtmlDocument doc = web.Load($"https://www.hearthpwn.com/members/{USER_NAME}/collection");
 
             foreach(HtmlNode cardLink in doc.DocumentNode.SelectNodes("//*[contains(@class,'card-image-item')]"))
             {

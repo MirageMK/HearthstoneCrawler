@@ -18,6 +18,9 @@ namespace HSCore.Readers
 
         public override List<Deck> GetDecks()
         {
+            ServicePointManager.Expect100Continue = true;
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+
             List<Deck> toReturn = new List<Deck>();
             try
             {

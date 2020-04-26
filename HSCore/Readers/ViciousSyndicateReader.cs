@@ -28,9 +28,9 @@ namespace HSCore.Readers
                 HtmlWeb web = new HtmlWeb();
                 HtmlDocument doc = web.Load(LIBRARY_URL);
 
-                foreach (HtmlNode deckLink in doc.DocumentNode.SelectNodes("//*[contains(@class,'menu-deck-library-menu-container')]/ul/li/ul/li/a"))
+                foreach (HtmlNode deckLink in doc.DocumentNode.SelectNodes("//*[contains(@class,'menu-deck-library-menu-container')]/ul/li/a"))
                 {
-                    string deckClass = deckLink.InnerHtml.Split(' ').Last();
+                    string deckClass = deckLink.InnerHtml;
 
                     string deckUrl = deckLink.GetAttributeValue("href", string.Empty);
 

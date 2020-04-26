@@ -34,6 +34,11 @@ namespace HSCore
         [ Description("The Boomsday Project")] TBP = 16,
         [ Description("Rastakhan's Rumble")] RR = 17,
         [ Description("Rise of Shadows")] RoS = 18,
+        [ Description("Saviors of Uldum")] SoU = 19,
+        [ Description("Descent of Dragons")] DoD = 20,
+        [ Description("Galakrond's Awakening")] GA = 21,
+        [ Description("Demon Hunter Initiate")] DHI = 22,
+        [ Description("Ashes of Outland")] AoO = 23
     }
 
     public enum DeckType

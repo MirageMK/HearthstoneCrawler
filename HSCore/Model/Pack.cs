@@ -21,7 +21,14 @@ namespace HSCore.Model
 
         public SetEnum Set { get; }
         private List<Card> Cards { get; }
-        public bool CanBuy => Set != SetEnum.Naxx && Set != SetEnum.BRM && Set != SetEnum.LoE && Set != SetEnum.Kara && Set != SetEnum.Basic && Set != SetEnum.HoF;
+        public bool CanBuy => Set != SetEnum.Naxx && 
+                              Set != SetEnum.BRM && 
+                              Set != SetEnum.LoE && 
+                              Set != SetEnum.Kara && 
+                              Set != SetEnum.Basic && 
+                              Set != SetEnum.HoF &&
+                              Set != SetEnum.GA &&
+                              Set != SetEnum.DHI ;
 
         private Dictionary<string, double> SplitedValueW
         {
